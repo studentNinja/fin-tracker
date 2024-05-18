@@ -1,6 +1,3 @@
-# fin-tracker
-
-
 # FinTracker
 
 FinTracker is a full-stack application for tracking finances, built with React, Redux Toolkit, TypeScript, Express, and MongoDB.
