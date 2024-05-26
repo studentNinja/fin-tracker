@@ -8,7 +8,7 @@ exports.createGoal = async (req, res) => {
             return res.status(400).send({ error: 'Amount and name are required' });
         }
 
-        const newGoal = new Goal({ user: req.userId, amount, name });
+        const newGoal = new Goal({ user_id: req.userId, amount, name });
         await newGoal.save();
         res.status(201).send(newGoal);
     } catch (err) {
@@ -19,7 +19,7 @@ exports.createGoal = async (req, res) => {
 
 exports.getGoals = async (req, res) => {
     try {
-        const goals = await Goal.find({ user: req.userId });
+        const goals = await Goal.find({ user_id: req.userId });
         res.status(200).send(goals);
     } catch (err) {
         console.error(err);
@@ -29,14 +29,14 @@ exports.getGoals = async (req, res) => {
 
 exports.updateGoal = async (req, res) => {
     try {
-        const { goal_id, amount, name, achieved, achievedDate } = req.body;
+        const { _id, amount, name, achieved, achievedDate } = req.body;
 
-        if (!goal_id) {
+        if (!_id) {
             return res.status(400).send({ error: 'Goal ID is required' });
         }
 
         const updatedGoal = await Goal.findByIdAndUpdate(
-            goal_id,
+            _id,
             { amount, name, achieved, achievedDate },
             { new: true }
         );
@@ -54,13 +54,13 @@ exports.updateGoal = async (req, res) => {
 
 exports.deleteGoal = async (req, res) => {
     try {
-        const { goal_id } = req.body;
+        const { _id } = req.body;
 
-        if (!goal_id) {
+        if (!_id) {
             return res.status(400).send({ error: 'Goal ID is required' });
         }
 
-        const deletedGoal = await Goal.findByIdAndDelete(goal_id);
+        const deletedGoal = await Goal.findByIdAndDelete(_id);
 
         if (!deletedGoal) {
             return res.status(404).send({ error: 'Goal not found' });

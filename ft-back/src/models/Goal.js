@@ -50,7 +50,7 @@ const goalSchema = new Schema({
     achieved: { type: Boolean, default: false },
     startDate: { type: Date, default: Date.now },
     achievedDate: { type: Date }
-}, { timestamps: true }); // Automatically add createdAt and updatedAt fields
+}, { timestamps: true });
 
 const Goal = mongoose.model('Goal', goalSchema);
 module.exports = Goal;

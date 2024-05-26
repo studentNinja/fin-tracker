@@ -44,7 +44,7 @@ const transactionSchema = new Schema({
     category: { type: String, enum: validCategories, required: true },
     date: { type: Date, default: Date.now },
     description: { type: String }
-}, { timestamps: true }); // Automatically add createdAt and updatedAt fields
+}, { timestamps: true });
 
 const Transaction = mongoose.model('Transaction', transactionSchema);
 module.exports = Transaction;

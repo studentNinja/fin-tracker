@@ -24,7 +24,20 @@ const router = express.Router();
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/Goal'
+ *             type: object
+ *             required:
+ *               - name
+ *               - amount
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 description: The name of the goal
+ *               amount:
+ *                 type: number
+ *                 description: The goal amount to be saved
+ *             example:
+ *               name: "Buy a house"
+ *               amount: 200000
  *     responses:
  *       201:
  *         description: Goal created successfully
@@ -104,7 +117,34 @@ router.get('/', authMiddleware, goalController.getGoals);
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/Goal'
+ *             type: object
+ *             required:
+ *               - _id
+ *               - name
+ *               - amount
+ *             properties:
+ *               _id:
+ *                 type: string
+ *                 description: The ID of the goal to update
+ *               name:
+ *                 type: string
+ *                 description: The name of the goal
+ *               amount:
+ *                 type: number
+ *                 description: The goal amount to be saved
+ *               achieved:
+ *                 type: boolean
+ *                 description: Whether the goal has been achieved
+ *               achievedDate:
+ *                 type: string
+ *                 format: date-time
+ *                 description: The date when the goal was achieved
+ *             example:
+ *               _id: "665356241716d857dd03b374"
+ *               name: "Buy a house"
+ *               amount: 250000
+ *               achieved: true
+ *               achievedDate: "2024-05-26T15:32:52.735Z"
  *     responses:
  *       200:
  *         description: Goal updated successfully
