@@ -26,14 +26,10 @@ const router = express.Router();
  *           schema:
  *             type: object
  *             required:
- *               - expense_id
  *               - name
  *               - category
  *               - amount
  *             properties:
- *               expense_id:
- *                 type: string
- *                 description: The unique ID of the fixed expense
  *               name:
  *                 type: string
  *                 description: The name of the fixed expense
@@ -44,7 +40,6 @@ const router = express.Router();
  *                 type: number
  *                 description: The amount of the fixed expense
  *             example:
- *               expense_id: "665356241716d857dd03b374"
  *               name: "Internet Bill"
  *               category: "Utilities"
  *               amount: 50
@@ -101,12 +96,12 @@ router.get('/', authMiddleware, fixedExpenseController.getFixedExpenses);
  *           schema:
  *             type: object
  *             required:
- *               - expenseId
+ *               - _id
  *               - name
  *               - category
  *               - amount
  *             properties:
- *               expenseId:
+ *               _id:
  *                 type: string
  *                 description: The ID of the fixed expense to update
  *               name:
@@ -119,7 +114,7 @@ router.get('/', authMiddleware, fixedExpenseController.getFixedExpenses);
  *                 type: number
  *                 description: The amount of the fixed expense
  *             example:
- *               expenseId: "665356241716d857dd03b374"
+ *               _id: "665356241716d857dd03b374"
  *               name: "Internet Bill"
  *               category: "Utilities"
  *               amount: 60
@@ -152,13 +147,13 @@ router.put('/', authMiddleware, fixedExpenseController.updateFixedExpense);
  *           schema:
  *             type: object
  *             required:
- *               - expense_id
+ *               - _id
  *             properties:
- *               expense_id:
+ *               _id:
  *                 type: string
  *                 description: The ID of the fixed expense to delete
  *             example:
- *               expenseId: "665356241716d857dd03b374"
+ *               _id: "665356241716d857dd03b374"
  *     responses:
  *       200:
  *         description: Fixed expense deleted successfully

@@ -34,8 +34,22 @@ const router = express.Router();
  *               $ref: '#/components/schemas/Goal'
  *       400:
  *         description: Bad Request
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
  *       500:
  *         description: Internal Server Error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
  */
 router.post('/', authMiddleware, goalController.createGoal);
 
@@ -58,8 +72,22 @@ router.post('/', authMiddleware, goalController.createGoal);
  *                 $ref: '#/components/schemas/Goal'
  *       400:
  *         description: Bad Request
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
  *       500:
  *         description: Internal Server Error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
  */
 router.get('/', authMiddleware, goalController.getGoals);
 
@@ -80,10 +108,28 @@ router.get('/', authMiddleware, goalController.getGoals);
  *     responses:
  *       200:
  *         description: Goal updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Goal'
  *       400:
  *         description: Bad Request
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
  *       500:
  *         description: Internal Server Error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
  */
 router.put('/', authMiddleware, goalController.updateGoal);
 
@@ -101,18 +147,35 @@ router.put('/', authMiddleware, goalController.updateGoal);
  *         application/json:
  *           schema:
  *             type: object
+ *             required:
+ *               - _id
  *             properties:
- *               id:
+ *               _id:
  *                 type: string
+ *                 description: The ID of the goal to delete
  *             example:
- *               id: "665356241716d857dd03b373"
+ *               _id: "665356241716d857dd03b373"
  *     responses:
  *       200:
  *         description: Goal deleted successfully
  *       400:
  *         description: Bad Request
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
  *       500:
  *         description: Internal Server Error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
  */
 router.delete('/', authMiddleware, goalController.deleteGoal);
 

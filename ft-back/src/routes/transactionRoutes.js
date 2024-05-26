@@ -34,8 +34,22 @@ const router = express.Router();
  *               $ref: '#/components/schemas/Transaction'
  *       400:
  *         description: Bad Request
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
  *       500:
  *         description: Internal Server Error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
  */
 router.post('/', authMiddleware, transactionController.createTransaction);
 
@@ -58,8 +72,22 @@ router.post('/', authMiddleware, transactionController.createTransaction);
  *                 $ref: '#/components/schemas/Transaction'
  *       400:
  *         description: Bad Request
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
  *       500:
  *         description: Internal Server Error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
  */
 router.get('/', authMiddleware, transactionController.getTransactions);
 

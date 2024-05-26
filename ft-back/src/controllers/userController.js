@@ -1,31 +1,45 @@
 const User = require('../models/User');
+const Transaction = require('../models/Transaction');
+const FixedExpense = require('../models/FixedExpense');
+const Goal = require('../models/Goal');
 
 exports.getProfile = async (req, res) => {
     try {
-        const user = await User.findById(req.user_id).select('-password');
+        const user = await User.findById(req.userId).select('-password');
         if (!user) {
             return res.status(404).send({ error: 'User not found' });
         }
         res.status(200).send(user);
     } catch (err) {
-        res.status(400).send(err);
+        res.status(500).send({ error: 'Server error' });
     }
 };
 
 exports.deleteAccount = async (req, res) => {
+    const session = await mongoose.startSession();
+    session.startTransaction();
+
     try {
-        const user = await User.findById(req.user_id);
+        const user = await User.findById(req.userId);
         if (!user) {
+            await session.abortTransaction();
+            session.endSession();
             return res.status(404).send({ error: 'User not found' });
         }
 
-        await Transaction.deleteMany({ user_id: req.user_id });
-        await FixedExpense.deleteMany({ user_id: req.user_id });
-        await Goal.deleteMany({ user_id: req.user_id });
+        await Transaction.deleteMany({ user_id: req.userId }).session(session);
+        await FixedExpense.deleteMany({ user_id: req.userId }).session(session);
+        await Goal.deleteMany({ user_id: req.userId }).session(session);
 
-        await User.findByIdAndDelete(req.user_id);
+        await User.findByIdAndDelete(req.userId).session(session);
+
+        await session.commitTransaction();
+        session.endSession();
+        
         res.status(200).send({ message: 'Account deleted successfully' });
     } catch (err) {
-        res.status(400).send(err);
+        await session.abortTransaction();
+        session.endSession();
+        res.status(500).send({ error: 'Server error' });
     }
 };

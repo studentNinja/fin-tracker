@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
-const validCategories = require('../config/expenseCategories');
+const validCategories = require('../config/expenseCategories'); // Make sure this is an array of valid categories
 
 /**
  * @swagger
@@ -44,7 +44,7 @@ const transactionSchema = new Schema({
     category: { type: String, enum: validCategories, required: true },
     date: { type: Date, default: Date.now },
     description: { type: String }
-});
+}, { timestamps: true }); // Automatically add createdAt and updatedAt fields
 
 const Transaction = mongoose.model('Transaction', transactionSchema);
 module.exports = Transaction;
