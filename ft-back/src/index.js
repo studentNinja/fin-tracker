@@ -19,7 +19,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/goals',goalRoutes)
 app.use('/api/transactions',transactionRoutes)
-app.use('api/fixedexpenses',fixedExpenseRoutes)
+app.use('/api/fixedexpenses',fixedExpenseRoutes)
 
 const port = process.env.PORT || 8080;
 app.listen(port, () => {
