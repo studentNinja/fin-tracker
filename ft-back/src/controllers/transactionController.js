@@ -1,5 +1,6 @@
 const Transaction = require('../models/Transaction');
 const validCategories = require('../config/expenseCategories');
+const User = require('../models/User');
 
 exports.createTransaction = async (req, res) => {
     try {
@@ -19,6 +20,9 @@ exports.createTransaction = async (req, res) => {
             category,
             description
         });
+
+        await User.findByIdAndUpdate(req.userId, { $push: { transactions: newTransaction._id } });
+
 
         await newTransaction.save();
         res.status(201).send(newTransaction);

@@ -1,4 +1,5 @@
 const FixedExpense = require('../models/FixedExpense');
+const User = require('../models/User');
 const validCategories = require('../config/expenseCategories'); // Ensure this is correctly imported
 
 exports.createFixedExpense = async (req, res) => {
@@ -15,6 +16,7 @@ exports.createFixedExpense = async (req, res) => {
 
         const newFixedExpense = new FixedExpense({ user: req.userId, name, category, amount });
         await newFixedExpense.save();
+        await User.findByIdAndUpdate(req.userId, { $push: { fixed_expenses: newFixedExpense._id } });
         res.status(201).send(newFixedExpense);
     } catch (err) {
         console.error(err);
