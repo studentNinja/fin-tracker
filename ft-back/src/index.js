@@ -17,7 +17,7 @@ connectDB();
 swaggerSetup(app);
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
-app.use('api/goals',goalRoutes)
+app.use('/api/goals',goalRoutes)
 app.use('/api/transactions',transactionRoutes)
 app.use('api/fixedexpenses',fixedExpenseRoutes)
 
