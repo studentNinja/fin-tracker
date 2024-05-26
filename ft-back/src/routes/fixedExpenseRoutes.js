@@ -24,10 +24,37 @@ const router = express.Router();
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/FixedExpense'
+ *             type: object
+ *             required:
+ *               - expense_id
+ *               - name
+ *               - category
+ *               - amount
+ *             properties:
+ *               expense_id:
+ *                 type: string
+ *                 description: The unique ID of the fixed expense
+ *               name:
+ *                 type: string
+ *                 description: The name of the fixed expense
+ *               category:
+ *                 type: string
+ *                 description: The category of the fixed expense
+ *               amount:
+ *                 type: number
+ *                 description: The amount of the fixed expense
+ *             example:
+ *               expense_id: "665356241716d857dd03b374"
+ *               name: "Internet Bill"
+ *               category: "Utilities"
+ *               amount: 50
  *     responses:
  *       201:
  *         description: Fixed expense created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/FixedExpense'
  *       400:
  *         description: Bad Request
  *       500:
@@ -72,10 +99,37 @@ router.get('/', authMiddleware, fixedExpenseController.getFixedExpenses);
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/FixedExpense'
+ *             type: object
+ *             required:
+ *               - expenseId
+ *               - name
+ *               - category
+ *               - amount
+ *             properties:
+ *               expenseId:
+ *                 type: string
+ *                 description: The ID of the fixed expense to update
+ *               name:
+ *                 type: string
+ *                 description: The name of the fixed expense
+ *               category:
+ *                 type: string
+ *                 description: The category of the fixed expense
+ *               amount:
+ *                 type: number
+ *                 description: The amount of the fixed expense
+ *             example:
+ *               expenseId: "665356241716d857dd03b374"
+ *               name: "Internet Bill"
+ *               category: "Utilities"
+ *               amount: 60
  *     responses:
  *       200:
  *         description: Fixed expense updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/FixedExpense'
  *       400:
  *         description: Bad Request
  *       500:
@@ -97,11 +151,14 @@ router.put('/', authMiddleware, fixedExpenseController.updateFixedExpense);
  *         application/json:
  *           schema:
  *             type: object
+ *             required:
+ *               - expense_id
  *             properties:
- *               id:
+ *               expense_id:
  *                 type: string
+ *                 description: The ID of the fixed expense to delete
  *             example:
- *               id: 5f8d0d55b54764421b7156c3
+ *               expenseId: "665356241716d857dd03b374"
  *     responses:
  *       200:
  *         description: Fixed expense deleted successfully

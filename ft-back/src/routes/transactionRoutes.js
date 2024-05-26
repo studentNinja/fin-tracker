@@ -28,6 +28,10 @@ const router = express.Router();
  *     responses:
  *       201:
  *         description: Transaction created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Transaction'
  *       400:
  *         description: Bad Request
  *       500:

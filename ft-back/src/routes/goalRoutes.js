@@ -28,6 +28,10 @@ const router = express.Router();
  *     responses:
  *       201:
  *         description: Goal created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Goal'
  *       400:
  *         description: Bad Request
  *       500:
@@ -101,7 +105,7 @@ router.put('/', authMiddleware, goalController.updateGoal);
  *               id:
  *                 type: string
  *             example:
- *               id: 5f8d0d55b54764421b7156c3
+ *               id: "665356241716d857dd03b373"
  *     responses:
  *       200:
  *         description: Goal deleted successfully

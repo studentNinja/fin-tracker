@@ -9,7 +9,7 @@ exports.createTransaction = async (req, res) => {
         }
 
         const newTransaction = new Transaction({
-            user_id: req.userId,
+            user_id: req.user_id,
             amount,
             category,
             description
@@ -25,11 +25,11 @@ exports.getTransactions = async (req, res) => {
     try {
         const { page = 1, limit = 10 } = req.query;
 
-        const transactions = await Transaction.find({ user_id: req.userId })
+        const transactions = await Transaction.find({ user_id: req.user_id })
             .skip((page - 1) * limit)
             .limit(Number(limit));
 
-        const total = await Transaction.countDocuments({ user_id: req.userId });
+        const total = await Transaction.countDocuments({ user_id: req.user_id });
 
         res.status(200).send({
             transactions,

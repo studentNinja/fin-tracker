@@ -4,8 +4,8 @@ const config = require('../config/config');
 
 exports.register = async (req, res) => {
     try {
-        const { username, email, password, initialCapital, savingGoal } = req.body;
-        const newUser = new User({ username, email, password, initialCapital, savingGoal });
+        const { username, email, password, initial_capital, saving_goal } = req.body;
+        const newUser = new User({ username, email, password, initial_capital, saving_goal });
         await newUser.save();
         res.status(201).send(newUser);
     } catch (err) {

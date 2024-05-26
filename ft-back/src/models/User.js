@@ -2,7 +2,6 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const { Schema } = mongoose;
 
-
 /**
  * @swagger
  * components:
@@ -13,7 +12,7 @@ const { Schema } = mongoose;
  *         - username
  *         - email
  *         - password
- *         - initialCapital
+ *         - initial_capital
  *       properties:
  *         username:
  *           type: string
@@ -24,13 +23,14 @@ const { Schema } = mongoose;
  *         password:
  *           type: string
  *           description: The password of the user
- *         initialCapital:
+ *         initial_capital:
  *           type: number
  *           description: The initial capital of the user
- *         savingGoal:
+ *         saving_goal:
  *           type: number
  *           description: The saving goal of the user
- *         registrationDate:
+ *           default: 100000
+ *         registration_date:
  *           type: string
  *           format: date-time
  *           description: The registration date of the user
@@ -38,16 +38,15 @@ const { Schema } = mongoose;
  *           type: array
  *           items:
  *             $ref: '#/components/schemas/Transaction'
- *         fixedExpenses:
+ *         fixed_expenses:
  *           type: array
  *           items:
  *             $ref: '#/components/schemas/FixedExpense'
- *         achievedGoals:
+ *         goals:
  *           type: array
  *           items:
  *             $ref: '#/components/schemas/Goal'
  */
-
 const userSchema = new Schema({
     username: { type: String, required: true, unique: true, minlength: 4 },
     email: { type: String, required: true, unique: true },
