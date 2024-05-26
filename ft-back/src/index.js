@@ -4,6 +4,7 @@ const authRoutes = require('./routes/authRoutes');
 const userRoutes = require('./routes/userRoutes');
 const transactionRoutes = require('./routes/transactionRoutes')
 const fixedExpenseRoutes = require('./routes/fixedExpenseRoutes')
+const goalRoutes =require('./routes/goalRoutes')
 const cors = require('cors');
 const swaggerSetup = require('./swagger');
 require('dotenv').config();
@@ -16,6 +17,7 @@ connectDB();
 swaggerSetup(app);
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
+app.use('api/goals',goalRoutes)
 app.use('/api/transactions',transactionRoutes)
 app.use('api/fixedexpenses',fixedExpenseRoutes)
 
