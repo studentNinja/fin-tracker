@@ -3,6 +3,7 @@ const connectDB = require('./connections/db');
 const authRoutes = require('./routes/authRoutes');
 const userRoutes = require('./routes/userRoutes');
 const transactionRoutes = require('./routes/transactionRoutes')
+const fixedExpenseRoutes = require('./routes/fixedExpenseRoutes')
 const cors = require('cors');
 const swaggerSetup = require('./swagger');
 require('dotenv').config();
@@ -16,6 +17,7 @@ swaggerSetup(app);
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/transactions',transactionRoutes)
+app.use('api/expenses',fixedExpenseRoutes)
 
 const port = process.env.PORT || 8080;
 app.listen(port, () => {
