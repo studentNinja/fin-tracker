@@ -7,12 +7,11 @@ interface UserState {
     error: { msg: string } | string | null;
 }
 
-// Async thunk для реєстрації користувача
 export const registerUser = createAsyncThunk(
-    'user/register',
-    async (userData: { name: string; email: string; password: string }, { rejectWithValue }) => {
+    'auth/register',
+    async (userData: { username: string; email: string; password: string ,initialCapital: number}, { rejectWithValue }) => {
         try {
-            const response = await axiosInstance.post('/users/register', userData);
+            const response = await axiosInstance.post('/auth/register', userData);
             return response.data;
         } catch (error: any) {
             return rejectWithValue(error.response.data);
