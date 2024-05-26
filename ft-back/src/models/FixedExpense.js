@@ -25,6 +25,7 @@ const { Schema } = mongoose;
 const fixedExpenseSchema = new Schema({
     user: { type: Schema.Types.ObjectId, ref: 'User', required: false },
     name: { type: String, required: true },
+    category:{ type: String, enum: validCategories, required: true },
     amount: { type: Number, required: true }
 });
 

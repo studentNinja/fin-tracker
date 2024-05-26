@@ -52,12 +52,12 @@ const userSchema = new Schema({
     username: { type: String, required: true, unique: true, minlength: 4 },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true, minlength: 8 },
-    initialCapital: { type: Number, required: true },
-    savingGoal: { type: Number, default: 100000 },
-    registrationDate: { type: Date, default: Date.now },
+    initial_capital: { type: Number, required: true },
+    saving_goal: { type: Number, default: 100000 },
+    registration_date: { type: Date, default: Date.now },
     transactions: [{ type: Schema.Types.ObjectId, ref: 'Transaction' }],
-    fixedExpenses: [{ type: Schema.Types.ObjectId, ref: 'FixedExpense' }],
-    achievedGoals: [{ type: Schema.Types.ObjectId, ref: 'Goal' }]
+    fixed_expenses: [{ type: Schema.Types.ObjectId, ref: 'FixedExpense' }],
+    goals: [{ type: Schema.Types.ObjectId, ref: 'Goal' }]
 });
 
 userSchema.pre('save', async function(next) {

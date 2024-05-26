@@ -34,12 +34,13 @@ const { Schema } = mongoose;
  */
 
 const goalSchema = new Schema({
-    user: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+    user_id: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+    goal_id:{type: Schema.Types.ObjectId, required:true,unique: true},
+    name:{type: String, required:true},
     amount: { type: Number, required: true, default: 100000 },
-    savedAmount: { type: Number, default: 0 },
     achieved: { type: Boolean, default: false },
     startDate: { type: Date, default: Date.now },
-    achievedDate: { type: Date }
+    achievedDate: { type: Date}
 });
 
 const Goal = mongoose.model('Goal', goalSchema);
