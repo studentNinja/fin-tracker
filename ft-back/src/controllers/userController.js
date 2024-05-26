@@ -1,16 +1,18 @@
 const User = require('../models/User');
-const Transaction = require('../models/Transaction');
-const FixedExpense = require('../models/FixedExpense');
-const Goal = require('../models/Goal');
 
 exports.getProfile = async (req, res) => {
     try {
-        const user = await User.findById(req.userId).select('-password');
+        const user = await User.findById(req.userId)
+            .select('-password')
+            .populate('transactions')
+            .populate('fixed_expenses')
+            .populate('goals');
         if (!user) {
             return res.status(404).send({ error: 'User not found' });
         }
         res.status(200).send(user);
     } catch (err) {
+        console.error(err);
         res.status(500).send({ error: 'Server error' });
     }
 };

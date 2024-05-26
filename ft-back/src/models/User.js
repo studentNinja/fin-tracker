@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const bcrypt = require('bcryptjs');
 const { Schema } = mongoose;
 
 /**
@@ -48,8 +47,8 @@ const { Schema } = mongoose;
  *             $ref: '#/components/schemas/Goal'
  */
 const userSchema = new Schema({
-    username: { type: String, required: true, unique: true, minlength: 4, index: true },
-    email: { type: String, required: true, unique: true, index: true },
+    username: { type: String, required: true, unique: true, minlength: 4 },
+    email: { type: String, required: true, unique: true },
     password: { type: String, required: true, minlength: 8 },
     initial_capital: { type: Number, required: true },
     saving_goal: { type: Number, default: 100000 },
@@ -61,12 +60,8 @@ const userSchema = new Schema({
 
 userSchema.pre('save', async function(next) {
     if (this.isModified('password') || this.isNew) {
-        try {
-            const salt = await bcrypt.genSalt(10);
-            this.password = await bcrypt.hash(this.password, salt);
-        } catch (err) {
-            next(err);
-        }
+        const salt = await bcrypt.genSalt(10);
+        this.password = await bcrypt.hash(this.password, salt);
     }
     next();
 });
