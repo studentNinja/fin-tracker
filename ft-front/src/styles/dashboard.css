@@ -1,0 +1,369 @@
+
+.yellow{
+    background-color: var(--yellow-diagram-color);
+}
+.yellow-green{
+    background-color: var(--yellow-green-diagram-color);
+}
+.blue{
+    background-color: var(--blue-diagram-color);
+}
+.grey{
+    background-color: var(--grey-diagram-color);
+}
+
+.green{
+    background-color: var(--green-diagram-color);
+}
+
+.orange{
+    background-color: var(--orange-diagram-color);
+}
+.purple{
+    background-color: var(--purple-diagram-color);
+}
+.pink{
+    background-color: var(--pink-diagram-color);
+}
+
+
+.months-spendings-diagram{
+    width: 120px;
+    height: 120px;
+}
+
+
+
+.goal-diagram-info-number{
+    flex: 1;
+    display: flex;
+    flex-direction: row-reverse;
+    font-size: 32px;
+    font-weight: 500;
+
+}
+.goal-diagram-info-point{
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+
+}
+.goal-diagram-info-elem{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.goal-diagram-info-container{
+    display: flex;
+    font-size: 12px;
+
+}
+.goal-diagram-info-left{
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.goal-buttons-container .btn{
+    padding: 7px 30px ;
+    height: fit-content;
+
+}
+.goal-buttons-container{
+    display: flex;
+    font-size: 13px;
+    font-weight: 300;
+    gap: 10px;
+    flex: 1;
+    align-items: center;
+}
+
+.diagram-part-first{
+    border-bottom-left-radius: var(--button-border-radius);
+    border-top-left-radius: var(--button-border-radius);
+
+}
+.diagram-part-last{
+    border-bottom-right-radius: var(--button-border-radius);
+    border-top-right-radius: var(--button-border-radius);
+}
+
+
+
+.goal-diagram-container{
+    display: flex;
+    gap: 1px;
+    margin-top: 5px;
+}
+
+
+.goal-diagram-percent{
+    margin-bottom: 3px;
+    font-size: 12px;
+}
+.goal-diagram-part{
+    height: 25px;
+}
+.goal-diagram-prev-months{
+    /*this is going to be set automatically depending on data*/
+    width:13%
+}
+.goal-diagram-curr-months{
+    /*this is going to be set automatically depending on data*/
+    width:2%
+}
+.goal-diagram-left{
+    flex: 1;
+}
+
+
+.text{
+    text-align: left;
+}
+
+.months-spendings-diagram-info-title{
+    font-size: 13px;
+    font-weight: 300;
+}
+.dashboard-container{
+    height: 88%;
+    min-height: 560px;
+    max-height: 100%;
+    background-color: rgba(255, 255, 255, 0.61);
+    border-radius: var(--border-radius);
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 20px;
+}
+
+.block{
+    background-color: rgba(255, 255, 255, 0.89);
+    border-radius: var(--border-radius);
+    min-height: 240px;
+    box-sizing: border-box;
+    padding: 23px;
+    box-shadow: 0 0 10px 1px rgba(35, 41, 57, 0.08)
+}
+.block-1 {
+    box-sizing: border-box;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap:13px;
+    max-height: 100%;
+    overflow: hidden;
+}
+.block-2 {
+    flex: 1.5;
+
+    max-height: 100%;
+    overflow: hidden;
+    font-size: 14px;
+    gap: 13px;
+    display: flex;
+    flex-direction: column;
+}
+.block-3 {
+    flex: 1;
+    min-height: 40%;
+    overflow: hidden;
+    font-size: 14px;
+    gap: 13px;
+    display: flex;
+    flex-direction: row;
+    /*max-height: 350px;*/
+
+
+}
+.list-elem-line{
+    position: absolute;
+    width: 5px;
+    height: 130%;
+    border-radius: 5px;
+    transition: width 300ms;
+}
+.list-elem-line-2{
+    position: absolute;
+    width: 3px;
+    height: 110%;
+    border-radius: 5px;
+}
+
+.reverse-flex{
+    display: flex;
+    flex-direction: column-reverse;
+    width: 100%;
+    flex: 1;
+align-items: end;
+    justify-content: end;
+}
+
+.list-elem-start-block{
+    display: flex;
+    gap: 10px;
+    align-items: center;
+
+}
+.categories-diagram-container{
+    display: flex;
+    gap:1px;
+    border-radius: 5px ;
+    overflow: hidden;
+    cursor: pointer;
+}
+.categories-diagram-part{
+    height: 30px;
+    /*flex: 1;*/
+}
+
+.months-spendings-diagram-part{
+    flex: 1;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    gap:13px;
+}
+
+.categories-part{
+    /*box-sizing: border-box;*/
+    flex: 1;
+    overflow: hidden;
+    max-height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding: 0 15px;
+    height: fit-content;
+}
+.spendings-history-part{
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    flex: 1.5;
+    padding: 0 15px;
+
+}
+
+
+
+
+.first-row-block-container{
+    display: flex;
+    flex: 1;
+    gap: 16px;
+    max-height: 260px;
+
+    /*overflow: hidden;*/
+
+}
+.block-title{
+    width: 100%;
+    text-align: left;
+    font-weight: 500;
+    font-size: 16px;
+}
+.income-number-container{
+    display: flex;
+    align-items: center;
+}
+.income-number{
+    font-size: 32px;
+    font-weight: 500;
+    flex: 1;
+    text-align: left;
+
+}
+
+.line{
+    background-color: var(--line-bg-color);
+    width: 100%;
+    height: 2px;
+    border-radius: 3px;
+}
+.line-vertical{
+    background-color: var(--line-bg-color);
+    width: 2px;
+    height: 100%;
+    border-radius: 3px;
+}
+
+.list-line{
+    background-color: var(--line-bg-color);
+    width: 100%;
+    height: 1px;
+    border-radius: 3px;
+    min-height: 1px;
+}
+.margin-top{
+    margin-top: 10px;
+}
+
+.list{
+    font-size: 14px;
+    box-sizing: border-box;
+    width: 100%;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    overflow: auto;
+    height: 100%;
+    max-height: 100%;
+    padding-right: 10px;
+    scroll-behavior: smooth;
+
+}
+
+.list-2{
+    padding-top: 3px;
+    gap: 10px;
+    padding-right: 0;
+ }
+.list-3{
+    overflow: hidden;
+    justify-content: end;
+    padding-top: 3px;
+    gap: 4px;
+    padding-right: 15px;
+ }
+
+.list-elem:hover .list-elem-line{
+    width: 98%;
+}
+.list-elem-line-selected{
+    width: 98%;
+}
+
+
+.list-elem{
+    position: relative;
+    display: flex;
+    height: fit-content;
+    align-items: center;
+}
+.cursor{
+    cursor: pointer;
+
+}
+.padding-10{
+    padding-right: 10px;
+}
+.list-elem-end-block{
+    z-index: 1;
+    display: flex;
+    flex: 1;
+    flex-direction: row-reverse;
+    align-items: center;
+    align-content: center;
+    gap: 10px;
+    height: fit-content;
+}
+
+.list-elem-title{
+    margin-left: 10px;
+    height: fit-content;
+    z-index: 1;
+}
+

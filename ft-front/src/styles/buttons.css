@@ -1,0 +1,67 @@
+.add-btn{
+    background-color: var(--button-bg-color);
+    color: #FFFFFF;
+    padding: 0 7px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 1 / 1;
+    font-size: 22px;
+    cursor: pointer;
+    transition: background-color 200ms;
+}
+
+
+
+.btn{
+    padding: 7px 24px ;
+    border-radius: var(--button-border-radius);
+    background-color: var(--button-bg-color);
+    color: #FFFFFF;
+    cursor: pointer;
+    transition: background-color 200ms;
+}
+.btn-2{
+    background-color: var(--grey-diagram-color);
+
+}
+
+.btn:hover {
+    background-color: rgb(162, 176, 225);
+}
+.add-btn:hover:hover {
+    background-color: rgb(162, 176, 225);
+}
+.btn:active{
+    background-color: var(--button-bg-color);
+}
+
+.delete-btn{
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    cursor: pointer;
+
+}
+.btn-pop-up{
+    border-radius: var(--button-border-radius);
+    cursor: pointer;
+    transition: background-color 200ms;
+    font-weight: 300;
+    width: fit-content;
+    padding: 5px 30px;
+
+}
+.btn-pop-up-cancel{
+    color: var(--text-color);
+    background: none;
+    border: var(--button-bg-color) 1px solid;
+    transition: color 100ms;
+}
+
+
+.btn-pop-up-cancel:hover{
+    color: white;
+    border: rgba(116, 141, 207, 0) 1px solid;
+}

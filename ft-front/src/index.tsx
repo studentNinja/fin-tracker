@@ -3,7 +3,8 @@ import ReactDOM from 'react-dom/client'; // Імпортуйте createRoot
 import { Provider } from 'react-redux';
 import store from './app/store';
 import App from './App';
-import './index.css';
+import './styles/index.css';
+import './styles/buttons.css';
 
 const container = document.getElementById('root');
 const root = ReactDOM.createRoot(container!);

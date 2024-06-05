@@ -1,10 +1,14 @@
 import React from 'react';
-import HomePage from './pages/HomePage';
+import DashboardPage from "./pages/DashboardPage";
+import './styles/App.css';
+import Header from "./components/Header";
+
 
 const App: React.FC = () => {
   return (
       <div className="App">
-        <HomePage />
+          <Header />
+        <DashboardPage/>
       </div>
   );
 };
