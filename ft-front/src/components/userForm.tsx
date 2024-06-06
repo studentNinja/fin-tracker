@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { AppDispatch, RootState } from "../app/store";
 import { registerUser } from "../features/auth/authSlice";
 
@@ -8,11 +9,18 @@ const UserForm: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [initialCapital, setInitialCapital] = useState<number>(0);
+  const navigate = useNavigate();
 
   const dispatch = useDispatch<AppDispatch>();
-  const { loading, error, userInfo } = useSelector(
+  const { loading, error, isAuthenticated } = useSelector(
     (state: RootState) => state.auth
   );
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/dashboard");
+    }
+  }, [isAuthenticated, navigate]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -67,7 +75,6 @@ const UserForm: React.FC = () => {
       ) : (
         <p>{error}</p>
       )}
-      {userInfo && <p>Registered successfully!</p>}
     </form>
   );
 };
