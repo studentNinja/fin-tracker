@@ -15,7 +15,6 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({ children }) => {
 
   useEffect(() => {
     if (token) {
-      // You may want to fetch user details from your API or use the stored user info
       dispatch(
         setAuthState({
           token,

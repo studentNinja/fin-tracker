@@ -22,7 +22,6 @@ interface AuthState {
     error: { msg: string } | string | null;
 }
 
-// Get token from local storage and check if it's still valid
 const token = getTokenWithExpiry('token');
 
 const initialState: AuthState = {
@@ -51,7 +50,7 @@ export const loginUser = createAsyncThunk(
         try {
             const response = await axiosInstance.post('/auth/login', credentials);
             const { token, user } = response.data;
-            setTokenWithExpiry('token', token, 3600 * 1000); // Set token with 1-hour expiry
+            setTokenWithExpiry('token', token, 3600 * 1000);
             return { token, user };
         } catch (error: any) {
             return rejectWithValue(error.response.data);
