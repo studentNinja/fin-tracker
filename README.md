@@ -87,9 +87,9 @@ FinTracker is a full-stack application for tracking finances, built with React, 
 - **URL:** `/api/users/register`
 - **Method:** `POST`
 - **Body Parameters:**
-    - `name`: string
-    - `email`: string
-    - `password`: string
+  - `name`: string
+  - `email`: string
+  - `password`: string
 
 ### Example Request
 
@@ -102,16 +102,18 @@ curl 'http://localhost:8080/api/users/register' -X POST -H 'Content-Type: applic
 ### Common Issues
 
 1. **MongoDB Connection Error:**
-    - Ensure MongoDB is running.
-    - Verify the `MONGODB_URI` in your `.env` file is correct.
+
+   - Ensure MongoDB is running.
+   - Verify the `MONGODB_URI` in your `.env` file is correct.
 
 2. **CORS Issues:**
-    - Ensure the backend is configured to handle CORS requests.
-    - Verify the `REACT_APP_BACK_URL` in your `.env` file is correct.
+
+   - Ensure the backend is configured to handle CORS requests.
+   - Verify the `REACT_APP_BACK_URL` in your `.env` file is correct.
 
 3. **Frontend not loading:**
-    - Ensure the frontend development server is running on `http://localhost:3000`.
-    - Check the console for any errors.
+   - Ensure the frontend development server is running on `http://localhost:3000`.
+   - Check the console for any errors.
 
 ## Contributing
 
@@ -124,7 +126,3 @@ curl 'http://localhost:8080/api/users/register' -X POST -H 'Content-Type: applic
 ## License
 
 This project is licensed under the MIT License.
-
-Access the application:
-
-Open your browser and navigate to `http://localhost:3000`. Use the registration form to create a new user and monitor the console for any potential errors or logs.

@@ -1,17 +1,62 @@
 const mongoose = require('mongoose');
-const bcrypt = require('bcryptjs');
 const { Schema } = mongoose;
+const bcrypt = require('bcryptjs');
 
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     User:
+ *       type: object
+ *       required:
+ *         - username
+ *         - email
+ *         - password
+ *         - initial_capital
+ *       properties:
+ *         username:
+ *           type: string
+ *           description: The username of the user
+ *         email:
+ *           type: string
+ *           description: The email of the user
+ *         password:
+ *           type: string
+ *           description: The password of the user
+ *         initial_capital:
+ *           type: number
+ *           description: The initial capital of the user
+ *         saving_goal:
+ *           type: number
+ *           description: The saving goal of the user
+ *           default: 100000
+ *         registration_date:
+ *           type: string
+ *           format: date-time
+ *           description: The registration date of the user
+ *         transactions:
+ *           type: array
+ *           items:
+ *             $ref: '#/components/schemas/Transaction'
+ *         fixed_expenses:
+ *           type: array
+ *           items:
+ *             $ref: '#/components/schemas/FixedExpense'
+ *         goals:
+ *           type: array
+ *           items:
+ *             $ref: '#/components/schemas/Goal'
+ */
 const userSchema = new Schema({
     username: { type: String, required: true, unique: true, minlength: 4 },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true, minlength: 8 },
-    initialCapital: { type: Number, required: true },
-    savingGoal: { type: Number, default: 100000 },
-    registrationDate: { type: Date, default: Date.now },
+    initial_capital: { type: Number, required: true },
+    saving_goal: { type: Number, default: 100000 },
+    registration_date: { type: Date, default: Date.now },
     transactions: [{ type: Schema.Types.ObjectId, ref: 'Transaction' }],
-    fixedExpenses: [{ type: Schema.Types.ObjectId, ref: 'FixedExpense' }],
-    achievedGoals: [{ type: Schema.Types.ObjectId, ref: 'Goal' }]
+    fixed_expenses: [{ type: Schema.Types.ObjectId, ref: 'FixedExpense' }],
+    goals: [{ type: Schema.Types.ObjectId, ref: 'Goal' }]
 });
 
 userSchema.pre('save', async function(next) {
