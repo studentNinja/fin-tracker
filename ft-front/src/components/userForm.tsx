@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../app/store";
-import { registerUser } from "../features/user/userSlice";
+import { registerUser } from "../features/auth/authSlice";
 
 const UserForm: React.FC = () => {
   const [username, setUserName] = useState("");
