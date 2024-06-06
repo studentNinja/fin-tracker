@@ -25,7 +25,7 @@ FinTracker is a full-stack application for tracking finances, built with React, 
    npm install
    ```
 
-3. Create a `.env` file in the `ft-back` directory and addIncome the following:
+3. Create a `.env` file in the `ft-back` directory and add the following:
 
    ```env
    MONGODB_URI=mongodb://localhost:27017/fintracker
@@ -60,7 +60,7 @@ FinTracker is a full-stack application for tracking finances, built with React, 
    npm install
    ```
 
-3. Create a `.env` file in the `ft-front` directory and addIncome the following:
+3. Create a `.env` file in the `ft-front` directory and add the following:
 
    ```env
    REACT_APP_BACK_URL=http://localhost:8080/api
