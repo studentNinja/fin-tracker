@@ -23,11 +23,7 @@ const initialState: UserState = {
 
 export const fetchUserInfo = createAsyncThunk('user/fetchUserInfo', async (_, { rejectWithValue }) => {
     try {
-        const response = await axiosInstance.get('/users/profile', {
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem('token')}`,
-            },
-        });
+        const response = await axiosInstance.get('/users/profile');
         return response.data;
     } catch (error) {
         if (axios.isAxiosError(error)) {

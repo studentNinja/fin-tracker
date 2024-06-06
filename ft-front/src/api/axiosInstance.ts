@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { getTokenWithExpiry } from '../utils/tokenUtils';
 
 const baseURL = process.env.REACT_APP_BACK_URL;
 
@@ -10,9 +11,12 @@ const axiosInstance = axios.create({
     },
 });
 
-console.log('REACT_APP_BACK_URL:', baseURL);
 axiosInstance.interceptors.request.use(
     (config) => {
+        const token = getTokenWithExpiry('token');
+        if (token) {
+            config.headers['Authorization'] = `Bearer ${token}`;
+        }
         return config;
     },
     (error) => {

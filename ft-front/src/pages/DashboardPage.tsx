@@ -23,7 +23,7 @@ const DashboardPage: React.FC = () => {
     dispatch(fetchUserInfo());
   }, [dispatch]);
 
-  console.log(userInfo, loading);
+  console.log(userInfo);
 
   const [visibilityPopUpConfirmDelete, setVisibilityPopUpConfirmDelete] =
     useState(false);
