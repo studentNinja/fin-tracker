@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import logo from "../assets/logo.svg";
 import avatar from "../assets/avatar.svg";
 import "../styles/header.css";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { AppDispatch } from "../app/store";
+import { AppDispatch, RootState } from "../app/store";
 import { logout } from "../features/auth/authSlice";
 
 const Header = () => {
@@ -12,7 +12,9 @@ const Header = () => {
 
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
-
+  const isAuthenticated = useSelector(
+    (state: RootState) => state.auth.isAuthenticated
+  );
   const handleLogout = () => {
     dispatch(logout());
     navigate("/login");
@@ -23,14 +25,14 @@ const Header = () => {
         <div className="logo">
           <img src={logo} alt="logo" />
         </div>
-        {user ? (
+        {isAuthenticated ? (
           <div className="header-option">
             <a href="#">?Dashboard?</a>
           </div>
         ) : (
           ""
         )}
-        {user ? (
+        {isAuthenticated ? (
           <div className="account-box">
             <div className="btn" onClick={handleLogout}>
               Вийти
@@ -41,7 +43,9 @@ const Header = () => {
           </div>
         ) : (
           <div className="account-box">
-            <div className="btn">Увійти</div>
+            <div className="btn" onClick={() => navigate("/login")}>
+              Увійти
+            </div>
           </div>
         )}
       </header>
