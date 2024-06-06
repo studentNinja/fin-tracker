@@ -46,10 +46,10 @@ const DashboardBlock3 = (props: {
   function selectCategory(id: number) {
     if (selectedCategory === id) return;
     setSelectedCategory(id);
-    if (id == 0) setArraySpendingsFiltered(arraySpendings);
+    if (id === 0) setArraySpendingsFiltered(arraySpendings);
     else
       setArraySpendingsFiltered(
-        arraySpendings.filter((spending) => spending.category == id)
+        arraySpendings.filter((spending) => spending.category === id)
       );
   }
 
@@ -82,7 +82,7 @@ const DashboardBlock3 = (props: {
       number,
     };
     setArraySpendings([...arraySpendings, newSpending]);
-    if (categoryId == selectedCategory || selectedCategory == 0)
+    if (categoryId === selectedCategory || selectedCategory === 0)
       setArraySpendingsFiltered([...arraySpendingsFiltered, newSpending]);
   }
 

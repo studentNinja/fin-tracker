@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import UserForm from "../components/userForm";
 import "../styles/dashboard.css";
 import deleteBtn from "../assets/delete-btn.svg";
@@ -9,8 +9,22 @@ import ConfirmDeletePopUp from "../components/pop-ups/ConfirmDeletePopUp";
 import AddIncomeOrFixedExpensesPopUp from "../components/pop-ups/AddIncomeOrFixedExpensesPopUp";
 import MoveMoneyPopUp from "../components/pop-ups/MoveMoneyPopUp";
 import AddSpendingPopUp from "../components/pop-ups/AddSpendingPopUp";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState, AppDispatch } from "../app/store";
+import { fetchUserInfo } from "../features/user/userSlice";
 
 const DashboardPage: React.FC = () => {
+  const dispatch = useDispatch<AppDispatch>();
+  const { userInfo, loading, error } = useSelector(
+    (state: RootState) => state.user
+  );
+
+  useEffect(() => {
+    dispatch(fetchUserInfo());
+  }, [dispatch]);
+
+  console.log(userInfo, loading);
+
   const [visibilityPopUpConfirmDelete, setVisibilityPopUpConfirmDelete] =
     useState(false);
   const [visibilityPopUpAddIncome, setVisibilityPopUpAddIncome] =

@@ -11,7 +11,7 @@ const UserForm: React.FC = () => {
 
   const dispatch = useDispatch<AppDispatch>();
   const { loading, error, userInfo } = useSelector(
-    (state: RootState) => state.user
+    (state: RootState) => state.auth // Ensure to use the correct slice name here
   );
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -22,11 +22,13 @@ const UserForm: React.FC = () => {
   return (
     <form onSubmit={handleSubmit}>
       <div>
-        <label>Name</label>
+        <label>Username</label>
         <input
           type="text"
           value={username}
           onChange={(e) => setUserName(e.target.value)}
+          required
+          minLength={4}
         />
       </div>
       <div>
@@ -35,6 +37,7 @@ const UserForm: React.FC = () => {
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          required
         />
       </div>
       <div>
@@ -43,6 +46,8 @@ const UserForm: React.FC = () => {
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          required
+          minLength={8}
         />
       </div>
       <div>
@@ -51,10 +56,12 @@ const UserForm: React.FC = () => {
           type="number"
           value={initialCapital}
           onChange={(e) => setInitialCapital(Number(e.target.value))}
+          required
         />
       </div>
-      <button type="submit">Register</button>
-      {loading && <p>Loading...</p>}
+      <button type="submit" disabled={loading}>
+        {loading ? "Registering..." : "Register"}
+      </button>
       {error && typeof error === "object" && error !== null ? (
         <p>{error.msg}</p>
       ) : (
