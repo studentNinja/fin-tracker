@@ -3,8 +3,9 @@ import deleteBtn from "../../../assets/delete-btn.svg";
 
 const SpendingsHistoryPart = (props: {
     arraySpendings:Array<{id:number,date:string,title:string, number:number, category:number}>,
-    deleteSpending: (id: number) => void
-}) => {
+    deleteSpending: (id: number) => void,
+    clickAddSpendingBtn:()=>void
+    }) => {
 
 
 
@@ -16,7 +17,8 @@ const SpendingsHistoryPart = (props: {
 
                 </div>
                 <div className="list-elem-end-block">
-                    <div className="add-btn">+</div>
+                    <div className="add-btn"
+                         onClick={()=>props.clickAddSpendingBtn()}>+</div>
                 </div>
             </div>
 

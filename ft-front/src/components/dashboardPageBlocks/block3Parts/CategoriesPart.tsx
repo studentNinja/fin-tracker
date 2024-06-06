@@ -2,6 +2,9 @@ import React, {useState} from 'react';
 
 const CategoriesPart = (props:{selectCategory: (id: number) => void}) => {
 
+    // to do: fetch categories
+
+
     const [arrayCategories ] = useState([
         {id:1, title:"Постійні витрати", color:"blue", number:4500},
         {id:2, title:"Краса та одяг",color:"green", number:2000},

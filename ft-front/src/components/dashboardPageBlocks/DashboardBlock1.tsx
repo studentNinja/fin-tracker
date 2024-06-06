@@ -1,8 +1,10 @@
 import React, {useState} from 'react';
 import deleteBtn from "../../assets/delete-btn.svg";
 
-const DashboardBlock1 = (props: { showConfirmDeletePopUp: (deleteFunct:()=>void)=>void }) => {
+const DashboardBlock1 = (props: { showConfirmDeletePopUp: (deleteFunct:()=>void)=>void ,
+                                showPopUpAddIncome: (addFunct:(title:string, number:number)=>void)=>void }) => {
 
+    // to do: fetch income sources
     const [arrayIncome, setArrayIncome] = useState([
         {id:1, title:"Зарплата", number:80000},
         {id:2, title:"Повернення боргу", number:5000},
@@ -12,11 +14,27 @@ const DashboardBlock1 = (props: { showConfirmDeletePopUp: (deleteFunct:()=>void)
         {id:6, title:"Стипендія", number:2000},
         {id:7, title:"Подарунок", number:6000},
     ])
+
+
     function deleteIncome(id:number){
         setArrayIncome(arrayIncome.filter((income)=>income.id!==id))
 
         /// to do: DELETE
     }
+    function addIncome(title:string, number:number){
+        if(number<=0)
+            throw new Error("Неправильне значення суми")
+        let newIncome={
+            id:arrayIncome.length+1,
+            title, number
+        }
+        setArrayIncome([...arrayIncome, newIncome])
+
+        /// to do: POST
+    }
+
+
+
 
     return (
         <div className="block block-1">
@@ -31,7 +49,7 @@ const DashboardBlock1 = (props: { showConfirmDeletePopUp: (deleteFunct:()=>void)
                      res + curr.number, 0).toLocaleString('uk-UA')
 
                 }</div>
-                <div className="add-btn">+</div>
+                <div className="add-btn" onClick={()=>props.showPopUpAddIncome(addIncome)} >+</div>
             </div>
             <div className="line"></div>
             <div className="list">
