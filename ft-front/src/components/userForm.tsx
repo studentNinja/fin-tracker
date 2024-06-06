@@ -11,7 +11,7 @@ const UserForm: React.FC = () => {
 
   const dispatch = useDispatch<AppDispatch>();
   const { loading, error, userInfo } = useSelector(
-    (state: RootState) => state.auth // Ensure to use the correct slice name here
+    (state: RootState) => state.auth
   );
 
   const handleSubmit = (e: React.FormEvent) => {
