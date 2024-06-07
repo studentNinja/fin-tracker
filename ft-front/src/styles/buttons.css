@@ -12,6 +12,26 @@
     transition: background-color 200ms;
 }
 
+.form-button:disabled{
+    cursor: auto;
+}
+button{
+    font-family: Roboto, serif;
+}
+
+.form-button{
+    cursor: pointer;
+    background-color: var(--button-bg-color);
+    color: #FFFFFF;
+    border-radius: var(--button-border-radius);
+    transition: background-color 200ms;
+    padding: 7px 10% ;
+    border:none;
+    width: fit-content;
+    height: fit-content;
+    font-size: 16px;
+}
+
 
 
 .btn{
@@ -21,6 +41,7 @@
     color: #FFFFFF;
     cursor: pointer;
     transition: background-color 200ms;
+
 }
 .btn-2{
     background-color: var(--grey-diagram-color);
@@ -30,9 +51,10 @@
 .btn:hover {
     background-color: rgb(162, 176, 225);
 }
-.add-btn:hover:hover {
+.add-btn:hover{
     background-color: rgb(162, 176, 225);
 }
+
 .btn:active{
     background-color: var(--button-bg-color);
 }
@@ -51,8 +73,9 @@
     font-weight: 300;
     width: fit-content;
     padding: 5px 30px;
-
 }
+
+
 .btn-pop-up-cancel{
     color: var(--text-color);
     background: none;

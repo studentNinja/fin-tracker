@@ -29,7 +29,7 @@ const AddSpendingPopUp = (props: {
       }}
     >
       <div
-        className="pop-up-body shadow"
+        className="form-body shadow"
         onClick={(e) => {
           e.stopPropagation();
         }}
@@ -48,9 +48,7 @@ const AddSpendingPopUp = (props: {
               </option>
             ))}
           </select>
-          {/*<input value={title}*/}
-          {/*       onChange={event=>setTitle(event.target.value)}*/}
-          {/*       className="input-pop-up"/>*/}
+
         </div>
         <div className="input-title-pop-up">
           Введіть назву

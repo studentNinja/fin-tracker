@@ -34,7 +34,7 @@ const initialState: AuthState = {
 
 export const registerUser = createAsyncThunk(
     'auth/register',
-    async (userData: { username: string; email: string; password: string; initialCapital: number }, { rejectWithValue }) => {
+    async (userData: { username: string; email: string; password: string; initial_capital: number; saving_goal:number }, { rejectWithValue }) => {
         try {
             const response = await axiosInstance.post('/auth/register', userData);
             return response.data;

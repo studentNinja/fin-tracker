@@ -16,7 +16,7 @@ const MoveMoneyPopUp = (props: {
       }}
     >
       <div
-        className="pop-up-body shadow"
+        className="form-body shadow"
         onClick={(e) => {
           e.stopPropagation();
         }}
