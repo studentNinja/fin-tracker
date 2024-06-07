@@ -6,6 +6,7 @@ import { Route, Routes } from "react-router-dom";
 import { RegisterPage } from "./pages/RegisterPage";
 import PrivateRoute from "./components/PrivateRoute/PrivateRoute";
 import LoginPage from "./pages/LoginPage";
+import "./styles/form.css";
 
 const App: React.FC = () => {
   return (

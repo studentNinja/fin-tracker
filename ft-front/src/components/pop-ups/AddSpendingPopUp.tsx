@@ -27,9 +27,17 @@ const AddSpendingPopUp = (props: {
       onClick={(e) => {
         props.cancel();
       }}
-    >
+    ><form onSubmit={(e) => {
+      e.preventDefault()
+      try {
+        props.confirmAdd(categoryId, title, number);
+        props.cancel();
+      } catch (error) {
+        alert((error as Error).message);
+      }
+    }}>
       <div
-        className="pop-up-body shadow"
+        className="form-body pop-up shadow"
         onClick={(e) => {
           e.stopPropagation();
         }}
@@ -38,9 +46,11 @@ const AddSpendingPopUp = (props: {
         <div className="input-title-pop-up">
           Оберіть категорію витрати
           <select
+
             onChange={(event) => setCategoryId(+event.target.value)}
             className="input-pop-up"
             name="select"
+            required
           >
             {arrayCategories.map((category) => (
               <option key={category.id} value={category.id}>
@@ -48,9 +58,7 @@ const AddSpendingPopUp = (props: {
               </option>
             ))}
           </select>
-          {/*<input value={title}*/}
-          {/*       onChange={event=>setTitle(event.target.value)}*/}
-          {/*       className="input-pop-up"/>*/}
+
         </div>
         <div className="input-title-pop-up">
           Введіть назву
@@ -58,6 +66,7 @@ const AddSpendingPopUp = (props: {
             value={title}
             onChange={(event) => setTitle(event.target.value)}
             className="input-pop-up"
+            required
           />
         </div>
         <div className="input-title-pop-up">
@@ -68,32 +77,27 @@ const AddSpendingPopUp = (props: {
             value={number}
             onChange={(event) => setNumber(+event.target.value)}
             className="input-pop-up"
+            required
           />
         </div>
         <div className="button-container">
           <div
-            className="btn btn-pop-up btn-pop-up-cancel "
+            className="btn form-button btn-pop-up btn-pop-up-cancel "
             onClick={(e) => {
               props.cancel();
             }}
           >
             Скасувати
           </div>
-          <div
-            className="btn btn-pop-up "
-            onClick={(e) => {
-              try {
-                props.confirmAdd(categoryId, title, number);
-                props.cancel();
-              } catch (error) {
-                alert((error as Error).message);
-              }
-            }}
+          <button
+            className="btn form-button btn-pop-up "
+
           >
             Додати
-          </div>
+          </button>
         </div>
       </div>
+    </form>
     </div>
   );
 };

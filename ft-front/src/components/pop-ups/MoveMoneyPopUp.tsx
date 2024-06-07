@@ -14,9 +14,17 @@ const MoveMoneyPopUp = (props: {
       onClick={(e) => {
         props.cancel();
       }}
-    >
-      <div
-        className="pop-up-body shadow"
+    ><form onSubmit={(e) => {
+        e.preventDefault()
+        try {
+            props.confirmMove(number);
+            props.cancel();
+        } catch (error) {
+            alert((error as Error).message);
+        }
+    }}>
+        <div
+        className="form-body pop-up shadow"
         onClick={(e) => {
           e.stopPropagation();
         }}
@@ -30,32 +38,27 @@ const MoveMoneyPopUp = (props: {
             value={number}
             onChange={(event) => setNumber(+event.target.value)}
             className="input-pop-up"
+            required
           />
         </div>
         <div className="button-container">
           <div
-            className="btn btn-pop-up btn-pop-up-cancel "
+            className="btn form-button btn-pop-up btn-pop-up-cancel "
             onClick={(e) => {
               props.cancel();
             }}
           >
             Скасувати
           </div>
-          <div
-            className="btn btn-pop-up "
-            onClick={(e) => {
-              try {
-                props.confirmMove(number);
-                props.cancel();
-              } catch (error) {
-                alert((error as Error).message);
-              }
-            }}
+          <button
+            className="btn form-button btn-pop-up "
+            type="submit"
           >
             {props.title.split(" ")[0]}
-          </div>
+          </button>
         </div>
       </div>
+    </form>
     </div>
   );
 };

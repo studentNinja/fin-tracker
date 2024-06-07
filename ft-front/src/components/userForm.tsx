@@ -24,10 +24,11 @@ const UserForm: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    dispatch(registerUser({ username, email, password, initialCapital }));
+    dispatch(registerUser({ username, email, password, initial_capital:initialCapital, saving_goal:0 }));
   };
 
   return (
+
     <form onSubmit={handleSubmit}>
       <div>
         <label>Username</label>
