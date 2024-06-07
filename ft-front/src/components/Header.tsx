@@ -8,12 +8,13 @@ import { AppDispatch, RootState } from "../app/store";
 import { logout } from "../features/auth/authSlice";
 
 const Header = () => {
-  const [user, setUser] = useState(true);
-
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const isAuthenticated = useSelector(
     (state: RootState) => state.auth.isAuthenticated
+  );
+  const userName = useSelector(
+    (state: RootState) => state.user?.userInfo?.username
   );
   const handleLogout = () => {
     dispatch(logout());
@@ -40,6 +41,7 @@ const Header = () => {
             <div className="avatar-container">
               <img className="avatar" src={avatar} alt="avatar" />
             </div>
+            <div>{userName}</div>
           </div>
         ) : (
           <div className="account-box">

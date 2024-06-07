@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 
-import MonthsSpendingsDiagramPart from "./block3Parts/MonthsSpendingsDiagramPart";
-import CategoriesPart from "./block3Parts/CategoriesPart";
-import SpendingsHistoryPart from "./block3Parts/SpendingsHistoryPart";
+import MonthsSpendingsDiagramPart from "./StatisticsComponents/MonthsSpendingsDiagramPart";
+import CategoriesPart from "./StatisticsComponents/CategoriesPart";
+import SpendingsHistoryPart from "./StatisticsComponents/SpendingsHistoryPart";
 
-const DashboardBlock3 = (props: {
+const StatisticsBlock = (props: {
   showConfirmDeletePopUp: (deleteFunct: () => void) => void;
   showAddSpendingPopUp: (
     addFunct: (categoryId: number, title: string, number: number) => void
@@ -118,4 +118,4 @@ const DashboardBlock3 = (props: {
   );
 };
 
-export default DashboardBlock3;
+export default StatisticsBlock;

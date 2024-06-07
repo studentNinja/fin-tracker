@@ -11,7 +11,7 @@ const CategoriesPart = (props: { selectCategory: (id: number) => void }) => {
     { id: 5, title: "Медицина", color: "yellow", number: 2400 },
     { id: 6, title: "Продукти", color: "pink", number: 10000 },
     { id: 7, title: "Транспорт", color: "yellow-green", number: 10000 },
-    { id: 8, title: "Інше", color: "grey", number: 1400 },
+    { id: 8, title: "Інше", color: "grey", number: 0 },
   ]);
 
   let [selectedCategory, setselectedCategory] = useState(0);

@@ -23,9 +23,9 @@ const LoginPage: React.FC = () => {
     e.preventDefault();
     const resultAction = await dispatch(loginUser({ email, password }));
 
-    if (loginUser.fulfilled.match(resultAction)) {
-      navigate("/dashboard");
-    }
+    //     if (loginUser.fulfilled.match(resultAction)) {
+    //       navigate("/dashboard");
+    //     }
   };
 
   return (

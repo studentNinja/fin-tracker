@@ -5,7 +5,7 @@ const AddSpendingPopUp = (props: {
   cancel: () => void;
   confirmAdd: (categoryId: number, title: string, number: number) => void;
 }) => {
-  // to do: fetch data without Постійні витрати
+  //TODO: fetch data without Постійні витрати
   const [arrayCategories] = useState([
     { id: 1, title: "Постійні витрати", color: "blue", number: 4500 },
     { id: 2, title: "Краса та одяг", color: "green", number: 2000 },
