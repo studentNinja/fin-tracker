@@ -15,9 +15,17 @@ const AddIncomeOrFixedExpensesPopUp = (props: {
       onClick={(e) => {
         props.cancel();
       }}
-    >
+    ><form onSubmit={(e) => {
+      e.preventDefault()
+      try {
+        props.confirmAdd(title, number);
+        props.cancel();
+      } catch (error) {
+        alert((error as Error).message);
+      }
+    }}>
       <div
-        className="form-body shadow"
+        className="form-body pop-up shadow"
         onClick={(e) => {
           e.stopPropagation();
         }}
@@ -26,9 +34,11 @@ const AddIncomeOrFixedExpensesPopUp = (props: {
         <div className="input-title-pop-up">
           Введіть назву
           <input
+            minLength={3}
             value={title}
             onChange={(event) => setTitle(event.target.value)}
             className="input-pop-up"
+            required
           />
         </div>
         <div className="input-title-pop-up">
@@ -39,32 +49,28 @@ const AddIncomeOrFixedExpensesPopUp = (props: {
             value={number}
             onChange={(event) => setNumber(+event.target.value)}
             className="input-pop-up"
+            required
           />
         </div>
         <div className="button-container">
           <div
-            className="btn btn-pop-up btn-pop-up-cancel "
+            className="btn form-button btn-pop-up btn-pop-up-cancel "
             onClick={(e) => {
               props.cancel();
             }}
           >
             Скасувати
           </div>
-          <div
-            className="btn btn-pop-up "
-            onClick={(e) => {
-              try {
-                props.confirmAdd(title, number);
-                props.cancel();
-              } catch (error) {
-                alert((error as Error).message);
-              }
-            }}
+          <button
+            className="btn  form-button btn-pop-up"
+            type="submit"
+
           >
             Додати
-          </div>
+          </button>
         </div>
       </div>
+    </form>
     </div>
   );
 };

@@ -41,8 +41,9 @@ button{
     color: #FFFFFF;
     cursor: pointer;
     transition: background-color 200ms;
-
 }
+
+
 .btn-2{
     background-color: var(--grey-diagram-color);
 
@@ -73,6 +74,7 @@ button{
     font-weight: 300;
     width: fit-content;
     padding: 5px 30px;
+    border: 1px solid transparent;
 }
 
 
@@ -87,4 +89,8 @@ button{
 .btn-pop-up-cancel:hover{
     color: white;
     border: rgba(116, 141, 207, 0) 1px solid;
+}
+button{
+    box-sizing: border-box;
+    border: none;
 }

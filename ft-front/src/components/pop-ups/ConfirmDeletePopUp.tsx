@@ -13,7 +13,7 @@ const ConfirmDeletePopUp = (props: {
       }}
     >
       <div
-        className="form-body  shadow"
+        className="form-body pop-up  shadow"
         onClick={(e) => {
           e.stopPropagation();
         }}

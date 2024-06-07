@@ -12,6 +12,9 @@
     align-items: center;
 
 }
+.pop-up{
+    z-index: 102;
+}
 .pop-up-bg::before {
     content: "";
     position: absolute;
