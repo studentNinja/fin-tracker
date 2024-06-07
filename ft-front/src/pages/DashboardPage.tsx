@@ -77,17 +77,21 @@ const DashboardPage: React.FC = () => {
 
   return (
     <div className="dashboard-container shadow">
-      <div className="first-row-block-container">
-        <DashboardBlock1
-          showConfirmDeletePopUp={showConfirmDeletePopUp}
-          showPopUpAddIncome={showPopUpAddIncome}
-        />
-        <DashboardBlock2 showMoveMoneyPopUp={showMoveMoneyPopUp} />
-      </div>
-      <DashboardBlock3
-        showConfirmDeletePopUp={showConfirmDeletePopUp}
-        showAddSpendingPopUp={showAddSpendingPopUp}
-      />
+      {userInfo && (
+        <>
+          <div className="first-row-block-container">
+            <DashboardBlock1
+              showConfirmDeletePopUp={showConfirmDeletePopUp}
+              showPopUpAddIncome={showPopUpAddIncome}
+            />
+            <DashboardBlock2 showMoveMoneyPopUp={showMoveMoneyPopUp} />
+          </div>
+          <DashboardBlock3
+            showConfirmDeletePopUp={showConfirmDeletePopUp}
+            showAddSpendingPopUp={showAddSpendingPopUp}
+          />
+        </>
+      )}
 
       {visibilityPopUpConfirmDelete ? (
         <ConfirmDeletePopUp
