@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from "react";
-import UserForm from "../components/userForm";
 import "../styles/dashboard.css";
-import deleteBtn from "../assets/delete-btn.svg";
 import DashboardBlock1 from "../components/dashboardPageBlocks/IncomeBlock";
 import DashboardBlock2 from "../components/dashboardPageBlocks/ProgressBlock";
 import DashboardBlock3 from "../components/dashboardPageBlocks/StatisticsBlock";
 import ConfirmDeletePopUp from "../components/pop-ups/ConfirmDeletePopUp";
 import AddIncomeOrFixedExpensesPopUp from "../components/pop-ups/AddIncomeOrFixedExpensesPopUp";
-import MoveMoneyPopUp from "../components/pop-ups/MoveMoneyPopUp";
+import ChangeNumberPopUp from "../components/pop-ups/ChangeNumberPopUp";
 import AddSpendingPopUp from "../components/pop-ups/AddSpendingPopUp";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState, AppDispatch } from "../app/store";
@@ -79,7 +77,7 @@ const DashboardPage: React.FC = () => {
     <div className="dashboard-container shadow">
       {userInfo && (
         <>
-          <div className="first-row-block-container">
+          <div className="one-row-block-container">
             <DashboardBlock1
               showConfirmDeletePopUp={showConfirmDeletePopUp}
               showPopUpAddIncome={showPopUpAddIncome}
@@ -111,10 +109,10 @@ const DashboardPage: React.FC = () => {
         ""
       )}
       {visibilityMoveMoneyPopUp ? (
-        <MoveMoneyPopUp
+        <ChangeNumberPopUp
           title={titleMoveMoneyPopUp}
           cancel={() => setVisibilityMoveMoneyPopUp(false)}
-          confirmMove={functionsHolder.moveMoney}
+          confirmChange={functionsHolder.moveMoney}
         />
       ) : (
         ""

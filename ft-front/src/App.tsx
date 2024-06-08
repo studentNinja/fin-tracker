@@ -7,6 +7,8 @@ import { RegisterPage } from "./pages/RegisterPage";
 import PrivateRoute from "./components/PrivateRoute/PrivateRoute";
 import LoginPage from "./pages/LoginPage";
 import "./styles/form.css";
+import "./styles/list-animation.css";
+import ProfilePage from "./pages/ProfilePage";
 
 const App: React.FC = () => {
   return (
@@ -20,6 +22,14 @@ const App: React.FC = () => {
           element={
             <PrivateRoute>
               <DashboardPage />
+            </PrivateRoute>
+          }
+        />
+          <Route
+          path="/profile"
+          element={
+            <PrivateRoute>
+              <ProfilePage />
             </PrivateRoute>
           }
         />

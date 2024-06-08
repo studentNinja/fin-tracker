@@ -3,7 +3,7 @@ import logo from "../assets/logo.svg";
 import avatar from "../assets/avatar.svg";
 import "../styles/header.css";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import { AppDispatch, RootState } from "../app/store";
 import { logout } from "../features/auth/authSlice";
 
@@ -28,7 +28,7 @@ const Header = () => {
         </div>
         {isAuthenticated ? (
           <div className="header-option">
-            <a href="#">?Dashboard?</a>
+            <Link to="/dashboard">?Dashboard?</Link>
           </div>
         ) : (
           ""
@@ -38,9 +38,12 @@ const Header = () => {
             <div className="btn" onClick={handleLogout}>
               Вийти
             </div>
-            <div className="avatar-container">
-              <img className="avatar" src={avatar} alt="avatar" />
-            </div>
+            <Link to="/profile">
+              <div className="avatar-container">
+                <img className="avatar" src={avatar} alt="avatar" />
+              </div>
+            </Link>
+
             <div>{userName}</div>
           </div>
         ) : (
