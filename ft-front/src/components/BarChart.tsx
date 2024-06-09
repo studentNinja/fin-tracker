@@ -18,7 +18,12 @@ ChartJS.register(
   Tooltip,
   Legend
 );
-let dataSet = {
+
+interface DataSet {
+  [key: string]: number;
+}
+
+const dataSet: DataSet = {
   "01": 15000,
   "02": 12000,
   "03": 13000,
@@ -27,33 +32,34 @@ let dataSet = {
   "06": 7000,
 };
 
-export const options = {
-  //   responsive: true,
+const options = {
+  responsive: true,
   plugins: {
     legend: {
-      position: "top" as const,
-    },
-    title: {
-      display: true,
-      text: "Chart.js Bar Chart",
+      display: false,
     },
   },
+  maintainAspectRatio: false,
 };
 
 const labels = Object.keys(dataSet);
 
-export const data = {
+const data = {
   labels,
   datasets: [
     {
-      label: "Dataset 1",
-      data: dataSet,
+      data: Object.values(dataSet),
       backgroundColor: "#F29B7F",
     },
   ],
 };
-const BarChart = () => {
-  return <Bar options={options} data={data} />;
+
+const BarChart: React.FC = () => {
+  return (
+    <div style={{ width: "500px", height: "220px" }}>
+      <Bar options={options} data={data} />
+    </div>
+  );
 };
 
 export default BarChart;

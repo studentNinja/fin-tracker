@@ -36,6 +36,7 @@ min-width: 570px;
     display: flex;
     gap:16px;
     flex:1;
+    align-items: center;
 }
 
 
