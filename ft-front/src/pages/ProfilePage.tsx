@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import "../styles/profile.css";
 import UserInfoBlock from "../components/profilePageBlocks/UserInfoBlock";
 import MonthStatsBlock from "../components/profilePageBlocks/MonthStatsBlock";
@@ -7,8 +7,23 @@ import ConfirmDeletePopUp from "../components/pop-ups/ConfirmDeletePopUp";
 import AddIncomeOrFixedExpensesPopUp from "../components/pop-ups/AddIncomeOrFixedExpensesPopUp";
 import GoalProgressBlock from "../components/profilePageBlocks/GoalProgressBlock";
 import ChangeNumberPopUp from "../components/pop-ups/ChangeNumberPopUp";
+import SpengingHistoryStats from "../components/profilePageBlocks/SpengingHistoryStats";
+import {useDispatch, useSelector} from "react-redux";
+import {AppDispatch, RootState} from "../app/store";
+import {fetchUserInfo} from "../features/user/userSlice";
 
 const ProfilePage = () => {
+    const dispatch = useDispatch<AppDispatch>();
+    const { userInfo, loading, error } = useSelector(
+        (state: RootState) => state.user
+    );
+
+    useEffect(() => {
+        dispatch(fetchUserInfo());
+    }, [dispatch]);
+
+
+
 
     const [titleChangeNumberPopUp, setTitleChangeNumberPopUp] = useState("");
 
@@ -50,9 +65,11 @@ const ProfilePage = () => {
 
     return (
         <div className="dashboard-container profile-page-container shadow">
-            <div className="one-row-block-container">
-
-                <UserInfoBlock></UserInfoBlock>
+            {userInfo && (
+                <>
+                <div className="one-row-block-container">
+                    <UserInfoBlock showConfirmDeletePopUp={showConfirmDeletePopUp}
+                    ></UserInfoBlock>
                 <div className="one-row-block-container block-flex-3">
                     <MonthStatsBlock></MonthStatsBlock>
                     <FixedExpensesBlock showConfirmDeletePopUp={showConfirmDeletePopUp}
@@ -62,8 +79,11 @@ const ProfilePage = () => {
             </div>
             <div className="one-row-block-container one-row-block-container-2">
                 <GoalProgressBlock showChangeGoalNumber={showChangeNumberPopUp}></GoalProgressBlock>
-                <div className="block block-flex-3"></div>
+                <SpengingHistoryStats></SpengingHistoryStats>
             </div>
+                    </>
+            )            }
+
 
             {visibilityPopUpConfirmDelete ? (
                 <ConfirmDeletePopUp

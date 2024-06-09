@@ -55,7 +55,7 @@ const FixedExpensesBlock = (props: {
 
     return (
         <div className="block block-flex-1 block-column-content">
-            <div className="block-title">Дохід за місяць</div>
+            <div className="block-title">Постійні витрати</div>
             <div className="income-number-container">
                 <div className="income-number">
                     {

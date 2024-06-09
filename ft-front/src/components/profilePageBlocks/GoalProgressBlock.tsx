@@ -4,7 +4,7 @@ const GoalProgressBlock = (props:{showChangeGoalNumber:(title: string,
                                                         changeFunct: (number:number)=>void)=>void}) => {
     let [goalNumber, setGoalNumber]=useState(600000)
     let putAwayNumber=90000
-    let putAwayPercent=putAwayNumber/goalNumber*100
+    let putAwayPercent=Math.round(putAwayNumber/goalNumber*100)
     function changeGoalNumber(number: number) {
         if (!validateChangeGoalNumber(number))
             throw new Error("Сума цілі має бути більша, аніж вже відкладені кошти");
@@ -22,7 +22,7 @@ const GoalProgressBlock = (props:{showChangeGoalNumber:(title: string,
     }
     return (
         <div className="block block-flex-1 block-column-content">
-            <div className="block-title">Витрати за місяць</div>
+            <div className="block-title">Прогрес цілі</div>
             <div className="months-spendings-diagram" id="months-spendings-diagram">
                 <div
                     className="pie "

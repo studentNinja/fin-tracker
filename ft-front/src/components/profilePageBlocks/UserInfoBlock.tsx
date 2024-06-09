@@ -1,11 +1,15 @@
 import React from 'react';
 import avatar from '../../assets/avatar-profile-page.svg'
-import {Link} from "react-router-dom";
-import {useSelector} from "react-redux";
-import {RootState} from "../../app/store";
+import {Link, useNavigate} from "react-router-dom";
+import {useDispatch, useSelector} from "react-redux";
+import {AppDispatch, RootState} from "../../app/store";
 import {formatDate} from "../../utils/dateUtils";
-const UserInfoBlock = () => {
-
+import {logout} from "../../features/auth/authSlice";
+const UserInfoBlock = (props: {
+    showConfirmDeletePopUp: (deleteFunct: () => void) => void;
+}) => {
+    const dispatch = useDispatch<AppDispatch>();
+    const navigate = useNavigate();
     const user = useSelector(
         (state: RootState) => state.user
     );
@@ -13,7 +17,12 @@ const UserInfoBlock = () => {
 
     let date=formatDate(user?.userInfo?.registration_date)
 
-
+    function deleteAccount() {
+        alert("account deleted")
+        dispatch(logout());
+        navigate("/login");
+        /// to do: DELETE account
+    }
 
     return (
         <div className="block block-flex-1 block-column-content user-info-block">
@@ -24,7 +33,13 @@ const UserInfoBlock = () => {
                 <h4>{userName}</h4>
                 <div className='register-date-container'>Дата реєстрації {date}</div>
             </div>
-            <Link to="#" className="delete-option">Видалити акаунт</Link>
+            <a href="#" onClick={(e)=> {
+                e.preventDefault()
+                props.showConfirmDeletePopUp(() =>
+                    deleteAccount()
+                )
+
+            }} className="delete-option">Видалити акаунт</a>
         </div>
     );
 };

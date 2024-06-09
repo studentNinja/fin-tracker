@@ -13,7 +13,7 @@ const MonthStatsBlock = () => {
 
     return (
         <div className="block block-flex-1 block-column-content">
-            <div className="block-title">Дохід за місяць</div>
+            <div className="block-title">Статистика за місяць</div>
             <div className="income-number-container">
                 <div className="income-container-title">Дохід:</div>
                 <div className="income-number income-number-profile">
