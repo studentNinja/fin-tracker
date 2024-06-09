@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import "../../styles/pop-up.css";
 
-const MoveMoneyPopUp = (props: {
+const ChangeNumberPopUp = (props: {
   title: string;
   cancel: () => void;
-  confirmMove: (number: number) => void;
+  confirmChange: (number: number) => void;
 }) => {
   const [number, setNumber] = useState(0);
 
@@ -17,7 +17,7 @@ const MoveMoneyPopUp = (props: {
     ><form onSubmit={(e) => {
         e.preventDefault()
         try {
-            props.confirmMove(number);
+            props.confirmChange(number);
             props.cancel();
         } catch (error) {
             alert((error as Error).message);
@@ -63,4 +63,4 @@ const MoveMoneyPopUp = (props: {
   );
 };
 
-export default MoveMoneyPopUp;
+export default ChangeNumberPopUp;

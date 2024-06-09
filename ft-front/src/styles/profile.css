@@ -1,0 +1,108 @@
+.profile-page-container {
+min-width: 570px;
+
+}
+
+.spendings-history-diagram{
+    min-width: 320px;
+    flex:2.5;
+    width: 100%;
+    background-color: rgba(8, 243, 172, 0.49);
+}
+
+.spendings-history-info{
+    width: 100%;
+    flex:1;
+    display: flex;
+    flex-direction: column;
+    gap:16px;
+    justify-content: flex-end;
+    padding-bottom: 15px;
+}
+.font-size-32{
+    font-size: 32px;
+    font-weight: 500;
+}
+.spendings-history-info div{
+    text-align: left;
+
+    font-size: 14px;
+
+}
+
+
+.block-row-content{
+    width: 100%;
+    display: flex;
+    gap:16px;
+    flex:1;
+}
+
+
+
+.block-column-content {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap:13px;
+    max-height: 100%;
+    overflow: hidden;
+    align-items: center;
+}
+
+.user-info-container{
+    flex: 1;
+
+}
+.font-weight-300{
+
+    font-weight:300
+}
+.income-container-title{
+    font-size: 20px;
+}
+.income-number-profile{
+    text-align: end;
+}
+img{
+    height: 100%;
+}
+
+h4{
+    margin: 0;
+}
+.register-date-container{
+    font-size: 12px;
+    font-weight: 300;
+    margin-top: 5px;
+;
+}
+.delete-option{
+    font-size: 14px;
+    text-decoration: underline 1px;
+}
+.user-info-block{
+    background: linear-gradient(45deg , #E5EDFD, #D2D3F4);
+
+}
+.img-container{
+    flex: 1;
+}
+.one-row-block-container-2{
+    max-height: 100%;
+
+}
+
+.block-flex-1{
+    min-width: 200px;
+    flex: 1 1 calc(25% - 23px);
+}
+
+
+.block-flex-3{
+    flex: 3 calc(75% - 23px);
+}
+
+
+
+
