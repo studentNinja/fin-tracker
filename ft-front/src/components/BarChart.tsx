@@ -34,9 +34,24 @@ const dataSet: DataSet = {
 
 const options = {
   responsive: true,
+  scales: {
+    x: {
+      grid: {
+        display: false,
+      },
+    },
+    y: {
+      grid: {
+        display: false,
+      },
+    },
+  },
   plugins: {
     legend: {
       display: false,
+    },
+    tooltip: {
+      enabled: true,
     },
   },
   maintainAspectRatio: false,
@@ -50,13 +65,20 @@ const data = {
     {
       data: Object.values(dataSet),
       backgroundColor: "#F29B7F",
+      borderRadius: 5,
     },
   ],
 };
 
 const BarChart: React.FC = () => {
   return (
-    <div style={{ width: "500px", height: "220px" }}>
+    <div
+      style={{
+        width: "500px",
+        height: "220px",
+        padding: "10px",
+      }}
+    >
       <Bar options={options} data={data} />
     </div>
   );
