@@ -14,7 +14,7 @@ exports.createFixedExpense = async (req, res) => {
             return res.status(400).send({ error: 'Invalid category' });
         }
 
-        const newFixedExpense = new FixedExpense({ user: req.userId, name, category, amount });
+        const newFixedExpense = new FixedExpense({ userId: req.userId, name, category, amount });
         await newFixedExpense.save();
         await User.findByIdAndUpdate(req.userId, { $push: { fixed_expenses: newFixedExpense._id } });
         res.status(201).send(newFixedExpense);
@@ -26,7 +26,7 @@ exports.createFixedExpense = async (req, res) => {
 
 exports.getFixedExpenses = async (req, res) => {
     try {
-        const fixedExpenses = await FixedExpense.find({ user: req.userId });
+        const fixedExpenses = await FixedExpense.find({ userId: req.userId });
         res.status(200).send(fixedExpenses);
     } catch (err) {
         console.error(err);

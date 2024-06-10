@@ -4,11 +4,11 @@ const config = require('../config/config');
 
 exports.register = async (req, res) => {
     try {
-        const { username, email, password, initial_capital, saving_goal } = req.body;
+        const { username, email, password, capital, saving_goal } = req.body;
 
        
-        if (!username || !email || !password || initial_capital === undefined) {
-            return res.status(400).send({ error: 'Username, email, password, and initial capital are required' });
+        if (!username || !email || !password || capital === undefined) {
+            return res.status(400).send({ error: 'Username, email, password, and capital are required' });
         }
 
         
@@ -17,7 +17,7 @@ exports.register = async (req, res) => {
             return res.status(400).send({ error: 'Email is already in use' });
         }
 
-        const newUser = new User({ username, email, password, initial_capital, saving_goal });
+        const newUser = new User({ username, email, password, capital, saving_goal });
         await newUser.save();
 
         res.status(201).send({ message: 'User registered successfully', user: newUser });

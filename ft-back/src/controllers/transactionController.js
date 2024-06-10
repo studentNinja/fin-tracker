@@ -15,16 +15,16 @@ exports.createTransaction = async (req, res) => {
         }
 
         const newTransaction = new Transaction({
-            user_id: req.userId,
+            userId: req.userId,
             amount,
             category,
             description
         });
 
+        await newTransaction.save();
+
         await User.findByIdAndUpdate(req.userId, { $push: { transactions: newTransaction._id } });
 
-
-        await newTransaction.save();
         res.status(201).send(newTransaction);
     } catch (err) {
         console.error(err);
@@ -37,11 +37,11 @@ exports.getTransactions = async (req, res) => {
         const { page = 1, limit = 10 } = req.query;
         const userId = req.userId;
 
-        const transactions = await Transaction.find({ user_id: userId })
+        const transactions = await Transaction.find({ userId: userId })
             .skip((page - 1) * limit)
             .limit(Number(limit));
 
-        const total = await Transaction.countDocuments({ user_id: userId });
+        const total = await Transaction.countDocuments({ userId: userId });
 
         res.status(200).send({
             transactions,

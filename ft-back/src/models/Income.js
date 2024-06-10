@@ -8,11 +8,10 @@ const { Schema } = mongoose;
  *     Income:
  *       type: object
  *       required:
- *         - user
  *         - source
  *         - amount
  *       properties:
- *         user:
+ *         userId:
  *           type: string
  *           description: The ID of the user
  *         source:
@@ -34,16 +33,14 @@ const { Schema } = mongoose;
  *           format: date-time
  *           description: When the income record was last updated
  *       example:
- *         user: "665356241716d857dd03b372"
+ *         userId: "665356241716d857dd03b372"
  *         source: "Salary"
  *         amount: 3000
  *         date: "2023-06-01T00:00:00.000Z"
- *         createdAt: "2023-06-01T00:00:00.000Z"
- *         updatedAt: "2023-06-01T00:00:00.000Z"
  */
 
 const incomeSchema = new Schema({
-    user: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+    userId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
     source: { type: String, required: true },
     amount: { type: Number, required: true },
     date: { type: Date, default: Date.now }

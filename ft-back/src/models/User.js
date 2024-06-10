@@ -12,7 +12,7 @@ const bcrypt = require('bcryptjs');
  *         - username
  *         - email
  *         - password
- *         - initial_capital
+ *         - capital
  *       properties:
  *         username:
  *           type: string
@@ -23,9 +23,9 @@ const bcrypt = require('bcryptjs');
  *         password:
  *           type: string
  *           description: The password of the user
- *         initial_capital:
+ *         capital:
  *           type: number
- *           description: The initial capital of the user
+ *           description: The capital of the user
  *         saving_goal:
  *           type: number
  *           description: The saving goal of the user

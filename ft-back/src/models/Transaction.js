@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
-const validCategories = require('../config/expenseCategories'); // Make sure this is an array of valid categories
+const validCategories = require('../config/expenseCategories');
 
 /**
  * @swagger
@@ -9,11 +9,10 @@ const validCategories = require('../config/expenseCategories'); // Make sure thi
  *     Transaction:
  *       type: object
  *       required:
- *         - user
  *         - amount
  *         - category
  *       properties:
- *         user_id:
+ *         userId:
  *           type: string
  *           description: The ID of the user
  *         amount:
@@ -31,7 +30,7 @@ const validCategories = require('../config/expenseCategories'); // Make sure thi
  *           type: string
  *           description: The description of the transaction
  *       example:
- *         user: "665356241716d857dd03b372"
+ *         userId: "665356241716d857dd03b372"
  *         amount: 100
  *         category: "Food"
  *         date: "2024-05-26T15:32:52.735Z"
@@ -39,7 +38,7 @@ const validCategories = require('../config/expenseCategories'); // Make sure thi
  */
 
 const transactionSchema = new Schema({
-    user: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+    userId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
     amount: { type: Number, required: true },
     category: { type: String, enum: validCategories, required: true },
     date: { type: Date, default: Date.now },

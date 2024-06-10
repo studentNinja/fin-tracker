@@ -1,6 +1,6 @@
 export interface Goal {
     _id: string;
-    user_id: string;
+    userId: string;
     name: string;
     amount: number;
     achieved: boolean;

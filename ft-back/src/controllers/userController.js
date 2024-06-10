@@ -1,4 +1,8 @@
 const User = require('../models/User');
+const Transaction = require('../models/Transaction');
+const FixedExpense = require('../models/FixedExpense');
+const Goal = require('../models/Goal');
+const Income = require('../models/Income');
 
 exports.getProfile = async (req, res) => {
     try {
@@ -7,7 +11,7 @@ exports.getProfile = async (req, res) => {
             .populate('transactions')
             .populate('fixed_expenses')
             .populate('goals')
-            .populate('incomes')
+            .populate("incomes");
         if (!user) {
             return res.status(404).send({ error: 'User not found' });
         }
@@ -30,10 +34,10 @@ exports.deleteAccount = async (req, res) => {
             return res.status(404).send({ error: 'User not found' });
         }
 
-        await Transaction.deleteMany({ user_id: req.userId }).session(session);
-        await FixedExpense.deleteMany({ user_id: req.userId }).session(session);
-        await Goal.deleteMany({ user_id: req.userId }).session(session);
-        await Income.deleteMany({user_id: req.userId }).session(session);
+        await Transaction.deleteMany({ userId: req.userId }).session(session);
+        await FixedExpense.deleteMany({ userId: req.userId }).session(session);
+        await Goal.deleteMany({ userId: req.userId }).session(session);
+        await Income.deleteMany({ userId: req.userId }).session(session);
 
         await User.findByIdAndDelete(req.userId).session(session);
 

@@ -1,6 +1,6 @@
 export interface Income {
     _id: string;
-    user: string;
+    userId: string;
     source: string;
     amount: number;
     date: string;
