@@ -1,19 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import axiosInstance from '../../api/axiosInstance';
-
-
-interface UserState {
-    userInfo: {
-        username: string;
-        email: string;
-        initial_capital: number;
-        saving_goal: number;
-        registration_date: string;
-    } | null;
-    loading: boolean;
-    error: string | null;
-}
+import { UserState } from '../../types/userTypes'
 
 const initialState: UserState = {
     userInfo: null,

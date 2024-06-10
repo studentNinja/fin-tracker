@@ -5,6 +5,7 @@ const userRoutes = require('./routes/userRoutes');
 const transactionRoutes = require('./routes/transactionRoutes');
 const fixedExpenseRoutes = require('./routes/fixedExpenseRoutes');
 const goalRoutes = require('./routes/goalRoutes');
+const incomeRoutes = require('./routes/incomeRoutes')
 const cors = require('cors');
 const helmet = require('helmet');
 const swaggerSetup = require('./swagger');
@@ -25,6 +26,8 @@ app.use('/api/users', userRoutes);
 app.use('/api/goals', goalRoutes);
 app.use('/api/transactions', transactionRoutes);
 app.use('/api/fixedexpenses', fixedExpenseRoutes);
+app.use('/api/income', incomeRoutes);
+
 
 app.use((err, req, res, next) => {
     console.error(err.stack);
