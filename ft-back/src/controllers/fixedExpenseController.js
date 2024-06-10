@@ -5,6 +5,15 @@ const User = require('../models/User');
 exports.createFixedExpense = async (req, res) => {
     try {
         const { name, category, amount } = req.body;
+
+        if (!name || !category || !amount) {
+            return res.status(400).send({ error: 'Name, category, and amount are required' });
+        }
+
+        if (!validCategories.includes(category)) {
+            return res.status(400).send({ error: 'Invalid category' });
+        }
+
         const newFixedExpense = new FixedExpense({ userId: req.userId, name, category, amount });
         await newFixedExpense.save();
         await User.findByIdAndUpdate(req.userId, { $push: { fixed_expenses: newFixedExpense._id } });

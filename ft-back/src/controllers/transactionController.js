@@ -17,9 +17,10 @@ exports.createTransaction = async (req, res) => {
         });
 
         await newTransaction.save();
+
         await User.findByIdAndUpdate(req.userId, { $push: { transactions: newTransaction._id } });
 
-        res.status(201).json(newTransaction);
+        res.status(201).send(newTransaction);
     } catch (err) {
         res.status(400).json({ error: err.message });
     }

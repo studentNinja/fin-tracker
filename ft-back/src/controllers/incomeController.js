@@ -5,9 +5,15 @@ const User = require('../models/User');
 exports.createIncome = async (req, res) => {
     try {
         const { source, amount } = req.body;
+
+        if (!source || !amount) {
+            return res.status(400).json({ error: 'Source and amount are required' });
+        }
+
         const newIncome = new Income({ userId: req.userId, source, amount });
         await newIncome.save();
         await User.findByIdAndUpdate(req.userId, { $push: { incomes: newIncome._id } });
+
         res.status(201).json(newIncome);
     } catch (err) {
         res.status(400).json({ error: err.message });
