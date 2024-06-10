@@ -9,12 +9,14 @@ import LoginPage from "./pages/LoginPage";
 import "./styles/form.css";
 import "./styles/list-animation.css";
 import ProfilePage from "./pages/ProfilePage";
+import HomePage from "./pages/HomePage";
 
 const App: React.FC = () => {
   return (
     <div className="App">
       <Header />
       <Routes>
+        <Route path="/" element={<HomePage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route
@@ -25,7 +27,7 @@ const App: React.FC = () => {
             </PrivateRoute>
           }
         />
-          <Route
+        <Route
           path="/profile"
           element={
             <PrivateRoute>
