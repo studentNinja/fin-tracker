@@ -3,7 +3,7 @@ import logo from "../assets/logo.svg";
 import avatar from "../assets/avatar.svg";
 import "../styles/header.css";
 import { useDispatch, useSelector } from "react-redux";
-import {Link, useNavigate} from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AppDispatch, RootState } from "../app/store";
 import { logout } from "../features/auth/authSlice";
 
@@ -23,7 +23,7 @@ const Header = () => {
   return (
     <div>
       <header className="shadow">
-        <div className="logo">
+        <div className="logo" onClick={() => navigate("/")}>
           <img src={logo} alt="logo" />
         </div>
         {isAuthenticated ? (
