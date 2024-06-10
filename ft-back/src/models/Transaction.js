@@ -9,7 +9,7 @@ const validCategories = require('../config/expenseCategories'); // Make sure thi
  *     Transaction:
  *       type: object
  *       required:
- *         - user_id
+ *         - user
  *         - amount
  *         - category
  *       properties:
@@ -31,7 +31,7 @@ const validCategories = require('../config/expenseCategories'); // Make sure thi
  *           type: string
  *           description: The description of the transaction
  *       example:
- *         user_id: "665356241716d857dd03b372"
+ *         user: "665356241716d857dd03b372"
  *         amount: 100
  *         category: "Food"
  *         date: "2024-05-26T15:32:52.735Z"
@@ -39,7 +39,7 @@ const validCategories = require('../config/expenseCategories'); // Make sure thi
  */
 
 const transactionSchema = new Schema({
-    user_id: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+    user: { type: Schema.Types.ObjectId, ref: 'User', required: true },
     amount: { type: Number, required: true },
     category: { type: String, enum: validCategories, required: true },
     date: { type: Date, default: Date.now },
