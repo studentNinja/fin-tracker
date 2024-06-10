@@ -41,10 +41,10 @@ exports.deleteAccount = async (req, res) => {
             return res.status(404).send({ error: 'User not found' });
         }
 
-        await Transaction.deleteMany({ userId: req.userId }).session(session);
-        await FixedExpense.deleteMany({ userId: req.userId }).session(session);
-        await Goal.deleteMany({ userId: req.userId }).session(session);
-        await Income.deleteMany({ userId: req.userId }).session(session);
+        await Transaction.deleteMany({ user_id: req.userId }).session(session);
+        await FixedExpense.deleteMany({ user_id: req.userId }).session(session);
+        await Goal.deleteMany({ user_id: req.userId }).session(session);
+        await Income.deleteMany({user_id: req.userId }).session(session);
 
         await User.findByIdAndDelete(req.userId).session(session);
 
