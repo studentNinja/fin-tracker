@@ -9,7 +9,7 @@ exports.createGoal = async (req, res) => {
             return res.status(400).send({ error: 'Amount and name are required' });
         }
 
-        const newGoal = new Goal({ user_id: req.userId, amount, name });
+        const newGoal = new Goal({ userId: req.userId, amount, name });
         await newGoal.save();
         await User.findByIdAndUpdate(req.userId, { $push: { goals: newGoal._id } });
         res.status(201).send(newGoal);
@@ -21,7 +21,7 @@ exports.createGoal = async (req, res) => {
 
 exports.getGoals = async (req, res) => {
     try {
-        const goals = await Goal.find({ user_id: req.userId });
+        const goals = await Goal.find({ userId: req.userId });
         res.status(200).send(goals);
     } catch (err) {
         console.error(err);

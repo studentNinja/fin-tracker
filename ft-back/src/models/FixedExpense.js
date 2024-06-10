@@ -9,12 +9,11 @@ const validCategories = require('../config/expenseCategories'); // Ensure this i
  *     FixedExpense:
  *       type: object
  *       required:
- *         - user
  *         - name
  *         - category
  *         - amount
  *       properties:
- *         user:
+ *         userId:
  *           type: string
  *           description: The ID of the user
  *         name:
@@ -28,18 +27,18 @@ const validCategories = require('../config/expenseCategories'); // Ensure this i
  *           type: number
  *           description: The amount of the fixed expense
  *       example:
- *         user: "665356241716d857dd03b372"
+ *         userId: "665356241716d857dd03b372"
  *         name: "Internet Bill"
  *         category: "Utilities"
  *         amount: 50
  */
 
 const fixedExpenseSchema = new Schema({
-    user: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+    userId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
     name: { type: String, required: true },
     category: { type: String, enum: validCategories, required: true },
     amount: { type: Number, required: true }
-}, { timestamps: true }); // Automatically add createdAt and updatedAt fields
+}, { timestamps: true });
 
 const FixedExpense = mongoose.model('FixedExpense', fixedExpenseSchema);
 module.exports = FixedExpense;

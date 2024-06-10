@@ -1,4 +1,8 @@
 const User = require('../models/User');
+const Transaction = require('../models/Transaction');
+const FixedExpense = require('../models/FixedExpense');
+const Goal = require('../models/Goal');
+const Income = require('../models/Income');
 
 exports.getProfile = async (req, res) => {
     try {
@@ -6,16 +10,21 @@ exports.getProfile = async (req, res) => {
             .select('-password')
             .populate('transactions')
             .populate('fixed_expenses')
-            .populate('goals');
+            .populate('goals')
+            .populate('incomes'); 
         if (!user) {
             return res.status(404).send({ error: 'User not found' });
         }
-        res.status(200).send(user);
+        res.status(200).send({
+            userId: user._id,
+            ...user.toObject()
+        });
     } catch (err) {
         console.error(err);
         res.status(500).send({ error: 'Server error' });
     }
 };
+
 
 exports.deleteAccount = async (req, res) => {
     const session = await mongoose.startSession();
@@ -29,9 +38,10 @@ exports.deleteAccount = async (req, res) => {
             return res.status(404).send({ error: 'User not found' });
         }
 
-        await Transaction.deleteMany({ user_id: req.userId }).session(session);
-        await FixedExpense.deleteMany({ user_id: req.userId }).session(session);
-        await Goal.deleteMany({ user_id: req.userId }).session(session);
+        await Transaction.deleteMany({ userId: req.userId }).session(session);
+        await FixedExpense.deleteMany({ userId: req.userId }).session(session);
+        await Goal.deleteMany({ userId: req.userId }).session(session);
+        await Income.deleteMany({ userId: req.userId }).session(session);
 
         await User.findByIdAndDelete(req.userId).session(session);
 

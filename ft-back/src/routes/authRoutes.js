@@ -26,7 +26,7 @@ const router = express.Router();
  *               - username
  *               - email
  *               - password
- *               - initial_capital
+ *               - capital
  *             properties:
  *               username:
  *                 type: string
@@ -37,17 +37,17 @@ const router = express.Router();
  *               password:
  *                 type: string
  *                 description: The password of the user
- *               initial_capital:
+ *               capital:
  *                 type: number
  *                 description: The initial capital of the user
  *               saving_goal:
  *                 type: number
  *                 description: The saving goal of the user
  *             example:
- *               username: demouser
+ *               username: ddddddddd
  *               email: test@t.t
  *               password: password123
- *               initial_capital: 5000
+ *               capital: 5000
  *               saving_goal: 20000
  *     responses:
  *       201:
