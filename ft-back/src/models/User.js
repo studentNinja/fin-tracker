@@ -23,9 +23,9 @@ const bcrypt = require('bcryptjs');
  *         password:
  *           type: string
  *           description: The password of the user
- *         capital:
+ *         initial_capital:
  *           type: number
- *           description: The capital of the user
+ *           description: The initial capital of the user
  *         saving_goal:
  *           type: number
  *           description: The saving goal of the user
