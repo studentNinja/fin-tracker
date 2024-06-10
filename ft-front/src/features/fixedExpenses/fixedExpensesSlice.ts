@@ -1,20 +1,20 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { fetchFixedExpenses, fetchFixedExpenseById, addFixedExpense, updateFixedExpense, deleteFixedExpense } from './fixedExpensesThunks';
 import { FixedExpense } from '../../types/fixedExpenseTypes';
+import { addFixedExpense, deleteFixedExpense, fetchFixedExpenses, updateFixedExpense } from './fixedExpensesThunks';
 
 interface FixedExpensesState {
     fixedExpenses: FixedExpense[];
-    selectedFixedExpense: FixedExpense | null;
     loading: boolean;
     error: string | null;
 }
 
 const initialState: FixedExpensesState = {
     fixedExpenses: [],
-    selectedFixedExpense: null,
     loading: false,
     error: null,
 };
+
+
 
 const fixedExpensesSlice = createSlice({
     name: 'fixedExpenses',
