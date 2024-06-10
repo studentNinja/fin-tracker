@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from "react";
 import "../styles/profile.css";
 import UserInfoBlock from "../components/profilePageBlocks/UserInfoBlock";
 import MonthStatsBlock from "../components/profilePageBlocks/MonthStatsBlock";
@@ -8,112 +8,112 @@ import AddIncomeOrFixedExpensesPopUp from "../components/pop-ups/AddIncomeOrFixe
 import GoalProgressBlock from "../components/profilePageBlocks/GoalProgressBlock";
 import ChangeNumberPopUp from "../components/pop-ups/ChangeNumberPopUp";
 import SpengingHistoryStats from "../components/profilePageBlocks/SpengingHistoryStats";
-import {useDispatch, useSelector} from "react-redux";
-import {AppDispatch, RootState} from "../app/store";
-import {fetchUserInfo} from "../features/user/userSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../app/store";
+import { fetchUserInfo } from "../features/user/userSlice";
 
 const ProfilePage = () => {
-    const dispatch = useDispatch<AppDispatch>();
-    const { userInfo, loading, error } = useSelector(
-        (state: RootState) => state.user
+  const dispatch = useDispatch<AppDispatch>();
+  const { userInfo, loading, error } = useSelector(
+    (state: RootState) => state.user
+  );
+
+  useEffect(() => {
+    dispatch(fetchUserInfo());
+  }, [dispatch]);
+
+  const [titleChangeNumberPopUp, setTitleChangeNumberPopUp] = useState("");
+
+  const [visibilityAddFixedExpensePopUp, setVisibilityAddFixedExpensePopUp] =
+    useState(false);
+  const [visibilityPopUpConfirmDelete, setVisibilityPopUpConfirmDelete] =
+    useState(false);
+  const [visibilityChangeNumberPopUp, setVisibilityChangeNumberPopUp] =
+    useState(false);
+
+  const [functionsHolder, setFunctionsHolder] = useState({
+    delete: () => {},
+    addFixedExpense: (name: string, amount: number) => {},
+    changeGoal: (amount: number) => {},
+  });
+
+  function showConfirmDeletePopUp(deleteFunct: () => void) {
+    setFunctionsHolder(Object.assign(functionsHolder, { delete: deleteFunct }));
+    setVisibilityPopUpConfirmDelete(true);
+  }
+  function showAddFixedExpensePopUp(
+    addFunct: (name: string, amount: number) => void
+  ) {
+    setFunctionsHolder(
+      Object.assign(functionsHolder, { addFixedExpense: addFunct })
     );
+    setVisibilityAddFixedExpensePopUp(true);
+  }
 
-    useEffect(() => {
-        dispatch(fetchUserInfo());
-    }, [dispatch]);
-
-
-
-
-    const [titleChangeNumberPopUp, setTitleChangeNumberPopUp] = useState("");
-
-    const [visibilityAddFixedExpensePopUp, setVisibilityAddFixedExpensePopUp] =
-        useState(false);
-    const [visibilityPopUpConfirmDelete, setVisibilityPopUpConfirmDelete] =
-        useState(false);
-    const [visibilityChangeNumberPopUp, setVisibilityChangeNumberPopUp] =
-        useState(false);
-
-
-    const [functionsHolder, setFunctionsHolder] = useState({
-        delete: () => {},
-        addFixedExpense: (name: string, amount: number) => {},
-        changeGoal: ( amount: number) => {},
-    });
-
-    function showConfirmDeletePopUp(deleteFunct: () => void) {
-        setFunctionsHolder(Object.assign(functionsHolder, { delete: deleteFunct }));
-        setVisibilityPopUpConfirmDelete(true);
-    }
-    function showAddFixedExpensePopUp(addFunct: (name: string, amount: number) => void) {
-        setFunctionsHolder(Object.assign(functionsHolder, { addFixedExpense: addFunct }));
-        setVisibilityAddFixedExpensePopUp(true);
-    }
-
-    function showChangeNumberPopUp(
-        title: string,
-        changeFunct: (number: number) => void
-    ) {
-        setTitleChangeNumberPopUp(title);
-        setFunctionsHolder(
-            Object.assign(functionsHolder, { changeGoal: changeFunct })
-        );
-        setVisibilityChangeNumberPopUp(true);
-    }
-
-
-
-    return (
-        <div className="dashboard-container profile-page-container shadow">
-            {userInfo && (
-                <>
-                <div className="one-row-block-container">
-                    <UserInfoBlock showConfirmDeletePopUp={showConfirmDeletePopUp}
-                    ></UserInfoBlock>
-                <div className="one-row-block-container block-flex-3">
-                    <MonthStatsBlock></MonthStatsBlock>
-                    <FixedExpensesBlock showConfirmDeletePopUp={showConfirmDeletePopUp}
-                                        showPopUpAddFixedExpense={showAddFixedExpensePopUp}
-                    ></FixedExpensesBlock>
-                </div>
-            </div>
-            <div className="one-row-block-container one-row-block-container-2">
-                <GoalProgressBlock showChangeGoalNumber={showChangeNumberPopUp}></GoalProgressBlock>
-                <SpengingHistoryStats></SpengingHistoryStats>
-            </div>
-                    </>
-            )            }
-
-
-            {visibilityPopUpConfirmDelete ? (
-                <ConfirmDeletePopUp
-                    cancel={() => setVisibilityPopUpConfirmDelete(false)}
-                    confirmDelete={functionsHolder.delete}
-                />
-            ) : (
-                ""
-            )}
-            {visibilityAddFixedExpensePopUp ? (
-                <AddIncomeOrFixedExpensesPopUp
-                    title={"Додати постійну витрату"}
-                    cancel={() => setVisibilityAddFixedExpensePopUp(false)}
-                    confirmAdd={functionsHolder.addFixedExpense}
-                />
-            ) : (
-                ""
-            )}
-            {visibilityChangeNumberPopUp ? (
-                <ChangeNumberPopUp
-                    title={titleChangeNumberPopUp}
-                    cancel={() => setVisibilityChangeNumberPopUp(false)}
-                    confirmChange={functionsHolder.changeGoal}
-                />
-            ) : (
-                ""
-            )}
-
-        </div>
+  function showChangeNumberPopUp(
+    title: string,
+    changeFunct: (number: number) => void
+  ) {
+    setTitleChangeNumberPopUp(title);
+    setFunctionsHolder(
+      Object.assign(functionsHolder, { changeGoal: changeFunct })
     );
+    setVisibilityChangeNumberPopUp(true);
+  }
+
+  return (
+    <div className="dashboard-container profile-page-container shadow">
+      {userInfo && (
+        <>
+          <div className="one-row-block-container">
+            <UserInfoBlock
+              showConfirmDeletePopUp={showConfirmDeletePopUp}
+            ></UserInfoBlock>
+            <div className="one-row-block-container block-flex-3">
+              <MonthStatsBlock></MonthStatsBlock>
+              <FixedExpensesBlock
+                showConfirmDeletePopUp={showConfirmDeletePopUp}
+                showPopUpAddFixedExpense={showAddFixedExpensePopUp}
+              ></FixedExpensesBlock>
+            </div>
+          </div>
+          <div className="one-row-block-container one-row-block-container-2">
+            <GoalProgressBlock
+              showChangeGoalNumber={showChangeNumberPopUp}
+            ></GoalProgressBlock>
+            <SpengingHistoryStats></SpengingHistoryStats>
+          </div>
+        </>
+      )}
+
+      {visibilityPopUpConfirmDelete ? (
+        <ConfirmDeletePopUp
+          cancel={() => setVisibilityPopUpConfirmDelete(false)}
+          confirmDelete={functionsHolder.delete}
+        />
+      ) : (
+        ""
+      )}
+      {visibilityAddFixedExpensePopUp ? (
+        <AddIncomeOrFixedExpensesPopUp
+          title={"Додати постійну витрату"}
+          cancel={() => setVisibilityAddFixedExpensePopUp(false)}
+          confirmAdd={functionsHolder.addFixedExpense}
+        />
+      ) : (
+        ""
+      )}
+      {visibilityChangeNumberPopUp ? (
+        <ChangeNumberPopUp
+          title={titleChangeNumberPopUp}
+          cancel={() => setVisibilityChangeNumberPopUp(false)}
+          confirmChange={functionsHolder.changeGoal}
+        />
+      ) : (
+        ""
+      )}
+    </div>
+  );
 };
 
 export default ProfilePage;

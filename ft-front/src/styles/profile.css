@@ -36,6 +36,7 @@ min-width: 570px;
     display: flex;
     gap:16px;
     flex:1;
+    align-items: center;
 }
 
 
@@ -48,6 +49,7 @@ min-width: 570px;
     max-height: 100%;
     overflow: hidden;
     align-items: center;
+    justify-content: space-evenly;
 }
 
 .user-info-container{
