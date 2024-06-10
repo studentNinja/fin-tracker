@@ -12,7 +12,7 @@ const { Schema } = mongoose;
  *         - name
  *         - amount
  *       properties:
- *         userId:
+ *         user_id:
  *           type: string
  *           description: The ID of the user
  *         name:
@@ -35,7 +35,7 @@ const { Schema } = mongoose;
  *           format: date-time
  *           description: The date when the goal was achieved
  *       example:
- *         userId: "665356241716d857dd03b372"
+ *         user_id: "665356241716d857dd03b372"
  *         name: "Buy a house"
  *         amount: 200000
  *         achieved: false
@@ -44,7 +44,7 @@ const { Schema } = mongoose;
  */
 
 const goalSchema = new Schema({
-    userId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+    user_id: { type: Schema.Types.ObjectId, ref: 'User', required: true },
     name: { type: String, required: true },
     amount: { type: Number, required: true, default: 100000 },
     achieved: { type: Boolean, default: false },
