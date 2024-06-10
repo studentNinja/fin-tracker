@@ -1,18 +1,8 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axiosInstance from '../../api/axiosInstance';
+import { User } from '../../types/userTypes';
 import { setTokenWithExpiry, getTokenWithExpiry } from '../../utils/tokenUtils';
 
-interface User {
-    _id: string;
-    username: string;
-    email: string;
-    initial_capital: number;
-    saving_goal: number;
-    registration_date: string;
-    transactions: string[];
-    fixed_expenses: string[];
-    goals: string[];
-}
 
 interface AuthState {
     token: string | null;
