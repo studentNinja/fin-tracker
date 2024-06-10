@@ -6,7 +6,8 @@ exports.getProfile = async (req, res) => {
             .select('-password')
             .populate('transactions')
             .populate('fixed_expenses')
-            .populate('goals');
+            .populate('goals')
+            .populate('income');
         if (!user) {
             return res.status(404).send({ error: 'User not found' });
         }
@@ -32,6 +33,7 @@ exports.deleteAccount = async (req, res) => {
         await Transaction.deleteMany({ user_id: req.userId }).session(session);
         await FixedExpense.deleteMany({ user_id: req.userId }).session(session);
         await Goal.deleteMany({ user_id: req.userId }).session(session);
+        await Income.deleteMany({user_id: req.userId }).session(session);
 
         await User.findByIdAndDelete(req.userId).session(session);
 

@@ -23,9 +23,9 @@ const bcrypt = require('bcryptjs');
  *         password:
  *           type: string
  *           description: The password of the user
- *         initial_capital:
+ *         capital:
  *           type: number
- *           description: The initial capital of the user
+ *           description: The capital of the user
  *         saving_goal:
  *           type: number
  *           description: The saving goal of the user
@@ -46,17 +46,23 @@ const bcrypt = require('bcryptjs');
  *           type: array
  *           items:
  *             $ref: '#/components/schemas/Goal'
+ *         incomes:
+ *           type: array
+ *           items:
+ *             $ref: '#/components/schemas/Income'
  */
+
 const userSchema = new Schema({
     username: { type: String, required: true, unique: true, minlength: 4 },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true, minlength: 8 },
-    initial_capital: { type: Number, required: true },
+    capital: { type: Number, required: true },
     saving_goal: { type: Number, default: 100000 },
     registration_date: { type: Date, default: Date.now },
     transactions: [{ type: Schema.Types.ObjectId, ref: 'Transaction' }],
     fixed_expenses: [{ type: Schema.Types.ObjectId, ref: 'FixedExpense' }],
-    goals: [{ type: Schema.Types.ObjectId, ref: 'Goal' }]
+    goals: [{ type: Schema.Types.ObjectId, ref: 'Goal' }],
+    incomes: [{ type: Schema.Types.ObjectId, ref: 'Income' }]
 });
 
 userSchema.pre('save', async function(next) {
