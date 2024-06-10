@@ -7,7 +7,7 @@ exports.getProfile = async (req, res) => {
             .populate('transactions')
             .populate('fixed_expenses')
             .populate('goals')
-            .populate('incomes');
+            .populate('incomes')
         if (!user) {
             return res.status(404).send({ error: 'User not found' });
         }
