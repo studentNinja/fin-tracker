@@ -11,16 +11,20 @@ exports.getProfile = async (req, res) => {
             .populate('transactions')
             .populate('fixed_expenses')
             .populate('goals')
-            .populate("incomes");
+            .populate('incomes'); 
         if (!user) {
             return res.status(404).send({ error: 'User not found' });
         }
-        res.status(200).send(user);
+        res.status(200).send({
+            userId: user._id,
+            ...user.toObject()
+        });
     } catch (err) {
         console.error(err);
         res.status(500).send({ error: 'Server error' });
     }
 };
+
 
 exports.deleteAccount = async (req, res) => {
     const session = await mongoose.startSession();
