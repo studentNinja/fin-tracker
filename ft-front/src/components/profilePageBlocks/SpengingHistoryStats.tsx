@@ -1,5 +1,5 @@
 import React from "react";
-import BarChart from "../BarChart";
+import BarChart from "./BarChart";
 
 const SpengingHistoryStats = () => {
   let estimationDate = "12.2024";
