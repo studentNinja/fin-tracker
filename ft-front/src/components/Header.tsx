@@ -28,7 +28,7 @@ const Header = () => {
         </div>
         {isAuthenticated ? (
           <div className="header-option">
-            <Link to="/dashboard">?Dashboard?</Link>
+            <Link to="/dashboard">Dashboard</Link>
           </div>
         ) : (
           ""
