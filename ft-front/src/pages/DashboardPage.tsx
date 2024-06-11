@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import "../styles/dashboard.css";
 import DashboardBlock1 from "../components/dashboardPageBlocks/IncomeBlock";
 import DashboardBlock2 from "../components/dashboardPageBlocks/ProgressBlock";
@@ -7,9 +7,8 @@ import ConfirmDeletePopUp from "../components/pop-ups/ConfirmDeletePopUp";
 import AddIncomeOrFixedExpensesPopUp from "../components/pop-ups/AddIncomeOrFixedExpensesPopUp";
 import ChangeNumberPopUp from "../components/pop-ups/ChangeNumberPopUp";
 import AddSpendingPopUp from "../components/pop-ups/AddSpendingPopUp";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState, AppDispatch } from "../app/store";
-import { fetchUserProfile } from "../features/user/userThunks";
+import { useSelector } from "react-redux";
+import { RootState } from "../app/store";
 
 const DashboardPage: React.FC = () => {
   const { userInfo, loading, error } = useSelector(

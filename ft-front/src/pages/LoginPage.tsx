@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {Link, useNavigate} from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AppDispatch, RootState } from "../app/store";
-import { loginUser } from "../features/auth/authSlice";
-
-
+import { loginUser } from "../features/auth/authThunks";
 
 const LoginPage: React.FC = () => {
   const [email, setEmail] = useState("");
@@ -31,43 +29,44 @@ const LoginPage: React.FC = () => {
   };
 
   return (
-      <div className="form-container">
+    <div className="form-container">
       <div className="form-body shadow">
         <div className="form-h-holder">
           <div className="center-div form-h">УВІЙДІТЬ</div>
-            <Link to="/register" className="center-div change-option">Немає акаунту?</Link>
+          <Link to="/register" className="center-div change-option">
+            Немає акаунту?
+          </Link>
         </div>
-         <form  onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit}>
           <div className="input-container input-container-1-in-row">
             <label>Пошта</label>
             <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
             />
           </div>
           <div className="input-container input-container-1-in-row">
             <label>Пароль</label>
             <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
             />
           </div>
           <button className=" form-button" type="submit" disabled={loading}>
             {loading ? "Відбувається вхід..." : "Увійти"}
           </button>
           {error && typeof error === "object" && error !== null ? (
-              <div>{error.msg}</div>
+            <div>{error}</div>
           ) : (
-              <div>{error}</div>
+            <div>{error}</div>
           )}
         </form>
-
       </div>
-      </div>
+    </div>
     // <div>
     //   <h1>Login</h1>
     //   <form onSubmit={handleSubmit}>
