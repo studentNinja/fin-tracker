@@ -14,14 +14,9 @@ import { fetchUserProfile } from "../features/user/userThunks";
 import { Category } from "../types/categoryTypes";
 
 const ProfilePage = () => {
-  const dispatch = useDispatch<AppDispatch>();
   const { userInfo, loading, error } = useSelector(
     (state: RootState) => state.user
   );
-
-  useEffect(() => {
-    dispatch(fetchUserProfile());
-  }, [dispatch]);
 
   const [titleChangeNumberPopUp, setTitleChangeNumberPopUp] = useState("");
 

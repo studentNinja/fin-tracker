@@ -12,14 +12,9 @@ import { RootState, AppDispatch } from "../app/store";
 import { fetchUserProfile } from "../features/user/userThunks";
 
 const DashboardPage: React.FC = () => {
-  const dispatch = useDispatch<AppDispatch>();
   const { userInfo, loading, error } = useSelector(
     (state: RootState) => state.user
   );
-
-  useEffect(() => {
-    dispatch(fetchUserProfile());
-  }, [dispatch]);
 
   console.log(userInfo);
 
