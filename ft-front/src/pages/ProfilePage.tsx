@@ -10,7 +10,7 @@ import ChangeNumberPopUp from "../components/pop-ups/ChangeNumberPopUp";
 import SpengingHistoryStats from "../components/profilePageBlocks/SpengingHistoryStats";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../app/store";
-import { fetchUserInfo } from "../features/user/userSlice";
+import { fetchUserProfile } from "../features/user/userThunks";
 
 const ProfilePage = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -19,7 +19,7 @@ const ProfilePage = () => {
   );
 
   useEffect(() => {
-    dispatch(fetchUserInfo());
+    dispatch(fetchUserProfile());
   }, [dispatch]);
 
   const [titleChangeNumberPopUp, setTitleChangeNumberPopUp] = useState("");

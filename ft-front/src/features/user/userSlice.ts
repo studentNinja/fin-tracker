@@ -1,26 +1,14 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
-import axiosInstance from '../../api/axiosInstance';
-import { UserState } from '../../types/userTypes'
+import { createSlice} from '@reduxjs/toolkit';
+import { UserState } from '../../types/userTypes';
+import { fetchUserProfile, updatePassword, deleteUser } from './userThunks';
 
 const initialState: UserState = {
     userInfo: null,
     loading: false,
     error: null,
+    updatePasswordSuccess: false,
+    deleteUserSuccess: false,
 };
-
-export const fetchUserInfo = createAsyncThunk('user/fetchUserInfo', async (_, { rejectWithValue }) => {
-    try {
-        const response = await axiosInstance.get('/users/profile');
-        return response.data;
-    } catch (error) {
-        if (axios.isAxiosError(error)) {
-            return rejectWithValue(error.response?.data);
-        } else {
-            return rejectWithValue('An unexpected error occurred');
-        }
-    }
-});
 
 const userSlice = createSlice({
     name: 'user',
@@ -28,17 +16,46 @@ const userSlice = createSlice({
     reducers: {},
     extraReducers: (builder) => {
         builder
-            .addCase(fetchUserInfo.pending, (state) => {
+            .addCase(fetchUserProfile.pending, (state) => {
                 state.loading = true;
                 state.error = null;
             })
-            .addCase(fetchUserInfo.fulfilled, (state, action) => {
+            .addCase(fetchUserProfile.fulfilled, (state, action) => {
                 state.userInfo = action.payload;
                 state.loading = false;
             })
-            .addCase(fetchUserInfo.rejected, (state, action) => {
+            .addCase(fetchUserProfile.rejected, (state, action) => {
                 state.error = action.payload as string;
                 state.loading = false;
+            })
+            .addCase(updatePassword.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+                state.updatePasswordSuccess = false;
+            })
+            .addCase(updatePassword.fulfilled, (state) => {
+                state.loading = false;
+                state.updatePasswordSuccess = true;
+            })
+            .addCase(updatePassword.rejected, (state, action) => {
+                state.error = action.payload as string;
+                state.loading = false;
+                state.updatePasswordSuccess = false;
+            })
+            .addCase(deleteUser.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+                state.deleteUserSuccess = false;
+            })
+            .addCase(deleteUser.fulfilled, (state) => {
+                state.loading = false;
+                state.userInfo = null;
+                state.deleteUserSuccess = true;
+            })
+            .addCase(deleteUser.rejected, (state, action) => {
+                state.error = action.payload as string;
+                state.loading = false;
+                state.deleteUserSuccess = false;
             });
     },
 });

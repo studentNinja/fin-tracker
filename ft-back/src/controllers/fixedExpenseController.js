@@ -1,85 +1,65 @@
 const FixedExpense = require('../models/FixedExpense');
 const User = require('../models/User');
-const validCategories = require('../config/expenseCategories'); // Ensure this is correctly imported
+
 
 exports.createFixedExpense = async (req, res) => {
     try {
         const { name, category, amount } = req.body;
-
-        if (!name || !category || !amount) {
-            return res.status(400).send({ error: 'Name, category, and amount are required' });
-        }
-
-        if (!validCategories.includes(category)) {
-            return res.status(400).send({ error: 'Invalid category' });
-        }
-
         const newFixedExpense = new FixedExpense({ userId: req.userId, name, category, amount });
         await newFixedExpense.save();
         await User.findByIdAndUpdate(req.userId, { $push: { fixed_expenses: newFixedExpense._id } });
-        res.status(201).send(newFixedExpense);
+        res.status(201).json(newFixedExpense);
     } catch (err) {
-        console.error(err);
-        res.status(500).send({ error: 'Server error' });
+        res.status(400).json({ error: err.message });
     }
 };
 
 exports.getFixedExpenses = async (req, res) => {
     try {
         const fixedExpenses = await FixedExpense.find({ userId: req.userId });
-        res.status(200).send(fixedExpenses);
+        res.status(200).json(fixedExpenses);
     } catch (err) {
-        console.error(err);
-        res.status(500).send({ error: 'Server error' });
+        res.status(400).json({ error: err.message });
+    }
+};
+
+exports.getFixedExpenseById = async (req, res) => {
+    try {
+        const { fixedExpenseId } = req.params;
+        const fixedExpense = await FixedExpense.findById(fixedExpenseId);
+        if (!fixedExpense) {
+            return res.status(404).json({ error: 'Fixed expense not found' });
+        }
+        res.status(200).json(fixedExpense);
+    } catch (err) {
+        res.status(400).json({ error: err.message });
     }
 };
 
 exports.updateFixedExpense = async (req, res) => {
     try {
-        const { _id, name, category, amount } = req.body;
-
-        if (!_id) {
-            return res.status(400).send({ error: 'Expense ID is required' });
-        }
-
-        if (category && !validCategories.includes(category)) {
-            return res.status(400).send({ error: 'Invalid category' });
-        }
-
-        const updatedFixedExpense = await FixedExpense.findByIdAndUpdate(
-            _id,
-            { name, category, amount },
-            { new: true }
-        );
-
+        const { fixedExpenseId } = req.params;
+        const { name, category, amount } = req.body;
+        const updatedFixedExpense = await FixedExpense.findByIdAndUpdate(fixedExpenseId, { name, category, amount }, { new: true });
         if (!updatedFixedExpense) {
-            return res.status(404).send({ error: 'Fixed expense not found' });
+            return res.status(404).json({ error: 'Fixed expense not found' });
         }
-
-        res.status(200).send(updatedFixedExpense);
+        res.status(200).json(updatedFixedExpense);
     } catch (err) {
-        console.error(err);
-        res.status(500).send({ error: 'Server error' });
+        res.status(400).json({ error: err.message });
     }
 };
 
 exports.deleteFixedExpense = async (req, res) => {
     try {
-        const { _id } = req.body;
-
-        if (!_id) {
-            return res.status(400).send({ error: 'Expense ID is required' });
-        }
-
-        const deletedFixedExpense = await FixedExpense.findByIdAndDelete(_id);
-
+        const { fixedExpenseId } = req.params;
+        const deletedFixedExpense = await FixedExpense.findByIdAndDelete(fixedExpenseId);
         if (!deletedFixedExpense) {
-            return res.status(404).send({ error: 'Fixed expense not found' });
+            return res.status(404).json({ error: 'Fixed expense not found' });
         }
-
-        res.status(200).send({ message: 'Fixed expense deleted successfully' });
+        await User.findByIdAndUpdate(req.userId, { $pull: { fixed_expenses: fixedExpenseId } });
+        res.status(200).json({ message: 'Fixed expense deleted successfully' });
     } catch (err) {
-        console.error(err);
-        res.status(500).send({ error: 'Server error' });
+        res.status(400).json({ error: err.message });
     }
 };

@@ -13,51 +13,7 @@ const router = express.Router();
 
 /**
  * @swagger
- * /api/income:
- *   post:
- *     summary: Create a new income record
- *     tags: [Incomes]
- *     security:
- *       - bearerAuth: []
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/Income'
- *     responses:
- *       201:
- *         description: Income created successfully
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Income'
- *       401:
- *         description: Unauthorized
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 error:
- *                   type: string
- *                   description: Error message
- *       500:
- *         description: Internal Server Error
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 error:
- *                   type: string
- *                   description: Error message
- */
-router.post('/', authMiddleware, incomeController.createIncome);
-
-/**
- * @swagger
- * /api/income:
+ * /api/incomes:
  *   get:
  *     summary: Get all incomes for the authenticated user
  *     tags: [Incomes]
@@ -74,42 +30,79 @@ router.post('/', authMiddleware, incomeController.createIncome);
  *                 $ref: '#/components/schemas/Income'
  *       401:
  *         description: Unauthorized
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 error:
- *                   type: string
- *                   description: Error message
  *       500:
  *         description: Internal Server Error
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 error:
- *                   type: string
- *                   description: Error message
  */
 router.get('/', authMiddleware, incomeController.getIncomes);
 
 /**
  * @swagger
- * /api/income/{id}:
- *   put:
- *     summary: Update an income record
+ * /api/incomes:
+ *   post:
+ *     summary: Create a new income
+ *     tags: [Incomes]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Income'
+ *     responses:
+ *       201:
+ *         description: Income created successfully
+ *       400:
+ *         description: Bad Request
+ *       500:
+ *         description: Internal Server Error
+ */
+router.post('/', authMiddleware, incomeController.createIncome);
+
+/**
+ * @swagger
+ * /api/incomes/{incomeId}:
+ *   get:
+ *     summary: Get income by ID
  *     tags: [Incomes]
  *     security:
  *       - bearerAuth: []
  *     parameters:
  *       - in: path
- *         name: id
+ *         name: incomeId
  *         schema:
  *           type: string
  *         required: true
- *         description: The income ID
+ *         description: The ID of the income
+ *     responses:
+ *       200:
+ *         description: Income retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Income'
+ *       404:
+ *         description: Income not found
+ *       500:
+ *         description: Internal Server Error
+ */
+router.get('/:incomeId', authMiddleware, incomeController.getIncomeById);
+
+/**
+ * @swagger
+ * /api/incomes/{incomeId}:
+ *   put:
+ *     summary: Update an income
+ *     tags: [Incomes]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: incomeId
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The ID of the income
  *     requestBody:
  *       required: true
  *       content:
@@ -119,100 +112,36 @@ router.get('/', authMiddleware, incomeController.getIncomes);
  *     responses:
  *       200:
  *         description: Income updated successfully
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Income'
- *       401:
- *         description: Unauthorized
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 error:
- *                   type: string
- *                   description: Error message
  *       404:
  *         description: Income not found
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 error:
- *                   type: string
- *                   description: Error message
  *       500:
  *         description: Internal Server Error
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 error:
- *                   type: string
- *                   description: Error message
  */
-router.put('/:id', authMiddleware, incomeController.updateIncome);
+router.put('/:incomeId', authMiddleware, incomeController.updateIncome);
 
 /**
  * @swagger
- * /api/income/{id}:
+ * /api/incomes/{incomeId}:
  *   delete:
- *     summary: Delete an income record
+ *     summary: Delete an income
  *     tags: [Incomes]
  *     security:
  *       - bearerAuth: []
  *     parameters:
  *       - in: path
- *         name: id
+ *         name: incomeId
  *         schema:
  *           type: string
  *         required: true
- *         description: The income ID
+ *         description: The ID of the income
  *     responses:
  *       200:
  *         description: Income deleted successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   description: Success message
- *       401:
- *         description: Unauthorized
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 error:
- *                   type: string
- *                   description: Error message
  *       404:
  *         description: Income not found
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 error:
- *                   type: string
- *                   description: Error message
  *       500:
  *         description: Internal Server Error
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 error:
- *                   type: string
- *                   description: Error message
  */
-router.delete('/:id', authMiddleware, incomeController.deleteIncome);
+router.delete('/:incomeId', authMiddleware, incomeController.deleteIncome);
 
 module.exports = router;

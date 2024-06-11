@@ -34,22 +34,8 @@ const router = express.Router();
  *               $ref: '#/components/schemas/Transaction'
  *       400:
  *         description: Bad Request
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 error:
- *                   type: string
  *       500:
  *         description: Internal Server Error
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 error:
- *                   type: string
  */
 router.post('/', authMiddleware, transactionController.createTransaction);
 
@@ -63,32 +49,107 @@ router.post('/', authMiddleware, transactionController.createTransaction);
  *       - bearerAuth: []
  *     responses:
  *       200:
- *         description: List of transactions
+ *         description: Transactions retrieved successfully
  *         content:
  *           application/json:
  *             schema:
  *               type: array
  *               items:
  *                 $ref: '#/components/schemas/Transaction'
- *       400:
- *         description: Bad Request
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 error:
- *                   type: string
+ *       401:
+ *         description: Unauthorized
  *       500:
  *         description: Internal Server Error
+ */
+router.get('/', authMiddleware, transactionController.getTransactions);
+
+/**
+ * @swagger
+ * /api/transactions/{id}:
+ *   get:
+ *     summary: Get a transaction by ID
+ *     tags: [Transactions]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The transaction ID
+ *     responses:
+ *       200:
+ *         description: Transaction retrieved successfully
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 error:
- *                   type: string
+ *               $ref: '#/components/schemas/Transaction'
+ *       404:
+ *         description: Transaction not found
+ *       500:
+ *         description: Internal Server Error
  */
-router.get('/', authMiddleware, transactionController.getTransactions);
+router.get('/:transactionId', authMiddleware, transactionController.getTransactionById);
+
+/**
+ * @swagger
+ * /api/transactions/{id}:
+ *   put:
+ *     summary: Update a transaction by ID
+ *     tags: [Transactions]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The transaction ID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Transaction'
+ *     responses:
+ *       200:
+ *         description: Transaction updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Transaction'
+ *       404:
+ *         description: Transaction not found
+ *       500:
+ *         description: Internal Server Error
+ */
+router.put('/:transactionId', authMiddleware, transactionController.updateTransaction);
+
+/**
+ * @swagger
+ * /api/transactions/{id}:
+ *   delete:
+ *     summary: Delete a transaction by ID
+ *     tags: [Transactions]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The transaction ID
+ *     responses:
+ *       200:
+ *         description: Transaction deleted successfully
+ *       404:
+ *         description: Transaction not found
+ *       500:
+ *         description: Internal Server Error
+ */
+router.delete('/:transactionId', authMiddleware, transactionController.deleteTransaction);
 
 module.exports = router;
