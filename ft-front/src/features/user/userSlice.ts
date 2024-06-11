@@ -1,14 +1,6 @@
 import { createSlice} from '@reduxjs/toolkit';
-import { User } from '../../types/userTypes';
+import { UserState } from '../../types/userTypes';
 import { fetchUserProfile, updatePassword, deleteUser } from './userThunks';
-
-interface UserState {
-    userInfo: User | null;
-    loading: boolean;
-    error: string | null;
-    updatePasswordSuccess: boolean;
-    deleteUserSuccess: boolean;
-}
 
 const initialState: UserState = {
     userInfo: null,
