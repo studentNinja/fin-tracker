@@ -10,8 +10,8 @@ const swaggerDefinition = {
   },
   servers: [
     {
-      url: 'https://fin-tracker-21n6.onrender.com'
-      // url: 'http://localhost:8080'
+      // url: 'https://fin-tracker-21n6.onrender.com'
+      url: 'http://localhost:8080'
     },
   ],
   components: {

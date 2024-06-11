@@ -4,13 +4,8 @@ const User = require('../models/User');
 
 exports.createGoal = async (req, res) => {
     try {
-        const { amount, name } = req.body;
-
-        if (!amount || !name) {
-            return res.status(400).send({ error: 'Amount and name are required' });
-        }
-
-        const newGoal = new Goal({ userId: req.userId, amount, name });
+        const { name, amount } = req.body;
+        const newGoal = new Goal({ userId: req.userId, name, amount });
         await newGoal.save();
         await User.findByIdAndUpdate(req.userId, { $push: { goals: newGoal._id } });
 
