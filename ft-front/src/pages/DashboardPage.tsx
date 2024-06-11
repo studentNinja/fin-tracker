@@ -9,7 +9,7 @@ import ChangeNumberPopUp from "../components/pop-ups/ChangeNumberPopUp";
 import AddSpendingPopUp from "../components/pop-ups/AddSpendingPopUp";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState, AppDispatch } from "../app/store";
-import { fetchUserInfo } from "../features/user/userSlice";
+import { fetchUserProfile } from "../features/user/userThunks";
 
 const DashboardPage: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -18,7 +18,7 @@ const DashboardPage: React.FC = () => {
   );
 
   useEffect(() => {
-    dispatch(fetchUserInfo());
+    dispatch(fetchUserProfile());
   }, [dispatch]);
 
   console.log(userInfo);

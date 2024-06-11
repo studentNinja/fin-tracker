@@ -1,31 +1,22 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axiosInstance from '../../api/axiosInstance';
+import { createSlice} from '@reduxjs/toolkit';
 import { User } from '../../types/userTypes';
-
+import { fetchUserProfile, updatePassword, deleteUser } from './userThunks';
 
 interface UserState {
     userInfo: User | null;
     loading: boolean;
     error: string | null;
+    updatePasswordSuccess: boolean;
+    deleteUserSuccess: boolean;
 }
 
 const initialState: UserState = {
     userInfo: null,
     loading: false,
     error: null,
+    updatePasswordSuccess: false,
+    deleteUserSuccess: false,
 };
-
-export const fetchUserProfile = createAsyncThunk(
-    'user/fetchUserProfile',
-    async (_, { rejectWithValue }) => {
-        try {
-            const response = await axiosInstance.get('/users/profile');
-            return response.data;
-        } catch (error: any) {
-            return rejectWithValue(error.response?.data || 'An error occurred');
-        }
-    }
-);
 
 const userSlice = createSlice({
     name: 'user',
@@ -44,6 +35,35 @@ const userSlice = createSlice({
             .addCase(fetchUserProfile.rejected, (state, action) => {
                 state.error = action.payload as string;
                 state.loading = false;
+            })
+            .addCase(updatePassword.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+                state.updatePasswordSuccess = false;
+            })
+            .addCase(updatePassword.fulfilled, (state) => {
+                state.loading = false;
+                state.updatePasswordSuccess = true;
+            })
+            .addCase(updatePassword.rejected, (state, action) => {
+                state.error = action.payload as string;
+                state.loading = false;
+                state.updatePasswordSuccess = false;
+            })
+            .addCase(deleteUser.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+                state.deleteUserSuccess = false;
+            })
+            .addCase(deleteUser.fulfilled, (state) => {
+                state.loading = false;
+                state.userInfo = null;
+                state.deleteUserSuccess = true;
+            })
+            .addCase(deleteUser.rejected, (state, action) => {
+                state.error = action.payload as string;
+                state.loading = false;
+                state.deleteUserSuccess = false;
             });
     },
 });
