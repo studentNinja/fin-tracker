@@ -1,31 +1,24 @@
 import React, { ReactElement, useEffect } from "react";
 import { Navigate, Outlet, useLocation } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../app/store";
-import { getTokenWithExpiry } from "../../utils/tokenUtils";
-import { setAuthState } from "../../features/auth/authSlice";
+import { useSelector, useDispatch } from "react-redux";
+import { AppDispatch, RootState } from "../../app/store";
+import { fetchUserProfile } from "../../features/user/userThunks";
 
 interface PrivateRouteProps {
   children?: ReactElement;
 }
 
 const PrivateRoute: React.FC<PrivateRouteProps> = ({ children }) => {
-  const dispatch = useDispatch();
-  const token = getTokenWithExpiry("token");
+  const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
-    if (token) {
-      dispatch(
-        setAuthState({
-          token,
-        })
-      );
-    }
-  }, [dispatch, token]);
+    dispatch(fetchUserProfile());
+  }, [dispatch]);
 
   const isAuthenticated = useSelector(
     (state: RootState) => state.auth.isAuthenticated
   );
+
   const location = useLocation();
 
   if (!isAuthenticated) {

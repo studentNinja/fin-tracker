@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { AppDispatch, RootState } from "../app/store";
-import { registerUser } from "../features/auth/authSlice";
+import { registerUser } from "../features/auth/authThunks";
 
 const UserForm: React.FC = () => {
   const [username, setUserName] = useState("");
@@ -24,11 +24,18 @@ const UserForm: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    dispatch(registerUser({ username, email, password, initial_capital:initialCapital, saving_goal:0 }));
+    dispatch(
+      registerUser({
+        username,
+        email,
+        password,
+        capital: initialCapital,
+        saving_goal: 0,
+      })
+    );
   };
 
   return (
-
     <form onSubmit={handleSubmit}>
       <div>
         <label>Username</label>
@@ -72,7 +79,7 @@ const UserForm: React.FC = () => {
         {loading ? "Registering..." : "Register"}
       </button>
       {error && typeof error === "object" && error !== null ? (
-        <p>{error.msg}</p>
+        <p>{error}</p>
       ) : (
         <p>{error}</p>
       )}

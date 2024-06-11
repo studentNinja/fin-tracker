@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../app/store";
-import { registerUser } from "../features/auth/authSlice";
+import { registerUser } from "../features/auth/authThunks";
 
 interface IRegisterFormInput {
   confirmPassword: string;
@@ -53,7 +53,7 @@ export const RegisterPage: React.FC = () => {
         username,
         email,
         password,
-        initial_capital: initialCapital,
+        capital: initialCapital,
         saving_goal: savingGoal,
       })
     );
@@ -145,7 +145,7 @@ export const RegisterPage: React.FC = () => {
             {loading ? "Відбувається реєстрація..." : "Зареєструватись"}
           </button>
           {error && typeof error === "object" && error !== null ? (
-            <div>{error.msg}</div>
+            <div>{error}</div>
           ) : (
             <div>{error}</div>
           )}
