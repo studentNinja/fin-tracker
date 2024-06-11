@@ -10,7 +10,6 @@ const axiosInstance = axios.create({
     },
 });
 
-// Utility function to get the token from local storage
 const getAccessToken = (): string | null => localStorage.getItem('accessToken');
 const getRefreshToken = (): string | null => localStorage.getItem('refreshToken');
 
@@ -39,21 +38,17 @@ axiosInstance.interceptors.response.use(
                     const response = await store.dispatch(refreshToken() as any);
                     const { accessToken } = response.payload;
 
-                    // Update the access token in local storage
                     localStorage.setItem('accessToken', accessToken);
 
-                    // Retry the original request with the new access token
                     if (originalRequest.headers) {
                         originalRequest.headers['Authorization'] = `Bearer ${accessToken}`;
                     }
                     return axiosInstance(originalRequest);
                 } catch (err) {
-                    // If refresh token is invalid, logout the user
                     store.dispatch(logout());
                     return Promise.reject(err);
                 }
             } else {
-                // If no refresh token is available, logout the user
                 store.dispatch(logout());
             }
         }
