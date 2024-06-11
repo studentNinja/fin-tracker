@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
-const validCategories = require('../config/expenseCategories');
+const validCategories = require('../config/expenseCategories'); // Ensure this is an array of valid categories
 
 /**
  * @swagger
