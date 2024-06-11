@@ -6,6 +6,8 @@ export interface UserState {
     userInfo: User | null;
     loading: boolean;
     error: string | null;
+    updatePasswordSuccess: boolean,
+    deleteUserSuccess: boolean,
 }
 
 export interface User {
