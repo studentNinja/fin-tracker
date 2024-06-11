@@ -1,17 +1,21 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { fetchFixedExpenses, fetchFixedExpenseById, addFixedExpense, updateFixedExpense, deleteFixedExpense } from './fixedExpensesThunks';
 import { FixedExpense } from '../../types/fixedExpenseTypes';
+import { 
+    fetchFixedExpenses, 
+    getFixedExpenseById, 
+    addFixedExpense, 
+    updateFixedExpense, 
+    deleteFixedExpense 
+} from './fixedExpensesThunks';
 
 interface FixedExpensesState {
     fixedExpenses: FixedExpense[];
-    selectedFixedExpense: FixedExpense | null;
     loading: boolean;
     error: string | null;
 }
 
 const initialState: FixedExpensesState = {
     fixedExpenses: [],
-    selectedFixedExpense: null,
     loading: false,
     error: null,
 };
@@ -34,15 +38,17 @@ const fixedExpensesSlice = createSlice({
                 state.error = action.payload as string;
                 state.loading = false;
             })
-            .addCase(fetchFixedExpenseById.pending, (state) => {
+            .addCase(getFixedExpenseById.pending, (state) => {
                 state.loading = true;
                 state.error = null;
             })
-            .addCase(fetchFixedExpenseById.fulfilled, (state, action) => {
-                state.selectedFixedExpense = action.payload;
+            .addCase(getFixedExpenseById.fulfilled, (state, action) => {
+                state.fixedExpenses = state.fixedExpenses.map(expense =>
+                    expense._id === action.payload._id ? action.payload : expense
+                );
                 state.loading = false;
             })
-            .addCase(fetchFixedExpenseById.rejected, (state, action) => {
+            .addCase(getFixedExpenseById.rejected, (state, action) => {
                 state.error = action.payload as string;
                 state.loading = false;
             })
@@ -63,10 +69,9 @@ const fixedExpensesSlice = createSlice({
                 state.error = null;
             })
             .addCase(updateFixedExpense.fulfilled, (state, action) => {
-                const index = state.fixedExpenses.findIndex(fixedExpense => fixedExpense._id === action.payload._id);
-                if (index !== -1) {
-                    state.fixedExpenses[index] = action.payload;
-                }
+                state.fixedExpenses = state.fixedExpenses.map(expense =>
+                    expense._id === action.payload._id ? action.payload : expense
+                );
                 state.loading = false;
             })
             .addCase(updateFixedExpense.rejected, (state, action) => {
@@ -78,7 +83,7 @@ const fixedExpensesSlice = createSlice({
                 state.error = null;
             })
             .addCase(deleteFixedExpense.fulfilled, (state, action) => {
-                state.fixedExpenses = state.fixedExpenses.filter(fixedExpense => fixedExpense._id !== action.payload);
+                state.fixedExpenses = state.fixedExpenses.filter(expense => expense._id !== action.payload);
                 state.loading = false;
             })
             .addCase(deleteFixedExpense.rejected, (state, action) => {

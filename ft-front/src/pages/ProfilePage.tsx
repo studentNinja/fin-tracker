@@ -11,6 +11,7 @@ import SpengingHistoryStats from "../components/profilePageBlocks/SpengingHistor
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../app/store";
 import { fetchUserProfile } from "../features/user/userThunks";
+import { Category } from "../types/categoryTypes";
 
 const ProfilePage = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -33,7 +34,7 @@ const ProfilePage = () => {
 
   const [functionsHolder, setFunctionsHolder] = useState({
     delete: () => {},
-    addFixedExpense: (name: string, amount: number) => {},
+    addFixedExpense: (name: string, amount: number, category: Category) => {},
     changeGoal: (amount: number) => {},
   });
 
@@ -42,7 +43,7 @@ const ProfilePage = () => {
     setVisibilityPopUpConfirmDelete(true);
   }
   function showAddFixedExpensePopUp(
-    addFunct: (name: string, amount: number) => void
+    addFunct: (name: string, amount: number, category: Category) => void
   ) {
     setFunctionsHolder(
       Object.assign(functionsHolder, { addFixedExpense: addFunct })
@@ -98,7 +99,7 @@ const ProfilePage = () => {
         <AddIncomeOrFixedExpensesPopUp
           title={"Додати постійну витрату"}
           cancel={() => setVisibilityAddFixedExpensePopUp(false)}
-          confirmAdd={functionsHolder.addFixedExpense}
+          confirmAddExpense={functionsHolder.addFixedExpense}
         />
       ) : (
         ""

@@ -2,10 +2,11 @@ import { Category } from "./categoryTypes";
 
 export interface FixedExpense {
     _id: string;
-    userId: string;
     name: string;
-    category: Category;
     amount: number;
+    userId: string; 
+    category: Category; 
     createdAt: string;
     updatedAt: string;
-}
+  }
+  

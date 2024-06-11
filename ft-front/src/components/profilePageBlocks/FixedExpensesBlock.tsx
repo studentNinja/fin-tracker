@@ -1,112 +1,127 @@
-import React, {useState} from 'react';
+import React, { useEffect, useState } from "react";
 import deleteBtn from "../../assets/delete-btn.svg";
-import {useSelector} from "react-redux";
-import {RootState} from "../../app/store";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState, AppDispatch } from "../../app/store";
+import { FixedExpense } from "../../types/fixedExpenseTypes";
+import {
+  fetchFixedExpenses,
+  addFixedExpense as addFixedExpenseThunk,
+  deleteFixedExpense as deleteFixedExpenseThunk,
+  getFixedExpenseById,
+} from "../../features/fixedExpenses/fixedExpensesThunks";
+import { Category } from "../../types/categoryTypes";
 
 const FixedExpensesBlock = (props: {
-    showConfirmDeletePopUp: (deleteFunct: () => void) => void;
-    showPopUpAddFixedExpense: (
-        addFunct: (title: string, number: number) => void
-    ) => void;
+  showConfirmDeletePopUp: (deleteFunct: () => void) => void;
+  showPopUpAddFixedExpense: (
+    addFunct: (name: string, amount: number, category: Category) => void
+  ) => void;
 }) => {
-    let user = useSelector(
-        (state: RootState) => state.user
-    );
-    console.log(user)
+  const dispatch = useDispatch<AppDispatch>();
+  const fixedExpenses = useSelector(
+    (state: RootState) => state.fixedExpenses.fixedExpenses
+  );
+  const loading = useSelector(
+    (state: RootState) => state.fixedExpenses.loading
+  );
+  const error = useSelector((state: RootState) => state.fixedExpenses.error);
 
+  let moneyLeft = 71000;
+  let [arrayFixedExpenses, setArrayFixedExpenses] = useState<FixedExpense[]>(
+    []
+  );
 
+  useEffect(() => {
+    dispatch(fetchFixedExpenses());
+  }, [dispatch]);
 
-    let moneyLeft=71000
-    let [arrayFixedExpenses, setArrayFixedExpenses]=useState([
-        {_id:1, name: "Інтернет", amount: 300},
-        {_id:2, name: "Абонплата", amount: 250},
-        {_id:3, name: "Підписки", amount: 1000},
-        {_id:4, name: "Chat GPT", amount: 1300},
-        {_id:5, name: "Оренда квартири", amount: 1300},
-    ])
-
-    function addFixedExpense(name: string, amount: number){
-        if (name.length === 0) throw new Error("Введіть назву");
-        if (!validateSpendingNumber(amount))
-            throw new Error("Недостатньо коштів для здійснення операції");
-
-        if (amount <= 0) throw new Error("Неправильне значення суми");
-
-        let newExpense = {
-            _id: arrayFixedExpenses.length + 1,
-            name,
-            amount
-        };
-        setArrayFixedExpenses([...arrayFixedExpenses, newExpense]);
-
-
-
-        //to do: POST
+  useEffect(() => {
+    if (fixedExpenses) {
+      setArrayFixedExpenses(fixedExpenses);
     }
+  }, [fixedExpenses]);
 
-    function validateSpendingNumber(number: number) {
-        return moneyLeft >= number;
-    }
-    function deleteFixedExpense(id: number) {
-        setArrayFixedExpenses(arrayFixedExpenses.filter((expense) => expense._id !== id));
+  function addFixedExpense(name: string, amount: number, category: Category) {
+    if (name.length === 0) throw new Error("Введіть назву");
+    if (!validateSpendingNumber(amount))
+      throw new Error("Недостатньо коштів для здійснення операції");
 
-        /// to do: DELETE
-    }
+    if (amount <= 0) throw new Error("Неправильне значення суми");
 
-    return (
-        <div className="block block-flex-1 block-column-content">
-            <div className="block-title">Постійні витрати</div>
-            <div className="income-number-container">
-                <div className="income-number">
-                    {
-                        // calc general income
-                        arrayFixedExpenses
-                            .reduce((res, curr) => res + curr.amount, 0)
-                            .toLocaleString("uk-UA")
-                    }
-                </div>
-                <div
-                    className="add-btn"
-                    onClick={() => props.showPopUpAddFixedExpense(addFixedExpense)}
-                >
-                    +
-                </div>
-            </div>
-            <div className="line"></div>
+    const newExpense = {
+      name,
+      amount,
+      category,
+    };
 
-            <div className="list">
-                {arrayFixedExpenses.map((expense) => {
-                    return (
-                        <div
-                            key={expense._id}
-                            style={{ display: "flex", gap: "5px", flexDirection: "column" }}
-                        >
-                            <div className="list-elem">
-                                <div>{expense.name}</div>
-                                <div className="list-elem-end-block">
-                                    <div className="delete-btn">
-                                        <img
-                                            src={deleteBtn}
-                                            onClick={() =>
-                                                props.showConfirmDeletePopUp(() =>
-                                                    deleteFixedExpense(expense._id)
-                                                )
-                                            }
-                                            alt="delete"
-                                        />
-                                    </div>
-                                    <div>{expense.amount.toLocaleString("uk-UA")}</div>
-                                </div>
-                            </div>
-                            <div className="list-line"></div>
-                        </div>
-                    );
-                })}
-            </div>
+    dispatch(addFixedExpenseThunk(newExpense));
+  }
 
+  function validateSpendingNumber(number: number) {
+    return moneyLeft >= number;
+  }
 
+  function deleteFixedExpense(id: string) {
+    dispatch(deleteFixedExpenseThunk(id));
+  }
+
+  return (
+    <div className="block block-flex-1 block-column-content">
+      <div className="block-title">Постійні витрати</div>
+      <div className="income-number-container">
+        <div className="income-number">
+          {
+            // calc general income
+            arrayFixedExpenses
+              .reduce((res, curr) => res + curr.amount, 0)
+              .toLocaleString("uk-UA")
+          }
         </div>
-    );
+        <div
+          className="add-btn"
+          onClick={() =>
+            props.showPopUpAddFixedExpense(
+              (name: string, amount: number, category: Category) =>
+                addFixedExpense(name, amount, category)
+            )
+          }
+        >
+          +
+        </div>
+      </div>
+      <div className="line"></div>
+
+      <div className="list">
+        {arrayFixedExpenses.map((expense) => {
+          return (
+            <div
+              key={expense._id}
+              style={{ display: "flex", gap: "5px", flexDirection: "column" }}
+            >
+              <div className="list-elem">
+                <div>{expense.name}</div>
+                <div className="list-elem-end-block">
+                  <div className="delete-btn">
+                    <img
+                      src={deleteBtn}
+                      onClick={() =>
+                        props.showConfirmDeletePopUp(() =>
+                          deleteFixedExpense(expense._id)
+                        )
+                      }
+                      alt="delete"
+                    />
+                  </div>
+                  <div>{expense.amount.toLocaleString("uk-UA")}</div>
+                </div>
+              </div>
+              <div className="list-line"></div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
 };
 
 export default FixedExpensesBlock;
