@@ -103,7 +103,7 @@ const DashboardPage: React.FC = () => {
         <AddIncomeOrFixedExpensesPopUp
           title={"Додати джерело доходу"}
           cancel={() => setVisibilityPopUpAddIncome(false)}
-          confirmAdd={functionsHolder.addIncome}
+          confirmAddExpense={functionsHolder.addIncome}
         />
       ) : (
         ""
