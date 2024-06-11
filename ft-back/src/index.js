@@ -26,7 +26,7 @@ app.use('/api/users', userRoutes);
 app.use('/api/goals', goalRoutes);
 app.use('/api/transactions', transactionRoutes);
 app.use('/api/fixedexpenses', fixedExpenseRoutes);
-app.use('/api/income', incomeRoutes);
+app.use('/api/incomes', incomeRoutes);
 
 
 app.use((err, req, res, next) => {

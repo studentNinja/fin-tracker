@@ -1,20 +1,20 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { fetchFixedExpenses, fetchFixedExpenseById, addFixedExpense, updateFixedExpense, deleteFixedExpense } from './fixedExpensesThunks';
 import { FixedExpense } from '../../types/fixedExpenseTypes';
-import { addFixedExpense, deleteFixedExpense, fetchFixedExpenses, updateFixedExpense } from './fixedExpensesThunks';
 
 interface FixedExpensesState {
     fixedExpenses: FixedExpense[];
+    selectedFixedExpense: FixedExpense | null;
     loading: boolean;
     error: string | null;
 }
 
 const initialState: FixedExpensesState = {
     fixedExpenses: [],
+    selectedFixedExpense: null,
     loading: false,
     error: null,
 };
-
-
 
 const fixedExpensesSlice = createSlice({
     name: 'fixedExpenses',
@@ -31,6 +31,18 @@ const fixedExpensesSlice = createSlice({
                 state.loading = false;
             })
             .addCase(fetchFixedExpenses.rejected, (state, action) => {
+                state.error = action.payload as string;
+                state.loading = false;
+            })
+            .addCase(fetchFixedExpenseById.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(fetchFixedExpenseById.fulfilled, (state, action) => {
+                state.selectedFixedExpense = action.payload;
+                state.loading = false;
+            })
+            .addCase(fetchFixedExpenseById.rejected, (state, action) => {
                 state.error = action.payload as string;
                 state.loading = false;
             })

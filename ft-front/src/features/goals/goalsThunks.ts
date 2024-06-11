@@ -42,7 +42,7 @@ export const deleteGoal = createAsyncThunk(
     'goals/deleteGoal',
     async (id: string, { rejectWithValue }) => {
         try {
-            const response = await axiosInstance.delete(`/goals/${id}`);
+            await axiosInstance.delete(`/goals/${id}`);
             return id;
         } catch (error: any) {
             return rejectWithValue(error.response?.data || 'An error occurred');

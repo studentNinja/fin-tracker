@@ -14,6 +14,18 @@ export const fetchFixedExpenses = createAsyncThunk(
     }
 );
 
+export const fetchFixedExpenseById = createAsyncThunk(
+    'fixedExpenses/fetchFixedExpenseById',
+    async (id: string, { rejectWithValue }) => {
+        try {
+            const response = await axiosInstance.get(`/fixedexpenses/${id}`);
+            return response.data;
+        } catch (error: any) {
+            return rejectWithValue(error.response?.data || 'An error occurred');
+        }
+    }
+);
+
 export const addFixedExpense = createAsyncThunk(
     'fixedExpenses/addFixedExpense',
     async (fixedExpense: Omit<FixedExpense, '_id'>, { rejectWithValue }) => {
@@ -42,7 +54,7 @@ export const deleteFixedExpense = createAsyncThunk(
     'fixedExpenses/deleteFixedExpense',
     async (id: string, { rejectWithValue }) => {
         try {
-            const response = await axiosInstance.delete(`/fixedexpenses/${id}`);
+            await axiosInstance.delete(`/fixedexpenses/${id}`);
             return id;
         } catch (error: any) {
             return rejectWithValue(error.response?.data || 'An error occurred');
