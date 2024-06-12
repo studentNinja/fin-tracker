@@ -2,76 +2,87 @@ import React, { useState } from "react";
 import "../../styles/pop-up.css";
 import { Category } from "../../types/categoryTypes";
 
-const AddIncomeOrFixedExpensesPopUp = (props: {
+interface Props {
   title: string;
   cancel: () => void;
   confirmAddExpense: (name: string, amount: number, category: Category) => void;
-}) => {
+}
+
+const AddIncomeOrFixedExpensesPopUp: React.FC<Props> = ({
+                                                          title: popupTitle,
+                                                          cancel,
+                                                          confirmAddExpense,
+                                                        }) => {
   const [title, setTitle] = useState("");
   const [number, setNumber] = useState(1000);
+  const [category, setCategory] = useState<Category>({} as Category);
+
+  const handleConfirm = () => {
+    confirmAddExpense(title, number, category);
+  };
 
   return (
-    <div
-      className="pop-up-bg"
-      onClick={(e) => {
-        props.cancel();
-      }}
-    >
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          try {
-            // props.confirmAddEx(title, number);
-            props.cancel();
-          } catch (error) {
-            alert((error as Error).message);
-          }
-        }}
-      >
-        <div
-          className="form-body pop-up shadow"
+      <div
+          className="pop-up-bg"
           onClick={(e) => {
-            e.stopPropagation();
+            cancel();
           }}
+      >
+        <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              try {
+                handleConfirm();
+                cancel();
+              } catch (error) {
+                alert((error as Error).message);
+              }
+            }}
         >
-          <div className="pop-up-h">{props.title}</div>
-          <div className="input-title-pop-up">
-            Введіть назву
-            <input
-              minLength={3}
-              value={title}
-              onChange={(event) => setTitle(event.target.value)}
-              className="input-pop-up"
-              required
-            />
-          </div>
-          <div className="input-title-pop-up">
-            Введіть суму
-            <input
-              min="1"
-              type="number"
-              value={number}
-              onChange={(event) => setNumber(+event.target.value)}
-              className="input-pop-up"
-              required
-            />
-          </div>
-          <div className="button-container">
-            <div
-              className="btn form-button btn-pop-up btn-pop-up-cancel "
+          <div
+              className="form-body pop-up shadow"
               onClick={(e) => {
-                props.cancel();
+                e.stopPropagation();
               }}
-            >
-              Скасувати
+          >
+            <div className="pop-up-h">{popupTitle}</div>
+            <div className="input-title-pop-up">
+              Введіть назву
+              <input
+                  minLength={3}
+                  value={title}
+                  onChange={(event) => setTitle(event.target.value)}
+                  className="input-pop-up"
+                  required
+              />
             </div>
-            <button className="btn  form-button btn-pop-up" type="submit">
-              Додати
-            </button>
+            <div className="input-title-pop-up">
+              Введіть суму
+              <input
+                  min="1"
+                  type="number"
+                  value={number}
+                  onChange={(event) => setNumber(+event.target.value)}
+                  className="input-pop-up"
+                  required
+              />
+            </div>
+            <div className="button-container">
+              <div
+                  className="btn form-button btn-pop-up btn-pop-up-cancel"
+                  onClick={(e) => {
+                    cancel();
+                  }}
+              >
+                Скасувати
+              </div>
+              <button className="btn form-button btn-pop-up" type="submit">
+                Додати
+              </button>
+            </div>
           </div>
-        </div>
-      </form>
-    </div>
+        </form>
+      </div>
   );
 };
 
