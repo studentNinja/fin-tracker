@@ -13,6 +13,8 @@ import {
 import "../styles/dashboard.css";
 import "../styles/homePage.css";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { RootState } from "../app/store";
 
 ChartJS.register(
   CategoryScale,
@@ -67,6 +69,7 @@ const options = {
 };
 
 const HomePage: React.FC = () => {
+  const { isAuthenticated } = useSelector((state: RootState) => state.auth);
   return (
     <div className="dashboard-container shadow">
       <div className="main-section">
@@ -106,9 +109,11 @@ const HomePage: React.FC = () => {
       </div>
       <div className="footer">
         <p>Зручно керуйте фінансами, легко досягайте цілей!</p>
-        <Link to="/register">
-          <button className="sign-up-btn">Зареєструватися!</button>
-        </Link>
+        {!isAuthenticated ? (
+          <Link to="/register">
+            <button className="sign-up-btn">Зареєструватися!</button>
+          </Link>
+        ) : null}
       </div>
     </div>
   );
