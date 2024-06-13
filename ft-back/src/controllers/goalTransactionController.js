@@ -1,19 +1,14 @@
 const GoalTransaction = require('../models/GoalTransaction');
-const User = require('../models/User');
 const Goal = require('../models/Goal');
-const Transaction = require("../models/Transaction");
 
 
 exports.createGoalTransaction = async (req, res) => {
     try {
         console.log(req.body)
         let { amount } = req.body;
-
-
         if (!amount ) {
             return res.status(400).send({ error: 'Amount is required' });
         }
-
         const goal = await Goal.findOne({ achieved: false });
         if (goal == null) {
             res.status(400).json({error: "No goal exists"});
@@ -21,11 +16,8 @@ exports.createGoalTransaction = async (req, res) => {
         }
         // res.sendStatus(201) ;
         // return
-
         const goalId=goal._id
-
         let goalTrantsactionsArray= await GoalTransaction.find({ goalId  });
-
         let savedAmount=goalTrantsactionsArray
             .reduce((res, curr) => res + curr.amount, 0)
 
@@ -51,6 +43,7 @@ exports.createGoalTransaction = async (req, res) => {
         });
 
         await newGoalTransaction.save();
+        await Goal.findByIdAndUpdate(req.goalId, { $push: { goalTransactions: newGoalTransaction._id } });
 
 
         res.status(201).json(newGoalTransaction);

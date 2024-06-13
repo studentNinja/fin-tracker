@@ -48,6 +48,7 @@ const goalSchema = new Schema({
     name: { type: String, required: true },
     amount: { type: Number, required: true, default: 100000 },
     achieved: { type: Boolean, default: false },
+    goalTransactions:{type:Schema.Types.ObjectId, ref: 'GoalTransaction' },
     startDate: { type: Date, default: Date.now },
     achievedDate: { type: Date }
 }, { timestamps: true });

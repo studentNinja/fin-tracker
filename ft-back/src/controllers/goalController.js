@@ -7,7 +7,7 @@ exports.createGoal = async (req, res) => {
         const { name, amount } = req.body;
         const newGoal = new Goal({ userId: req.userId, name, amount });
         await newGoal.save();
-        await User.findByIdAndUpdate(req.userId, { $push: { goals: newGoal._id } });
+        await User.findByIdAndUpdate(req.userId, { $push: { goals: newGoal._id } }).populate('goalTransactions');
 
         res.status(201).json(newGoal);
     } catch (err) {
@@ -17,7 +17,7 @@ exports.createGoal = async (req, res) => {
 
 exports.getGoals = async (req, res) => {
     try {
-        const goals = await Goal.find({ userId: req.userId });
+        const goals = await Goal.find({ userId: req.userId }).populate('goalTransactions');
         res.status(200).json(goals);
     } catch (err) {
         res.status(400).json({ error: err.message });
