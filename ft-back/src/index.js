@@ -3,6 +3,7 @@ const connectDB = require('./connections/db');
 const authRoutes = require('./routes/authRoutes');
 const userRoutes = require('./routes/userRoutes');
 const transactionRoutes = require('./routes/transactionRoutes');
+const goalTransactionRoutes = require('./routes/goalTransactionRoutes');
 const fixedExpenseRoutes = require('./routes/fixedExpenseRoutes');
 const goalRoutes = require('./routes/goalRoutes');
 const incomeRoutes = require('./routes/incomeRoutes')
@@ -24,6 +25,7 @@ swaggerSetup(app);
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/goals', goalRoutes);
+app.use('/api/goal-transactions', goalTransactionRoutes);
 app.use('/api/transactions', transactionRoutes);
 app.use('/api/fixedexpenses', fixedExpenseRoutes);
 app.use('/api/incomes', incomeRoutes);
