@@ -11,20 +11,13 @@ import { useSelector } from "react-redux";
 import { RootState } from "../app/store";
 
 const DashboardPage: React.FC = () => {
-  const { userInfo, loading, error } = useSelector(
-    (state: RootState) => state.user
-  );
+  const { userInfo } = useSelector((state: RootState) => state.user);
+  const { incomes } = useSelector((state: RootState) => state.incomes);
 
-  console.log(userInfo);
-
-  const [visibilityPopUpConfirmDelete, setVisibilityPopUpConfirmDelete] =
-    useState(false);
-  const [visibilityPopUpAddIncome, setVisibilityPopUpAddIncome] =
-    useState(false);
-  const [visibilityMoveMoneyPopUp, setVisibilityMoveMoneyPopUp] =
-    useState(false);
-  const [visibilityAddSpendingPopUp, setVisibilityAddSpendingPopUp] =
-    useState(false);
+  const [visibilityPopUpConfirmDelete, setVisibilityPopUpConfirmDelete] = useState(false);
+  const [visibilityPopUpAddIncome, setVisibilityPopUpAddIncome] = useState(false);
+  const [visibilityMoveMoneyPopUp, setVisibilityMoveMoneyPopUp] = useState(false);
+  const [visibilityAddSpendingPopUp, setVisibilityAddSpendingPopUp] = useState(false);
 
   const [functionsHolder, setFunctionsHolder] = useState({
     delete: () => {},
@@ -36,91 +29,80 @@ const DashboardPage: React.FC = () => {
   const [titleMoveMoneyPopUp, setTitleMoveMoneyPopUp] = useState("");
 
   function showConfirmDeletePopUp(deleteFunct: () => void) {
-    setFunctionsHolder(Object.assign(functionsHolder, { delete: deleteFunct }));
+    setFunctionsHolder((prev) => ({ ...prev, delete: deleteFunct }));
     setVisibilityPopUpConfirmDelete(true);
   }
 
   function showPopUpAddIncome(
-    addFunct: (title: string, number: number) => void
+      addFunct: (title: string, number: number) => void
   ) {
-    setFunctionsHolder(Object.assign(functionsHolder, { addIncome: addFunct }));
+    setFunctionsHolder((prev) => ({ ...prev, addIncome: addFunct }));
     setVisibilityPopUpAddIncome(true);
   }
 
   function showMoveMoneyPopUp(
-    title: string,
-    moveFunct: (number: number) => void
+      title: string,
+      moveFunct: (number: number) => void
   ) {
     setTitleMoveMoneyPopUp(title);
-    setFunctionsHolder(
-      Object.assign(functionsHolder, { moveMoney: moveFunct })
-    );
+    setFunctionsHolder((prev) => ({ ...prev, moveMoney: moveFunct }));
     setVisibilityMoveMoneyPopUp(true);
   }
 
   function showAddSpendingPopUp(
-    addFunct: (categoryId: number, title: string, number: number) => void
+      addFunct: (categoryId: number, title: string, number: number) => void
   ) {
-    setFunctionsHolder(
-      Object.assign(functionsHolder, { addSpending: addFunct })
-    );
+    setFunctionsHolder((prev) => ({ ...prev, addSpending: addFunct }));
     setVisibilityAddSpendingPopUp(true);
   }
 
   return (
-    <div className="dashboard-container shadow">
-      {userInfo && (
-        <>
-          <div className="one-row-block-container">
-            <DashboardBlock1
-              showConfirmDeletePopUp={showConfirmDeletePopUp}
-              showPopUpAddIncome={showPopUpAddIncome}
-            />
-            <DashboardBlock2 showMoveMoneyPopUp={showMoveMoneyPopUp} />
-          </div>
-          <DashboardBlock3
-            showConfirmDeletePopUp={showConfirmDeletePopUp}
-            showAddSpendingPopUp={showAddSpendingPopUp}
-          />
-        </>
-      )}
+      <div className="dashboard-container shadow">
+        {userInfo && (
+            <>
+              <div className="one-row-block-container">
+                <DashboardBlock1
+                    showConfirmDeletePopUp={showConfirmDeletePopUp}
+                    showPopUpAddIncome={showPopUpAddIncome}
+                />
+                <DashboardBlock2 showMoveMoneyPopUp={showMoveMoneyPopUp} />
+              </div>
+              <DashboardBlock3
+                  showConfirmDeletePopUp={showConfirmDeletePopUp}
+                  showAddSpendingPopUp={showAddSpendingPopUp}
+              />
+            </>
+        )}
 
-      {visibilityPopUpConfirmDelete ? (
-        <ConfirmDeletePopUp
-          cancel={() => setVisibilityPopUpConfirmDelete(false)}
-          confirmDelete={functionsHolder.delete}
-        />
-      ) : (
-        ""
-      )}
-      {visibilityPopUpAddIncome ? (
-        <AddIncomeOrFixedExpensesPopUp
-          title={"Додати джерело доходу"}
-          cancel={() => setVisibilityPopUpAddIncome(false)}
-          confirmAddExpense={functionsHolder.addIncome}
-        />
-      ) : (
-        ""
-      )}
-      {visibilityMoveMoneyPopUp ? (
-        <ChangeNumberPopUp
-          title={titleMoveMoneyPopUp}
-          cancel={() => setVisibilityMoveMoneyPopUp(false)}
-          confirmChange={functionsHolder.moveMoney}
-        />
-      ) : (
-        ""
-      )}
-      {visibilityAddSpendingPopUp ? (
-        <AddSpendingPopUp
-          cancel={() => setVisibilityAddSpendingPopUp(false)}
-          confirmAdd={functionsHolder.addSpending}
-        />
-      ) : (
-        ""
-      )}
-    </div>
+        {visibilityPopUpConfirmDelete && (
+            <ConfirmDeletePopUp
+                cancel={() => setVisibilityPopUpConfirmDelete(false)}
+                confirmDelete={functionsHolder.delete}
+            />
+        )}
+        {visibilityPopUpAddIncome && (
+            <AddIncomeOrFixedExpensesPopUp
+                title={"Додати джерело доходу"}
+                cancel={() => setVisibilityPopUpAddIncome(false)}
+                confirmAddExpense={functionsHolder.addIncome}
+            />
+        )}
+        {visibilityMoveMoneyPopUp && (
+            <ChangeNumberPopUp
+                title={titleMoveMoneyPopUp}
+                cancel={() => setVisibilityMoveMoneyPopUp(false)}
+                confirmChange={functionsHolder.moveMoney}
+            />
+        )}
+        {visibilityAddSpendingPopUp && (
+            <AddSpendingPopUp
+                cancel={() => setVisibilityAddSpendingPopUp(false)}
+                confirmAdd={functionsHolder.addSpending}
+            />
+        )}
+      </div>
   );
 };
 
 export default DashboardPage;
+
