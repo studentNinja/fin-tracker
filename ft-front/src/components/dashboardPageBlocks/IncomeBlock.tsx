@@ -9,6 +9,7 @@ import {
 } from "../../features/income/incomeThunks";
 import { Income } from "../../types/incomeTypes";
 import { ThunkDispatch, AnyAction } from "@reduxjs/toolkit";
+import {Data} from "../../data/data";
 
 interface Props {
   showPopUpAddIncome: (
@@ -19,7 +20,14 @@ interface Props {
 
 const IncomeBlock: React.FC<Props> = (props) => {
   const dispatch = useDispatch<ThunkDispatch<RootState, void, AnyAction>>();
-  const arrayIncome = useSelector((state: RootState) => state.incomes.incomes);
+  // const arrayIncome = useSelector((state: RootState) => state.incomes.incomes);
+  const data = useSelector((state: RootState) => {
+        return  new Data(state);
+  });
+  const arrayIncome=data.getIncomeArray()
+
+  const incomeAmount=data.getIncomeAmount()
+    console.log(arrayIncome)
 
   useEffect(() => {
     dispatch(fetchIncomes());
@@ -55,8 +63,7 @@ const IncomeBlock: React.FC<Props> = (props) => {
       <div className="block-title">Дохід за місяць</div>
       <div className="income-number-container">
         <div className="income-number">
-          {arrayIncome
-            .reduce((res, curr) => res + curr.amount, 0)
+          {incomeAmount
             .toLocaleString("uk-UA")}
         </div>
         <div
@@ -76,7 +83,7 @@ const IncomeBlock: React.FC<Props> = (props) => {
             style={{ display: "flex", gap: "5px", flexDirection: "column" }}
           >
             <div className="list-elem">
-              <div>{income.source}</div>
+              <div>{(income as Income).source}</div>
               <div className="list-elem-end-block">
                 <div className="delete-btn">
                   <img

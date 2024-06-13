@@ -12,3 +12,11 @@ export let formatDate=(isoString:string | undefined)=>{
 
     return `${formattedDay}.${formattedMonth}.${year}`;
 }
+export let getMonthAndYearFromDate=(isoString:string | undefined)=>{
+    if(!isoString)
+        return ""
+    const date = new Date(isoString);
+
+    return [date.getUTCMonth(), date.getUTCFullYear()];
+
+}

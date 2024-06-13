@@ -1,6 +1,17 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 
-import deleteBtn from "../../assets/delete-btn.svg";
+import {Data} from "../../data/data";
+
+import {useDispatch, useSelector} from "react-redux";
+import {RootState} from "../../app/store";
+import {addIncome, fetchIncomes} from "../../features/income/incomeThunks";
+import {AnyAction, ThunkDispatch} from "@reduxjs/toolkit";
+import {
+  addGoalTransaction,
+  fetchAllGoalTransactions,
+  fetchCurrentGoalTransactions
+} from "../../features/goalTransactions/goalTransactionsThunks";
+import {fetchGoals} from "../../features/goals/goalsThunks";
 
 const DashboardBlock2 = (props: {
   showMoveMoneyPopUp: (
@@ -8,15 +19,29 @@ const DashboardBlock2 = (props: {
     moveFunct: (number: number) => void
   ) => void;
 }) => {
+  const dispatch = useDispatch<ThunkDispatch<RootState, void, AnyAction>>();
+
+  const data = useSelector((state: RootState) => {
+    return  new Data(state);
+  });
+
+
+  useEffect(() => {
+    dispatch(fetchGoals());
+    dispatch(fetchCurrentGoalTransactions());
+  }, [dispatch]);
+
+
+
+
   // to do: fetch залишок вільних грошей
   let moneyLeft = 105000;
 
-  // to do: fetch goal info
-  const [goalNumber] = useState(600000);
-  const [goalPrevMonthsNumber, setGoalPrevMonthsNumber] = useState(90000);
-  const [goalCurrMonthNumber, setGoalCurrMonthNumber] = useState(10000);
+  const goalNumber = data.getGoalAmount()
+  const goalPrevMonthsNumber=data.getSavedAmountByPrevMonth();
+  const goalCurrMonthNumber = data.getSavedAmountByCurrentMonth()
 
-  let goalLeftNumber = goalNumber - goalPrevMonthsNumber - goalCurrMonthNumber;
+  let goalLeftNumber = goalNumber - data.getSavedAmount();
   let goalPrevMonthsPercent = Math.round(
     (goalPrevMonthsNumber / goalNumber) * 100
   );
@@ -25,35 +50,61 @@ const DashboardBlock2 = (props: {
   );
   let goalLeftPercent = 100 - goalPrevMonthsPercent - goalCurrMonthPercent;
 
-  function putMoneyAwayToGoal(number: number) {
-    if (!validatePutMoneyAwayToGoal(number))
-      throw new Error("Недостатньо коштів для здійснення операції");
-    if (number <= 0) throw new Error("Неправильне значення суми");
-    if (goalPrevMonthsNumber + goalCurrMonthNumber + number >= goalNumber)
-      setGoalCurrMonthNumber(goalNumber - goalPrevMonthsNumber);
-    else setGoalCurrMonthNumber(goalCurrMonthNumber + number);
+  // function putMoneyAwayToGoal(number: number) {
+  //   if (!validatePutMoneyAwayToGoal(number))
+  //     throw new Error("Недостатньо коштів для здійснення операції");
+  //   if (number <= 0) throw new Error("Неправильне значення суми");
+  //   if (goalPrevMonthsNumber + goalCurrMonthNumber + number >= goalNumber)
+  //     setGoalCurrMonthNumber(goalNumber - goalPrevMonthsNumber);
+  //   else setGoalCurrMonthNumber(goalCurrMonthNumber + number);
+  //
+  //   // to do: POST
+  //
+  // }
 
-    // to do: POST
-  }
-  function validatePutMoneyAwayToGoal(number: number) {
-    return moneyLeft >= number;
+
+  async function handleAddGoalTransaction(number: number) {
+
+    // to do: add validation
+
+    try {
+      const result = await dispatch(
+          addGoalTransaction({
+            amount: number,
+            userId: "",
+            date: "",
+          })
+      );
+    } catch (error) {
+      throw new Error(`Error adding income: ${
+          error
+      }`);
+    }
   }
 
-  function getMoneyFromGoal(number: number) {
-    if (!validateGetMoneyFromGoal(number))
-      throw new Error("Недостатньо коштів для здійснення операції");
-    if (number <= 0) throw new Error("Неправильне значення суми");
-    if (goalCurrMonthNumber <= number) {
-      setGoalCurrMonthNumber(0);
-      number -= goalCurrMonthNumber;
-      setGoalPrevMonthsNumber(goalPrevMonthsNumber - number);
-    } else setGoalCurrMonthNumber(goalCurrMonthNumber - number);
 
-    // to do: POST
-  }
-  function validateGetMoneyFromGoal(number: number) {
-    return goalPrevMonthsNumber + goalCurrMonthNumber >= number;
-  }
+
+
+
+  // function validatePutMoneyAwayToGoal(number: number) {
+  //   return moneyLeft >= number;
+  // }
+
+  // function getMoneyFromGoal(number: number) {
+  //   if (!validateGetMoneyFromGoal(number))
+  //     throw new Error("Недостатньо коштів для здійснення операції");
+  //   if (number <= 0) throw new Error("Неправильне значення суми");
+  //   if (goalCurrMonthNumber <= number) {
+  //     setGoalCurrMonthNumber(0);
+  //     number -= goalCurrMonthNumber;
+  //     setGoalPrevMonthsNumber(goalPrevMonthsNumber - number);
+  //   } else setGoalCurrMonthNumber(goalCurrMonthNumber - number);
+  //
+  //   // to do: POST
+  // }
+  // function validateGetMoneyFromGoal(number: number) {
+  //   return goalPrevMonthsNumber + goalCurrMonthNumber >= number;
+  // }
 
   return (
     <div className="block block-2">
@@ -139,7 +190,7 @@ const DashboardBlock2 = (props: {
         <div
           className="btn"
           onClick={() =>
-            props.showMoveMoneyPopUp("Відкласти кошти", putMoneyAwayToGoal)
+            props.showMoveMoneyPopUp("Відкласти кошти", handleAddGoalTransaction)
           }
         >
           Відкласти
@@ -147,7 +198,7 @@ const DashboardBlock2 = (props: {
         <div
           className="btn btn-2"
           onClick={() =>
-            props.showMoveMoneyPopUp("Зняти кошти", getMoneyFromGoal)
+            props.showMoveMoneyPopUp("Зняти кошти", (number)=>handleAddGoalTransaction(number*(-1)))
           }
         >
           Зняти
