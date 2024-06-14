@@ -5,20 +5,25 @@ import { Category } from "../../types/categoryTypes";
 interface Props {
   title: string;
   cancel: () => void;
-  confirmAddExpense: (name: string, amount: number, category: Category) => void;
+  confirmAdd: (name: string, amount: number) => void;
 }
 
 const AddIncomeOrFixedExpensesPopUp: React.FC<Props> = ({
                                                           title: popupTitle,
                                                           cancel,
-                                                          confirmAddExpense,
+                                                          confirmAdd,
                                                         }) => {
   const [title, setTitle] = useState("");
   const [number, setNumber] = useState(1000);
-  const [category, setCategory] = useState<Category>({} as Category);
 
   const handleConfirm = () => {
-    confirmAddExpense(title, number, category);
+      try {
+          confirmAdd(title, number);
+          cancel();
+      } catch (error) {
+          alert((error as Error).message);
+      }
+    // confirmAdd(title, number);
   };
 
   return (

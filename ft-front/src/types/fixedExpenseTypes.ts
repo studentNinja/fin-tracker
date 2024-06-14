@@ -9,4 +9,3 @@ export interface FixedExpense {
     createdAt: string;
     updatedAt: string;
   }
-  

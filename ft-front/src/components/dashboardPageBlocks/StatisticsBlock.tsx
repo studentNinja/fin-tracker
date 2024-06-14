@@ -6,6 +6,7 @@ import SpendingsHistoryPart from "./StatisticsComponents/SpendingsHistoryPart";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../app/store";
 import { Data } from "../../utils/dataUtils";
+
 import { AnyAction, ThunkDispatch } from "@reduxjs/toolkit";
 import { Category } from "../../types/categoryTypes";
 import { deleteIncome, fetchIncomes } from "../../features/income/incomeThunks";
@@ -24,12 +25,15 @@ import {
   categoryNames,
 } from "../../utils/categoryData";
 import { userInfo } from "os";
+import {deleteFixedExpense} from "../../features/fixedExpenses/fixedExpensesThunks";
+import {validateNumberToBePositive, validateTitle, validateTransaction} from "../../utils/validationUtils";
 
 const StatisticsBlock = (props: {
   showConfirmDeletePopUp: (deleteFunct: () => void) => void;
   showAddSpendingPopUp: (
     addFunct: (categoryId: number, title: string, number: number) => void
   ) => void;
+
 }) => {
   const dispatch = useDispatch<ThunkDispatch<RootState, void, AnyAction>>();
   const transactions = useSelector(
@@ -48,7 +52,7 @@ const StatisticsBlock = (props: {
   let goalTransactionsTotalSum = data.getGoalTransactionsAmountCurrentMonth();
   let incomeAmount = data.getIncomeAmountCurrentMonth();
 
-  let moneyLeft = 105000;
+  let balance = data.getBalance();
 
   let arraySpendings = data.getTransactionsArrayCurrentMonth();
   let [selectedCategory, setSelectedCategory] = useState(0);
@@ -87,17 +91,24 @@ const StatisticsBlock = (props: {
       }
     });
   }
+  async function handleDeleteFixedExpense(id: string) {
+    props.showConfirmDeletePopUp(() => {
+      try {
+        dispatch(deleteFixedExpense(id));
+        dispatch(fetchUserProfile());
+      } catch (error) {
+        console.error("Error deleting fixed expense:", error);
+      }
+    });
+  }
+
+
 
   function handleAddTransaction(
     categoryId: number,
     description: string,
     number: number
   ) {
-    if (description.length === 0) throw new Error("Введіть назву");
-    if (!validateSpendingNumber(number))
-      throw new Error("Недостатньо коштів для здійснення операції");
-
-    if (number <= 0) throw new Error("Неправильне значення суми");
 
     let newSpending = {
       date: new Date().toISOString(),
@@ -109,6 +120,10 @@ const StatisticsBlock = (props: {
       updatedAt: new Date().toISOString(),
     };
     try {
+      validateTitle(description)
+      validateTransaction(number, balance)
+      validateNumberToBePositive(number)
+
       dispatch(addTransaction(newSpending));
       dispatch(fetchUserProfile());
     } catch (error) {
@@ -116,9 +131,6 @@ const StatisticsBlock = (props: {
     }
   }
 
-  function validateSpendingNumber(number: number) {
-    return moneyLeft >= number;
-  }
 
   return (
     <div className="block block-3">
@@ -134,6 +146,7 @@ const StatisticsBlock = (props: {
         arraySpendings={arraySpendings}
         selectedCategory={selectedCategory}
         deleteSpending={handleDeleteTransaction}
+        deleteFixedExpense={handleDeleteFixedExpense}
         clickAddSpendingBtn={() =>
           props.showAddSpendingPopUp(handleAddTransaction)
         }

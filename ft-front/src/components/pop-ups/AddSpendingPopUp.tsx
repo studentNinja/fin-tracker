@@ -7,14 +7,15 @@ const AddSpendingPopUp = (props: {
   confirmAdd: (categoryId: number, title: string, number: number) => void;
 }) => {
 
-  const arrayCategories= Object.keys(categoryMap).map(key => {
-    return {
-      id: Number(key),
-      title: categoryNames[categoryMap[Number(key)]],
-    };
+  const arrayCategories= Object.keys(categoryMap).filter(key=>+key!=1).map(key => {
+
+        return {
+          id: Number(key),
+          title: categoryNames[categoryMap[Number(key)]],
+        };
   });
 
-  const [categoryId, setCategoryId] = useState(1);
+  const [categoryId, setCategoryId] = useState(2);
   const [title, setTitle] = useState("");
   const [number, setNumber] = useState(0);
 

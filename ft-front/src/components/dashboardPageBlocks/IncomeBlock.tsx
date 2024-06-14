@@ -11,6 +11,7 @@ import { Income } from "../../types/incomeTypes";
 import { ThunkDispatch, AnyAction } from "@reduxjs/toolkit";
 import { Data } from "../../utils/dataUtils";
 import { fetchUserProfile } from "../../features/user/userThunks";
+import {validateIncomeDelete, validateTitle} from "../../utils/validationUtils";
 
 interface Props {
   showPopUpAddIncome: (
@@ -31,22 +32,26 @@ const IncomeBlock: React.FC<Props> = (props) => {
 
   let arrayIncome = data.getIncomeArrayCurrentMonth();
   let incomeAmount = data.getIncomeAmountCurrentMonth();
+  let balance= data.getBalance()
 
   useEffect(() => {
     dispatch(fetchUserProfile());
   }, [dispatch]);
 
-  async function handleDeleteIncome(id: string) {
-    try {
-      await dispatch(deleteIncome(id));
-      await dispatch(fetchUserProfile());
-    } catch (error) {
-      console.error("Error deleting income:", error);
-    }
+  async function handleDeleteIncome(id: string, amount:number) {
+      try {
+          validateIncomeDelete(amount, balance)
+          await dispatch(deleteIncome(id));
+          await dispatch(fetchUserProfile());
+      } catch (error) {
+          console.error("Error deleting income:", error);
+
+      }
   }
 
   async function handleAddIncome(title: string, number: number) {
     try {
+        validateTitle(title)
       const result = await dispatch(
         addIncome({
           source: title,
@@ -94,7 +99,7 @@ const IncomeBlock: React.FC<Props> = (props) => {
                     src={deleteBtn}
                     onClick={() =>
                       props.showConfirmDeletePopUp(() =>
-                        handleDeleteIncome(income._id)
+                        handleDeleteIncome(income._id, income.amount)
                       )
                     }
                     alt="delete"

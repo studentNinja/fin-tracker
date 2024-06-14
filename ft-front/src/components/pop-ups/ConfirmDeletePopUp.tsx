@@ -31,8 +31,13 @@ const ConfirmDeletePopUp = (props: {
           <div
             className="btn btn-pop-up "
             onClick={(e) => {
-              props.confirmDelete();
-              props.cancel();
+                try {
+                    props.confirmDelete();
+                    props.cancel();
+                } catch (error) {
+                    alert((error as Error).message);
+                }
+
             }}
           >
             Підтвердити

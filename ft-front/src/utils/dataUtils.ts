@@ -4,6 +4,7 @@ import {GoalTransaction} from "../types/goalTransactionTypes";
 import {Goal} from "../types/goalTypes";
 import {Transaction} from "../types/transactionTypes";
 import {Category} from "../types/categoryTypes";
+import {compose} from "@reduxjs/toolkit";
 
 
 export class Data{
@@ -13,7 +14,7 @@ export class Data{
 
 
     constructor(user: User | null, goalTransactionsCurrent:GoalTransaction[]=[], goalTransactionsAll:GoalTransaction[]=[]) {
-        // console.log(user);
+        console.log(user);
         this.user = user;
         this.goalTransactionsAll = goalTransactionsAll;
         this.goalTransactionsCurrent = goalTransactionsCurrent;
@@ -59,7 +60,7 @@ export class Data{
     getTransactionsAmountByCategoryId(categoryId: number, categoryMap:Record<number, Category>){
         if(this.user==null)
             return 0
-        let categoryTransactions= (filterCurrentMonth(this.user.transactions) as Transaction[])
+        let categoryTransactions= this.getTransactionsArrayCurrentMonth()
             .filter(transaction => categoryMap[categoryId] === transaction.category)
 
         return  categoryTransactions.reduce((sum, transaction) => sum + transaction.amount, 0);
@@ -69,10 +70,24 @@ export class Data{
     getTransactionsArrayCurrentMonth(){
         if(this.user==null)
             return []
-        return filterCurrentMonth(this.user.transactions) as Transaction[]
+        const now = new Date();
+        let fixedTransactions=this.user.fixed_expenses.map(expense=> {
+            return {
+                _id: expense._id,
+                userId: expense.userId,
+                amount: expense.amount,
+                category: 'fixed',
+                date: new Date(now.getFullYear(), now.getMonth(), 2).toISOString(),
+                description: expense.name,
+                createdAt: expense.createdAt,
+                updatedAt: expense.updatedAt
+            } as Transaction
+        })
+        let allTransactions=fixedTransactions.concat(this.user.transactions)
+
+        return filterCurrentMonth(allTransactions) as Transaction[]
     }
     getGoalTransactionsArrayCurrentMonth(){
-
         if(this.user==null)
             return []
 
@@ -98,6 +113,13 @@ export class Data{
         return this.getGoalTransactionsArrayCurrentMonth()
             .reduce((res, curr) => res + curr.amount, 0)
     }
+
+
+    getBalance(){
+        let spentAmount=this.getTransactionsAmountCurrentMonth()+this.getGoalTransactionsAmountCurrentMonth()
+        return this.getIncomeAmountCurrentMonth()-spentAmount
+    }
+
 }
 
 
