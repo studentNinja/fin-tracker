@@ -1,21 +1,29 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 
 import MonthsSpendingsDiagramPart from "./StatisticsComponents/MonthsSpendingsDiagramPart";
 import CategoriesPart from "./StatisticsComponents/CategoriesPart";
 import SpendingsHistoryPart from "./StatisticsComponents/SpendingsHistoryPart";
-import {useDispatch, useSelector} from "react-redux";
-import {RootState} from "../../app/store";
-import {Data} from "../../utils/dataUtils";
-import {AnyAction, ThunkDispatch} from "@reduxjs/toolkit";
-import {Category} from "../../types/categoryTypes";
-import {deleteIncome, fetchIncomes} from "../../features/income/incomeThunks";
-import {addTransaction, deleteTransaction} from "../../features/transactions/transactionThunks";
-import {fetchUserProfile} from "../../features/user/userThunks";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../app/store";
+import { Data } from "../../utils/dataUtils";
+import { AnyAction, ThunkDispatch } from "@reduxjs/toolkit";
+import { Category } from "../../types/categoryTypes";
+import { deleteIncome, fetchIncomes } from "../../features/income/incomeThunks";
+import {
+  addTransaction,
+  deleteTransaction,
+} from "../../features/transactions/transactionThunks";
+import { fetchUserProfile } from "../../features/user/userThunks";
 import {
   fetchAllGoalTransactions,
-  fetchCurrentGoalTransactions
+  fetchCurrentGoalTransactions,
 } from "../../features/goalTransactions/goalTransactionsThunks";
-import {categoryColors, categoryMap, categoryNames} from "../../utils/categoryData";
+import {
+  categoryColors,
+  categoryMap,
+  categoryNames,
+} from "../../utils/categoryData";
+import { userInfo } from "os";
 
 const StatisticsBlock = (props: {
   showConfirmDeletePopUp: (deleteFunct: () => void) => void;
@@ -23,48 +31,46 @@ const StatisticsBlock = (props: {
     addFunct: (categoryId: number, title: string, number: number) => void
   ) => void;
 }) => {
-
-
   const dispatch = useDispatch<ThunkDispatch<RootState, void, AnyAction>>();
-
+  const transactions = useSelector(
+    (state: RootState) => state.transactions.transactions
+  );
 
   const data = useSelector((state: RootState) => {
-    return new Data(state.user.userInfo ,state.goalTransactions.goalTransactionsCurrent, state.goalTransactions.goalTransactionsAll);
+    return new Data(
+      state.user.userInfo,
+      state.goalTransactions.goalTransactionsCurrent,
+      state.goalTransactions.goalTransactionsAll
+    );
   });
 
-
-
-
-  let transactionsTotalSum=data.getTransactionsAmountCurrentMonth()
-  let goalTransactionsTotalSum=data.getGoalTransactionsAmountCurrentMonth()
-  let incomeAmount=data.getIncomeAmountCurrentMonth()
-
-
+  let transactionsTotalSum = data.getTransactionsAmountCurrentMonth();
+  let goalTransactionsTotalSum = data.getGoalTransactionsAmountCurrentMonth();
+  let incomeAmount = data.getIncomeAmountCurrentMonth();
 
   let moneyLeft = 105000;
 
-
   let arraySpendings = data.getTransactionsArrayCurrentMonth();
   let [selectedCategory, setSelectedCategory] = useState(0);
-
 
   useEffect(() => {
     dispatch(fetchUserProfile());
     dispatch(fetchAllGoalTransactions());
     dispatch(fetchCurrentGoalTransactions());
-  }, [dispatch]);
+  }, [dispatch, transactions]);
 
-  const categories = Object.keys(categoryMap).map(key => {
-
-    const totalAmount = data.getTransactionsAmountByCategoryId(+key, categoryMap)
-        return {
+  const categories = Object.keys(categoryMap).map((key) => {
+    const totalAmount = data.getTransactionsAmountByCategoryId(
+      +key,
+      categoryMap
+    );
+    return {
       id: Number(key),
       title: categoryNames[categoryMap[Number(key)]],
       color: categoryColors[Number(key)],
-      number: totalAmount
+      number: totalAmount,
     };
   });
-
 
   function selectCategory(id: number) {
     if (selectedCategory === id) return;
@@ -72,7 +78,6 @@ const StatisticsBlock = (props: {
   }
 
   async function handleDeleteTransaction(id: string) {
-
     props.showConfirmDeletePopUp(() => {
       try {
         dispatch(deleteTransaction(id));
@@ -83,9 +88,11 @@ const StatisticsBlock = (props: {
     });
   }
 
-
-
-  function handleAddTransaction(categoryId: number, description: string, number: number) {
+  function handleAddTransaction(
+    categoryId: number,
+    description: string,
+    number: number
+  ) {
     if (description.length === 0) throw new Error("Введіть назву");
     if (!validateSpendingNumber(number))
       throw new Error("Недостатньо коштів для здійснення операції");
@@ -97,9 +104,9 @@ const StatisticsBlock = (props: {
       description,
       category: categoryMap[categoryId],
       amount: number,
-      userId: 'help',
+      userId: "",
       createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
+      updatedAt: new Date().toISOString(),
     };
     try {
       dispatch(addTransaction(newSpending));
@@ -107,7 +114,6 @@ const StatisticsBlock = (props: {
     } catch (error) {
       console.error("Error adding transaction:", error);
     }
-
   }
 
   function validateSpendingNumber(number: number) {
@@ -122,14 +128,15 @@ const StatisticsBlock = (props: {
         income={incomeAmount}
       />
       <div className="line-vertical"></div>
-      <CategoriesPart categories={categories}
-                      selectCategory={selectCategory} />
+      <CategoriesPart categories={categories} selectCategory={selectCategory} />
       <div className="line-vertical"></div>
       <SpendingsHistoryPart
         arraySpendings={arraySpendings}
         selectedCategory={selectedCategory}
         deleteSpending={handleDeleteTransaction}
-        clickAddSpendingBtn={() => props.showAddSpendingPopUp(handleAddTransaction)}
+        clickAddSpendingBtn={() =>
+          props.showAddSpendingPopUp(handleAddTransaction)
+        }
       />
     </div>
   );

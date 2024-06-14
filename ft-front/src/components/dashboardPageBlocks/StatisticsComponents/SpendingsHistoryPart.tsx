@@ -1,30 +1,23 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import deleteBtn from "../../../assets/delete-btn.svg";
-import {Transaction} from "../../../types/transactionTypes";
-import {formatDateAndMonth} from "../../../utils/dateUtils";
-import {categoryMap} from "../../../utils/categoryData";
+import { Transaction } from "../../../types/transactionTypes";
+import { formatDateAndMonth } from "../../../utils/dateUtils";
+import { categoryMap } from "../../../utils/categoryData";
 
 const SpendingsHistoryPart = (props: {
-  arraySpendings:Transaction[];
-  selectedCategory:number;
+  arraySpendings: Transaction[];
+  selectedCategory: number;
   deleteSpending: (id: string) => void;
   clickAddSpendingBtn: () => void;
 }) => {
+  let arraySpendingsFiltered = props.arraySpendings.slice();
 
-
-    let arraySpendingsFiltered =  props.arraySpendings.slice()
-
-
-    if (props.selectedCategory === 0) arraySpendingsFiltered=(props.arraySpendings.slice());
-    else
-        arraySpendingsFiltered=
-            props.arraySpendings.filter((spending) =>
-                spending.category === categoryMap[props.selectedCategory])
-        ;
-
-
-
-
+  if (props.selectedCategory === 0)
+    arraySpendingsFiltered = props.arraySpendings.slice();
+  else
+    arraySpendingsFiltered = props.arraySpendings.filter(
+      (spending) => spending.category === categoryMap[props.selectedCategory]
+    );
   return (
     <div className="spendings-history-part">
       <div className="list-elem-start-block">

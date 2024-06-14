@@ -9,8 +9,8 @@ import {
 } from "../../features/income/incomeThunks";
 import { Income } from "../../types/incomeTypes";
 import { ThunkDispatch, AnyAction } from "@reduxjs/toolkit";
-import {Data} from "../../utils/dataUtils";
-import {fetchUserProfile} from "../../features/user/userThunks";
+import { Data } from "../../utils/dataUtils";
+import { fetchUserProfile } from "../../features/user/userThunks";
 
 interface Props {
   showPopUpAddIncome: (
@@ -22,21 +22,19 @@ interface Props {
 const IncomeBlock: React.FC<Props> = (props) => {
   const dispatch = useDispatch<ThunkDispatch<RootState, void, AnyAction>>();
   const data = useSelector((state: RootState) => {
-        return new Data(state.user.userInfo ,state.goalTransactions.goalTransactionsCurrent, state.goalTransactions.goalTransactionsAll);
+    return new Data(
+      state.user.userInfo,
+      state.goalTransactions.goalTransactionsCurrent,
+      state.goalTransactions.goalTransactionsAll
+    );
   });
 
-  let arrayIncome= data.getIncomeArrayCurrentMonth()
-  let incomeAmount= data.getIncomeAmountCurrentMonth()
-
-
+  let arrayIncome = data.getIncomeArrayCurrentMonth();
+  let incomeAmount = data.getIncomeAmountCurrentMonth();
 
   useEffect(() => {
     dispatch(fetchUserProfile());
   }, [dispatch]);
-
-
-
-
 
   async function handleDeleteIncome(id: string) {
     try {
@@ -60,7 +58,6 @@ const IncomeBlock: React.FC<Props> = (props) => {
         })
       );
       await dispatch(fetchUserProfile());
-
     } catch (error) {
       console.error("Error adding income:", error);
     }
@@ -71,8 +68,7 @@ const IncomeBlock: React.FC<Props> = (props) => {
       <div className="block-title">Дохід за місяць</div>
       <div className="income-number-container">
         <div className="income-number">
-          {incomeAmount
-            .toLocaleString("uk-UA")}
+          {incomeAmount.toLocaleString("uk-UA")}
         </div>
         <div
           className="add-btn"

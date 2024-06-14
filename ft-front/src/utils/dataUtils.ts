@@ -66,8 +66,6 @@ export class Data{
 
     }
 
-
-
     getTransactionsArrayCurrentMonth(){
         if(this.user==null)
             return []
@@ -100,12 +98,6 @@ export class Data{
         return this.getGoalTransactionsArrayCurrentMonth()
             .reduce((res, curr) => res + curr.amount, 0)
     }
-
-
-
-
-
-
 }
 
 
