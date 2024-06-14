@@ -82,31 +82,25 @@ const ProfilePage = () => {
         </>
       )}
 
-      {visibilityPopUpConfirmDelete ? (
+      {visibilityPopUpConfirmDelete && (
         <ConfirmDeletePopUp
           cancel={() => setVisibilityPopUpConfirmDelete(false)}
           confirmDelete={functionsHolder.delete}
         />
-      ) : (
-        ""
       )}
-      {visibilityAddFixedExpensePopUp ? (
+      {visibilityAddFixedExpensePopUp && (
         <AddIncomeOrFixedExpensesPopUp
           title={"Додати постійну витрату"}
           cancel={() => setVisibilityAddFixedExpensePopUp(false)}
           confirmAdd={functionsHolder.addFixedExpense}
         />
-      ) : (
-        ""
-      )}
-      {visibilityChangeNumberPopUp ? (
+      ) }
+      {visibilityChangeNumberPopUp && (
         <ChangeNumberPopUp
           title={titleChangeNumberPopUp}
           cancel={() => setVisibilityChangeNumberPopUp(false)}
           confirmChange={functionsHolder.changeGoal}
         />
-      ) : (
-        ""
       )}
     </div>
   );
