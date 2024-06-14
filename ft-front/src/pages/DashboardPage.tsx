@@ -14,16 +14,25 @@ const DashboardPage: React.FC = () => {
   const { userInfo } = useSelector((state: RootState) => state.user);
   const { incomes } = useSelector((state: RootState) => state.incomes);
 
-  const [visibilityPopUpConfirmDelete, setVisibilityPopUpConfirmDelete] = useState(false);
-  const [visibilityPopUpAddIncome, setVisibilityPopUpAddIncome] = useState(false);
-  const [visibilityMoveMoneyPopUp, setVisibilityMoveMoneyPopUp] = useState(false);
-  const [visibilityAddSpendingPopUp, setVisibilityAddSpendingPopUp] = useState(false);
+  const [visibilityAddFixedExpensePopUp, setVisibilityAddFixedExpensePopUp] =
+      useState(false);
+  const [visibilityPopUpConfirmDelete, setVisibilityPopUpConfirmDelete] =
+      useState(false);
+  const [visibilityPopUpAddIncome, setVisibilityPopUpAddIncome] =
+      useState(false);
+  const [visibilityMoveMoneyPopUp, setVisibilityMoveMoneyPopUp] =
+      useState(false);
+  const [visibilityAddSpendingPopUp, setVisibilityAddSpendingPopUp] =
+      useState(false);
+
 
   const [functionsHolder, setFunctionsHolder] = useState({
     delete: () => {},
     addIncome: (title: string, number: number) => {},
     addSpending: (categoryId: number, title: string, number: number) => {},
+    addFixedExpense: (title: string, number: number) => {},
     moveMoney: (number: number) => {},
+
   });
 
   const [titleMoveMoneyPopUp, setTitleMoveMoneyPopUp] = useState("");
@@ -56,6 +65,7 @@ const DashboardPage: React.FC = () => {
     setVisibilityAddSpendingPopUp(true);
   }
 
+
   return (
       <div className="dashboard-container shadow">
         {userInfo && (
@@ -84,7 +94,7 @@ const DashboardPage: React.FC = () => {
             <AddIncomeOrFixedExpensesPopUp
                 title={"Додати джерело доходу"}
                 cancel={() => setVisibilityPopUpAddIncome(false)}
-                confirmAddExpense={functionsHolder.addIncome}
+                confirmAdd={functionsHolder.addIncome}
             />
         )}
         {visibilityMoveMoneyPopUp && (

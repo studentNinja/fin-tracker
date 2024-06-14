@@ -8,6 +8,7 @@ const SpendingsHistoryPart = (props: {
   arraySpendings: Transaction[];
   selectedCategory: number;
   deleteSpending: (id: string) => void;
+  deleteFixedExpense: (id: string) => void;
   clickAddSpendingBtn: () => void;
 }) => {
   let arraySpendingsFiltered = props.arraySpendings.slice();
@@ -44,7 +45,12 @@ const SpendingsHistoryPart = (props: {
                 <div className="list-elem-end-block">
                   <div className="delete-btn">
                     <img
-                      onClick={() => props.deleteSpending(spending._id)}
+                      onClick={() => {
+                        if(spending.category==='fixed')
+                          props.deleteFixedExpense(spending._id)
+                        else
+                          props.deleteSpending(spending._id)
+                      }}
                       src={deleteBtn}
                       alt="delete"
                     />

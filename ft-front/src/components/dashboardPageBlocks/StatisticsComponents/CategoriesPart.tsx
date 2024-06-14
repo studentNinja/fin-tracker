@@ -9,7 +9,6 @@ const CategoriesPart = (props: { categories: Array<{
     }>;
     selectCategory: (id: number) => void
 }) => {
-  // to do: fetch categories
 
 
   let [selectedCategory, setselectedCategory] = useState(0);

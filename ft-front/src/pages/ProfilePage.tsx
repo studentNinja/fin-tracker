@@ -29,7 +29,7 @@ const ProfilePage = () => {
 
   const [functionsHolder, setFunctionsHolder] = useState({
     delete: () => {},
-    addFixedExpense: (name: string, amount: number, category: Category) => {},
+    addFixedExpense: (name: string, amount: number) => {},
     changeGoal: (amount: number) => {},
   });
 
@@ -38,7 +38,7 @@ const ProfilePage = () => {
     setVisibilityPopUpConfirmDelete(true);
   }
   function showAddFixedExpensePopUp(
-    addFunct: (name: string, amount: number, category: Category) => void
+    addFunct: (name: string, amount: number) => void
   ) {
     setFunctionsHolder(
       Object.assign(functionsHolder, { addFixedExpense: addFunct })
@@ -82,31 +82,25 @@ const ProfilePage = () => {
         </>
       )}
 
-      {visibilityPopUpConfirmDelete ? (
+      {visibilityPopUpConfirmDelete && (
         <ConfirmDeletePopUp
           cancel={() => setVisibilityPopUpConfirmDelete(false)}
           confirmDelete={functionsHolder.delete}
         />
-      ) : (
-        ""
       )}
-      {visibilityAddFixedExpensePopUp ? (
+      {visibilityAddFixedExpensePopUp && (
         <AddIncomeOrFixedExpensesPopUp
           title={"Додати постійну витрату"}
           cancel={() => setVisibilityAddFixedExpensePopUp(false)}
-          confirmAddExpense={functionsHolder.addFixedExpense}
+          confirmAdd={functionsHolder.addFixedExpense}
         />
-      ) : (
-        ""
-      )}
-      {visibilityChangeNumberPopUp ? (
+      ) }
+      {visibilityChangeNumberPopUp && (
         <ChangeNumberPopUp
           title={titleChangeNumberPopUp}
           cancel={() => setVisibilityChangeNumberPopUp(false)}
           confirmChange={functionsHolder.changeGoal}
         />
-      ) : (
-        ""
       )}
     </div>
   );

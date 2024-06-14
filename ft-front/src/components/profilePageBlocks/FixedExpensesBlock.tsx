@@ -14,7 +14,7 @@ import { Category } from "../../types/categoryTypes";
 const FixedExpensesBlock = (props: {
   showConfirmDeletePopUp: (deleteFunct: () => void) => void;
   showPopUpAddFixedExpense: (
-    addFunct: (name: string, amount: number, category: Category) => void
+    addFunct: (name: string, amount: number) => void
   ) => void;
 }) => {
   const dispatch = useDispatch<AppDispatch>();
@@ -41,7 +41,7 @@ const FixedExpensesBlock = (props: {
     }
   }, [fixedExpenses]);
 
-  function addFixedExpense(name: string, amount: number, category: Category) {
+  function handleAddFixedExpense(name: string, amount: number) {
     if (name.length === 0) throw new Error("Введіть назву");
     if (!validateSpendingNumber(amount))
       throw new Error("Недостатньо коштів для здійснення операції");
@@ -51,9 +51,8 @@ const FixedExpensesBlock = (props: {
     const newExpense = {
       name,
       amount,
-      category,
+      category:"fixed" as Category,
     };
-
     dispatch(addFixedExpenseThunk(newExpense));
   }
 
@@ -61,7 +60,7 @@ const FixedExpensesBlock = (props: {
     return moneyLeft >= number;
   }
 
-  function deleteFixedExpense(id: string) {
+  function handleDeleteFixedExpense(id: string) {
     dispatch(deleteFixedExpenseThunk(id));
   }
 
@@ -81,8 +80,8 @@ const FixedExpensesBlock = (props: {
           className="add-btn"
           onClick={() =>
             props.showPopUpAddFixedExpense(
-              (name: string, amount: number, category: Category) =>
-                addFixedExpense(name, amount, category)
+              (name: string, amount: number) =>
+                handleAddFixedExpense(name, amount)
             )
           }
         >
@@ -106,7 +105,7 @@ const FixedExpensesBlock = (props: {
                       src={deleteBtn}
                       onClick={() =>
                         props.showConfirmDeletePopUp(() =>
-                          deleteFixedExpense(expense._id)
+                          handleDeleteFixedExpense(expense._id)
                         )
                       }
                       alt="delete"

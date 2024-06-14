@@ -13,6 +13,11 @@ import {
 } from "../../features/goalTransactions/goalTransactionsThunks";
 import {fetchGoals} from "../../features/goals/goalsThunks";
 import {fetchUserProfile} from "../../features/user/userThunks";
+import {
+    validateTransaction,
+    validateGoalTransactionWithdraw,
+    validateNumberToBePositive
+} from "../../utils/validationUtils";
 
 const DashboardBlock2 = (props: {
   showMoveMoneyPopUp: (
@@ -41,7 +46,7 @@ const DashboardBlock2 = (props: {
 
 
   // to do: fetch залишок вільних грошей
-  let moneyLeft = 105000;
+  let balance = data.getBalance();
 
   const goalNumber = lastGoal?lastGoal?.amount:0
   const goalPrevMonthsNumber=data.getSavedAmountByPrevMonthForGoal();
@@ -56,22 +61,31 @@ const DashboardBlock2 = (props: {
   );
   let goalLeftPercent = 100 - goalPrevMonthsPercent - goalCurrMonthPercent;
 
-  // function putMoneyAwayToGoal(number: number) {
-  //   if (!validatePutMoneyAwayToGoal(number))
-  //     throw new Error("Недостатньо коштів для здійснення операції");
-  //   if (number <= 0) throw new Error("Неправильне значення суми");
-  //   if (goalPrevMonthsNumber + goalCurrMonthNumber + number >= goalNumber)
-  //     setGoalCurrMonthNumber(goalNumber - goalPrevMonthsNumber);
-  //   else setGoalCurrMonthNumber(goalCurrMonthNumber + number);
-  //
-  //   // to do: POST
-  //
-  // }
+
+
+    function fundGoal(number: number) {
+        try {
+            validateNumberToBePositive(number)
+            validateTransaction(number,  balance)
+            handleAddGoalTransaction(number)
+        }catch (err){
+            console.error("Error funding goal:", err);
+        }
+    }
+    function withdrawFromGoal(number: number) {
+        try {
+            validateNumberToBePositive(number)
+            validateGoalTransactionWithdraw(number,  goalCurrMonthNumber)
+
+            handleAddGoalTransaction(number*(-1))
+        }catch (err){
+            console.error("Error funding goal:", err);
+        }
+    }
+
 
 
   async function handleAddGoalTransaction(number: number) {
-
-    // to do: add validation
 
     try {
       const result = await dispatch(
@@ -90,27 +104,6 @@ const DashboardBlock2 = (props: {
 
 
 
-
-
-  // function validatePutMoneyAwayToGoal(number: number) {
-  //   return moneyLeft >= number;
-  // }
-
-  // function getMoneyFromGoal(number: number) {
-  //   if (!validateGetMoneyFromGoal(number))
-  //     throw new Error("Недостатньо коштів для здійснення операції");
-  //   if (number <= 0) throw new Error("Неправильне значення суми");
-  //   if (goalCurrMonthNumber <= number) {
-  //     setGoalCurrMonthNumber(0);
-  //     number -= goalCurrMonthNumber;
-  //     setGoalPrevMonthsNumber(goalPrevMonthsNumber - number);
-  //   } else setGoalCurrMonthNumber(goalCurrMonthNumber - number);
-  //
-  //   // to do: POST
-  // }
-  // function validateGetMoneyFromGoal(number: number) {
-  //   return goalPrevMonthsNumber + goalCurrMonthNumber >= number;
-  // }
 
   return (
      !achieved?
@@ -197,7 +190,7 @@ const DashboardBlock2 = (props: {
             <div
               className="btn"
               onClick={() =>
-                props.showMoveMoneyPopUp("Відкласти кошти", handleAddGoalTransaction)
+                props.showMoveMoneyPopUp("Відкласти кошти",fundGoal)
               }
             >
               Відкласти
@@ -205,7 +198,7 @@ const DashboardBlock2 = (props: {
             <div
               className="btn btn-2"
               onClick={() =>
-                props.showMoveMoneyPopUp("Зняти кошти", (number)=>handleAddGoalTransaction(number*(-1)))
+                props.showMoveMoneyPopUp("Зняти кошти", withdrawFromGoal)
               }
             >
               Зняти
