@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { User } from '../../types/userTypes';
-import { loginUser, refreshToken } from './authThunks';
+import { loginUser, refreshToken ,registerUser} from './authThunks';
 
 interface AuthState {
     user: User | null;
@@ -59,6 +59,20 @@ const authSlice = createSlice({
                 state.refreshToken = null;
                 localStorage.removeItem('accessToken');
                 localStorage.removeItem('refreshToken');
+            }).addCase(registerUser.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(registerUser.fulfilled, (state, action) => {
+                state.user = action.payload.user;
+                state.accessToken = action.payload.accessToken;
+                state.refreshToken = action.payload.refreshToken;
+                state.isAuthenticated = true;
+                state.loading = false;
+            })
+            .addCase(registerUser.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload as string;
             });
     },
 });

@@ -9,9 +9,16 @@ import {
 } from "../../features/income/incomeThunks";
 import { Income } from "../../types/incomeTypes";
 import { ThunkDispatch, AnyAction } from "@reduxjs/toolkit";
-import { Data } from "../../utils/dataUtils";
 import { fetchUserProfile } from "../../features/user/userThunks";
-import {validateIncomeDelete, validateTitle} from "../../utils/validationUtils";
+import {
+  validateIncomeDelete,
+  validateTitle,
+} from "../../utils/validationUtils";
+import {
+  getIncomeArrayCurrentMonth,
+  getIncomeAmountCurrentMonth,
+  getBalance,
+} from "../../utils/dataUtils";
 
 interface Props {
   showPopUpAddIncome: (
@@ -22,37 +29,36 @@ interface Props {
 
 const IncomeBlock: React.FC<Props> = (props) => {
   const dispatch = useDispatch<ThunkDispatch<RootState, void, AnyAction>>();
-  const data = useSelector((state: RootState) => {
-    return new Data(
-      state.user.userInfo,
-      state.goalTransactions.goalTransactionsCurrent,
-      state.goalTransactions.goalTransactionsAll
-    );
-  });
+  const user = useSelector((state: RootState) => state.user.userInfo);
+  const goalTransactionsAll = useSelector(
+    (state: RootState) => state.goalTransactions.goalTransactionsAll
+  );
+  const goalTransactionsCurrent = useSelector(
+    (state: RootState) => state.goalTransactions.goalTransactionsCurrent
+  );
 
-  let arrayIncome = data.getIncomeArrayCurrentMonth();
-  let incomeAmount = data.getIncomeAmountCurrentMonth();
-  let balance= data.getBalance()
+  let arrayIncome = getIncomeArrayCurrentMonth(user);
+  let incomeAmount = getIncomeAmountCurrentMonth(user);
+  let balance = getBalance(user, goalTransactionsAll);
 
   useEffect(() => {
     dispatch(fetchUserProfile());
   }, [dispatch]);
 
-  async function handleDeleteIncome(id: string, amount:number) {
-      try {
-          validateIncomeDelete(amount, balance)
-          await dispatch(deleteIncome(id));
-          await dispatch(fetchUserProfile());
-      } catch (error) {
-          console.error("Error deleting income:", error);
-
-      }
+  async function handleDeleteIncome(id: string, amount: number) {
+    try {
+      validateIncomeDelete(amount, balance);
+      await dispatch(deleteIncome(id));
+      await dispatch(fetchUserProfile());
+    } catch (error) {
+      console.error("Error deleting income:", error);
+    }
   }
 
   async function handleAddIncome(title: string, number: number) {
     try {
-        validateTitle(title)
-      const result = await dispatch(
+      validateTitle(title);
+      await dispatch(
         addIncome({
           source: title,
           amount: number,
@@ -92,7 +98,7 @@ const IncomeBlock: React.FC<Props> = (props) => {
             style={{ display: "flex", gap: "5px", flexDirection: "column" }}
           >
             <div className="list-elem">
-              <div>{(income as Income).source}</div>
+              <div>{income.source}</div>
               <div className="list-elem-end-block">
                 <div className="delete-btn">
                   <img

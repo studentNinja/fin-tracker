@@ -1,5 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
+import axios from 'axios';
 import axiosInstance from '../../api/axiosInstance';
+import { User } from '../../types/userTypes';
 
 interface RegisterUserData {
     username: string;
@@ -14,17 +16,26 @@ interface LoginCredentials {
     password: string;
 }
 
+interface TokenResponse {
+    user:User
+    accessToken: string;
+    refreshToken: string;
+}
+
 export const registerUser = createAsyncThunk(
     'auth/registerUser',
     async (userData: RegisterUserData, { rejectWithValue }) => {
         try {
-            const response = await axiosInstance.post('/auth/register', userData);
+            const response = await axiosInstance.post<TokenResponse>('/auth/register', userData);
             const { accessToken, refreshToken } = response.data;
             localStorage.setItem('accessToken', accessToken);
             localStorage.setItem('refreshToken', refreshToken);
             return response.data;
-        } catch (error: any) {
-            return rejectWithValue(error.response?.data || 'An error occurred');
+        } catch (error: unknown) {
+            if (axios.isAxiosError(error) && error.response) {
+                return rejectWithValue(error.response.data || 'An error occurred');
+            }
+            return rejectWithValue('An error occurred');
         }
     }
 );
@@ -33,13 +44,16 @@ export const loginUser = createAsyncThunk(
     'auth/login',
     async (credentials: LoginCredentials, { rejectWithValue }) => {
         try {
-            const response = await axiosInstance.post('/auth/login', credentials);
+            const response = await axiosInstance.post<TokenResponse>('/auth/login', credentials);
             const { accessToken, refreshToken } = response.data;
             localStorage.setItem('accessToken', accessToken);
             localStorage.setItem('refreshToken', refreshToken);
             return response.data;
-        } catch (error: any) {
-            return rejectWithValue(error.response?.data || 'An error occurred');
+        } catch (error: unknown) {
+            if (axios.isAxiosError(error) && error.response) {
+                return rejectWithValue(error.response.data || 'An error occurred');
+            }
+            return rejectWithValue('An error occurred');
         }
     }
 );
@@ -53,12 +67,15 @@ export const refreshToken = createAsyncThunk(
                 return rejectWithValue('No refresh token found');
             }
 
-            const response = await axiosInstance.post('/auth/refresh', { refreshToken });
+            const response = await axiosInstance.post<{ accessToken: string }>('/auth/refresh', { refreshToken });
             const { accessToken } = response.data;
             localStorage.setItem('accessToken', accessToken);
             return { accessToken };
-        } catch (error: any) {
-            return rejectWithValue(error.response?.data || 'An error occurred');
+        } catch (error: unknown) {
+            if (axios.isAxiosError(error) && error.response) {
+                return rejectWithValue(error.response.data || 'An error occurred');
+            }
+            return rejectWithValue('An error occurred');
         }
     }
 );
