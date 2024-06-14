@@ -9,7 +9,8 @@ import {
 } from "../../features/income/incomeThunks";
 import { Income } from "../../types/incomeTypes";
 import { ThunkDispatch, AnyAction } from "@reduxjs/toolkit";
-import {Data} from "../../data/data";
+import {Data} from "../../utils/dataUtils";
+import {fetchUserProfile} from "../../features/user/userThunks";
 
 interface Props {
   showPopUpAddIncome: (
@@ -20,22 +21,27 @@ interface Props {
 
 const IncomeBlock: React.FC<Props> = (props) => {
   const dispatch = useDispatch<ThunkDispatch<RootState, void, AnyAction>>();
-  // const arrayIncome = useSelector((state: RootState) => state.incomes.incomes);
   const data = useSelector((state: RootState) => {
-        return  new Data(state);
+        return new Data(state.user.userInfo ,state.goalTransactions.goalTransactionsCurrent, state.goalTransactions.goalTransactionsAll);
   });
-  const arrayIncome=data.getIncomeArray()
 
-  const incomeAmount=data.getIncomeAmount()
-    console.log(arrayIncome)
+  let arrayIncome= data.getIncomeArrayCurrentMonth()
+  let incomeAmount= data.getIncomeAmountCurrentMonth()
+
+
 
   useEffect(() => {
-    dispatch(fetchIncomes());
+    dispatch(fetchUserProfile());
   }, [dispatch]);
+
+
+
+
 
   async function handleDeleteIncome(id: string) {
     try {
       await dispatch(deleteIncome(id));
+      await dispatch(fetchUserProfile());
     } catch (error) {
       console.error("Error deleting income:", error);
     }
@@ -53,6 +59,8 @@ const IncomeBlock: React.FC<Props> = (props) => {
           updatedAt: "",
         })
       );
+      await dispatch(fetchUserProfile());
+
     } catch (error) {
       console.error("Error adding income:", error);
     }
