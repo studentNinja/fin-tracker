@@ -6,7 +6,7 @@ export const fetchAllGoalTransactions = createAsyncThunk(
     'goal-transactions/fetchAllGoalTransactions',
     async (_, { rejectWithValue }) => {
         try {
-            const response = await axiosInstance.get('/goal-transactions/all');
+            const response = await axiosInstance.get('/goal-transactions');
             return response.data;
         } catch (error: any) {
             return rejectWithValue(error.response?.data || 'An error occurred');

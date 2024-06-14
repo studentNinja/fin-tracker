@@ -1,6 +1,7 @@
 import { FixedExpense } from "./fixedExpenseTypes";
 import { Goal } from "./goalTypes";
 import { Transaction } from "./transactionTypes";
+import {Income} from "./incomeTypes";
 
 export interface UserState {
     userInfo: User | null;
@@ -20,4 +21,5 @@ export interface User {
     transactions: Transaction[];
     fixed_expenses: FixedExpense[];
     goals: Goal[];
+    incomes: Income[];
 }

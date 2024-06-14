@@ -1,8 +1,21 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 
 import MonthsSpendingsDiagramPart from "./StatisticsComponents/MonthsSpendingsDiagramPart";
 import CategoriesPart from "./StatisticsComponents/CategoriesPart";
 import SpendingsHistoryPart from "./StatisticsComponents/SpendingsHistoryPart";
+import {useDispatch, useSelector} from "react-redux";
+import {RootState} from "../../app/store";
+import {Data} from "../../utils/dataUtils";
+import {AnyAction, ThunkDispatch} from "@reduxjs/toolkit";
+import {Category} from "../../types/categoryTypes";
+import {deleteIncome, fetchIncomes} from "../../features/income/incomeThunks";
+import {addTransaction, deleteTransaction} from "../../features/transactions/transactionThunks";
+import {fetchUserProfile} from "../../features/user/userThunks";
+import {
+  fetchAllGoalTransactions,
+  fetchCurrentGoalTransactions
+} from "../../features/goalTransactions/goalTransactionsThunks";
+import {categoryColors, categoryMap, categoryNames} from "../../utils/categoryData";
 
 const StatisticsBlock = (props: {
   showConfirmDeletePopUp: (deleteFunct: () => void) => void;
@@ -10,89 +23,91 @@ const StatisticsBlock = (props: {
     addFunct: (categoryId: number, title: string, number: number) => void
   ) => void;
 }) => {
-  // to do: fetch залишок вільних грошей
+
+
+  const dispatch = useDispatch<ThunkDispatch<RootState, void, AnyAction>>();
+
+
+  const data = useSelector((state: RootState) => {
+    return new Data(state.user.userInfo ,state.goalTransactions.goalTransactionsCurrent, state.goalTransactions.goalTransactionsAll);
+  });
+
+
+
+
+  let transactionsTotalSum=data.getTransactionsAmountCurrentMonth()
+  let goalTransactionsTotalSum=data.getGoalTransactionsAmountCurrentMonth()
+  let incomeAmount=data.getIncomeAmountCurrentMonth()
+
+
+
   let moneyLeft = 105000;
 
-  // to do: fetch all spendings
 
-  let [arraySpendings, setArraySpendings] = useState([
-    { id: 1, date: "02.02", title: "АТБ покупки", number: 4500, category: 6 },
-    { id: 2, date: "03.02", title: "АТБ покупки", number: 2000, category: 6 },
-    { id: 3, date: "04.02", title: "Одяг в трц", number: 4500, category: 2 },
-    {
-      id: 4,
-      date: "05.02",
-      title: "Таксі на вокзал",
-      number: 5000,
-      category: 7,
-    },
-    {
-      id: 5,
-      date: "06.02",
-      title: "Кафе “Пузата хата”",
-      number: 2400,
-      category: 3,
-    },
-    { id: 6, date: "07.02", title: "АТБ покупки", number: 10000, category: 6 },
-    { id: 7, date: "11.02", title: "АТБ покупки", number: 10000, category: 6 },
-    { id: 8, date: "12.02", title: "АТБ покупки", number: 1400, category: 6 },
-  ]);
-
+  let arraySpendings = data.getTransactionsArrayCurrentMonth();
   let [selectedCategory, setSelectedCategory] = useState(0);
-  let [arraySpendingsFiltered, setArraySpendingsFiltered] = useState(
-    arraySpendings.slice()
-  );
+
+
+  useEffect(() => {
+    dispatch(fetchUserProfile());
+    dispatch(fetchAllGoalTransactions());
+    dispatch(fetchCurrentGoalTransactions());
+  }, [dispatch]);
+
+  const categories = Object.keys(categoryMap).map(key => {
+
+    const totalAmount = data.getTransactionsAmountByCategoryId(+key, categoryMap)
+        return {
+      id: Number(key),
+      title: categoryNames[categoryMap[Number(key)]],
+      color: categoryColors[Number(key)],
+      number: totalAmount
+    };
+  });
+
 
   function selectCategory(id: number) {
     if (selectedCategory === id) return;
     setSelectedCategory(id);
-    if (id === 0) setArraySpendingsFiltered(arraySpendings);
-    else
-      setArraySpendingsFiltered(
-        arraySpendings.filter((spending) => spending.category === id)
-      );
   }
 
-  function deleteSpending(id: number) {
-    props.showConfirmDeletePopUp(() => {
-      setArraySpendings(
-        arraySpendings.filter((spending) => spending.id !== id)
-      );
-      setArraySpendingsFiltered(
-        arraySpendingsFiltered.filter((spending) => spending.id !== id)
-      );
+  async function handleDeleteTransaction(id: string) {
 
-      /// to do: DELETE
+    props.showConfirmDeletePopUp(() => {
+      try {
+        dispatch(deleteTransaction(id));
+        dispatch(fetchUserProfile());
+      } catch (error) {
+        console.error("Error deleting transaction:", error);
+      }
     });
   }
 
-  function addSpending(categoryId: number, title: string, number: number) {
-    if (title.length === 0) throw new Error("Введіть назву");
+
+
+  function handleAddTransaction(categoryId: number, description: string, number: number) {
+    if (description.length === 0) throw new Error("Введіть назву");
     if (!validateSpendingNumber(number))
       throw new Error("Недостатньо коштів для здійснення операції");
 
     if (number <= 0) throw new Error("Неправильне значення суми");
-    let date = getDate();
 
     let newSpending = {
-      date,
-      category: categoryId,
-      id: arraySpendings.length + 1,
-      title,
-      number,
+      date: new Date().toISOString(),
+      description,
+      category: categoryMap[categoryId],
+      amount: number,
+      userId: 'help',
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
     };
-    setArraySpendings([...arraySpendings, newSpending]);
-    if (categoryId === selectedCategory || selectedCategory === 0)
-      setArraySpendingsFiltered([...arraySpendingsFiltered, newSpending]);
-  }
+    try {
+      dispatch(addTransaction(newSpending));
+      dispatch(fetchUserProfile());
+    } catch (error) {
+      console.error("Error adding transaction:", error);
+    }
 
-  function getDate() {
-    let monthNumber = new Date().getMonth() + 1;
-    let month = monthNumber < 10 ? `0${monthNumber}` : `${monthNumber}`;
-
-    let dayNumber = new Date().getDate();
-    let day = dayNumber < 10 ? `0${dayNumber}` : `${dayNumber}`;
-    return `${day}.${month}`;
   }
 
   function validateSpendingNumber(number: number) {
@@ -102,17 +117,19 @@ const StatisticsBlock = (props: {
   return (
     <div className="block block-3">
       <MonthsSpendingsDiagramPart
-        spentNumber={28500}
-        putAwayNumber={10500}
-        income={148000}
+        spentNumber={transactionsTotalSum}
+        putAwayNumber={goalTransactionsTotalSum}
+        income={incomeAmount}
       />
       <div className="line-vertical"></div>
-      <CategoriesPart selectCategory={selectCategory} />
+      <CategoriesPart categories={categories}
+                      selectCategory={selectCategory} />
       <div className="line-vertical"></div>
       <SpendingsHistoryPart
-        arraySpendings={arraySpendingsFiltered.reverse()}
-        deleteSpending={deleteSpending}
-        clickAddSpendingBtn={() => props.showAddSpendingPopUp(addSpending)}
+        arraySpendings={arraySpendings}
+        selectedCategory={selectedCategory}
+        deleteSpending={handleDeleteTransaction}
+        clickAddSpendingBtn={() => props.showAddSpendingPopUp(handleAddTransaction)}
       />
     </div>
   );

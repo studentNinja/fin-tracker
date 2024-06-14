@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 
-import {Data} from "../../data/data";
+import {Data} from "../../utils/dataUtils";
 
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../../app/store";
@@ -12,6 +12,7 @@ import {
   fetchCurrentGoalTransactions
 } from "../../features/goalTransactions/goalTransactionsThunks";
 import {fetchGoals} from "../../features/goals/goalsThunks";
+import {fetchUserProfile} from "../../features/user/userThunks";
 
 const DashboardBlock2 = (props: {
   showMoveMoneyPopUp: (
@@ -21,13 +22,18 @@ const DashboardBlock2 = (props: {
 }) => {
   const dispatch = useDispatch<ThunkDispatch<RootState, void, AnyAction>>();
 
-  const data = useSelector((state: RootState) => {
-    return  new Data(state);
-  });
+
+    const data = useSelector(
+        (state: RootState) =>  new Data(state.user.userInfo,state.goalTransactions.goalTransactionsCurrent, state.goalTransactions.goalTransactionsAll)
+    );
+
+    let lastGoal=data.getRecentGoal()
+    let achieved=lastGoal?.achieved
+
 
 
   useEffect(() => {
-    dispatch(fetchGoals());
+    dispatch(fetchUserProfile());
     dispatch(fetchCurrentGoalTransactions());
   }, [dispatch]);
 
@@ -37,11 +43,11 @@ const DashboardBlock2 = (props: {
   // to do: fetch залишок вільних грошей
   let moneyLeft = 105000;
 
-  const goalNumber = data.getGoalAmount()
-  const goalPrevMonthsNumber=data.getSavedAmountByPrevMonth();
-  const goalCurrMonthNumber = data.getSavedAmountByCurrentMonth()
+  const goalNumber = lastGoal?lastGoal?.amount:0
+  const goalPrevMonthsNumber=data.getSavedAmountByPrevMonthForGoal();
+  const goalCurrMonthNumber = data.getSavedAmountByCurrentMonthForGoal()
 
-  let goalLeftNumber = goalNumber - data.getSavedAmount();
+  let goalLeftNumber = goalNumber - data.getSavedAmountCurrentGoal();
   let goalPrevMonthsPercent = Math.round(
     (goalPrevMonthsNumber / goalNumber) * 100
   );
@@ -107,104 +113,148 @@ const DashboardBlock2 = (props: {
   // }
 
   return (
-    <div className="block block-2">
-      <div className="block-title">Прогрес цілі</div>
-      <div className="goal-diagram-container">
-        <div
-          style={{ width: `${goalPrevMonthsPercent}%` }}
-          className="goal-diagram-prev-months"
-        >
-          <div className="goal-diagram-percent">
-            {goalPrevMonthsPercent !== 0 ? goalPrevMonthsPercent + "%" : ""}
+     !achieved?
+         <div className="block block-2">
+          <div className="block-title">Прогрес цілі</div>
+          <div className="goal-diagram-container">
+            <div
+              style={{ width: `${goalPrevMonthsPercent}%` }}
+              className="goal-diagram-prev-months"
+            >
+              <div className="goal-diagram-percent">
+                {goalPrevMonthsPercent !== 0 ? goalPrevMonthsPercent + "%" : ""}
+              </div>
+              <div
+                className={`goal-diagram-part blue 
+                        ${goalPrevMonthsPercent !== 0 ? "diagram-part-first" : ""} 
+                        ${
+                          goalLeftPercent === 0 && goalCurrMonthPercent === 0
+                            ? "diagram-part-last"
+                            : ""
+                        }     `}
+              ></div>
+            </div>
+            <div
+              style={{ width: `${goalCurrMonthPercent}%` }}
+              className="goal-diagram-curr-months"
+            >
+              <div className="goal-diagram-percent">
+                {goalCurrMonthPercent !== 0 ? goalCurrMonthPercent + "%" : ""}
+              </div>
+              <div
+                className={`goal-diagram-part yellow 
+                        ${goalPrevMonthsPercent === 0 ? "diagram-part-first" : ""} 
+                        ${goalLeftPercent === 0 ? "diagram-part-last" : ""}       `}
+              ></div>
+            </div>
+            <div
+              style={{ width: `${goalLeftPercent}%` }}
+              className="goal-diagram-left"
+            >
+              <div className="goal-diagram-percent">
+                {goalLeftPercent !== 0 ? goalLeftPercent + "%" : ""}
+              </div>
+              <div
+                className={`goal-diagram-part grey 
+                        ${
+                          goalPrevMonthsPercent === 0 && goalCurrMonthPercent === 0
+                            ? "diagram-part-first"
+                            : ""
+                        } 
+                        ${
+                          goalLeftPercent !== 0 ? "diagram-part-last" : ""
+                        }                
+                        `}
+              ></div>
+            </div>
           </div>
-          <div
-            className={`goal-diagram-part blue 
-                    ${goalPrevMonthsPercent !== 0 ? "diagram-part-first" : ""} 
-                    ${
-                      goalLeftPercent === 0 && goalCurrMonthPercent === 0
-                        ? "diagram-part-last"
-                        : ""
-                    }     `}
-          ></div>
-        </div>
-        <div
-          style={{ width: `${goalCurrMonthPercent}%` }}
-          className="goal-diagram-curr-months"
-        >
-          <div className="goal-diagram-percent">
-            {goalCurrMonthPercent !== 0 ? goalCurrMonthPercent + "%" : ""}
+          <div className="text">
+            Вже зібрано{" "}
+            {(goalPrevMonthsNumber + goalCurrMonthNumber).toLocaleString("uk-UA")}
           </div>
-          <div
-            className={`goal-diagram-part yellow 
-                    ${goalPrevMonthsPercent === 0 ? "diagram-part-first" : ""} 
-                    ${goalLeftPercent === 0 ? "diagram-part-last" : ""}       `}
-          ></div>
-        </div>
-        <div
-          style={{ width: `${goalLeftPercent}%` }}
-          className="goal-diagram-left"
-        >
-          <div className="goal-diagram-percent">
-            {goalLeftPercent !== 0 ? goalLeftPercent + "%" : ""}
+          <div className="goal-diagram-info-container">
+            <div className="goal-diagram-info-left">
+              <div className="goal-diagram-info-elem">
+                <div className="goal-diagram-info-point yellow"></div>
+                Результат за попередні місяці:{" "}
+                {goalPrevMonthsNumber.toLocaleString("uk-UA")}
+              </div>
+              <div className="goal-diagram-info-elem">
+                <div className="goal-diagram-info-point blue"></div>
+                Відкладено цього місяця:{" "}
+                {goalCurrMonthNumber.toLocaleString("uk-UA")}
+              </div>
+              <div className="goal-diagram-info-elem">
+                <div className="goal-diagram-info-point grey"></div>
+                Залишилось зібрати {goalLeftNumber.toLocaleString("uk-UA")}
+              </div>
+            </div>
+            <div className="goal-diagram-info-number">
+              {goalNumber.toLocaleString("uk-UA")}
+            </div>
           </div>
-          <div
-            className={`goal-diagram-part grey 
-                    ${
-                      goalPrevMonthsPercent === 0 && goalCurrMonthPercent === 0
-                        ? "diagram-part-first"
-                        : ""
-                    } 
-                    ${
-                      goalLeftPercent !== 0 ? "diagram-part-last" : ""
-                    }                
-                    `}
-          ></div>
-        </div>
-      </div>
-      <div className="text">
-        Вже зібрано{" "}
-        {(goalPrevMonthsNumber + goalCurrMonthNumber).toLocaleString("uk-UA")}
-      </div>
-      <div className="goal-diagram-info-container">
-        <div className="goal-diagram-info-left">
-          <div className="goal-diagram-info-elem">
-            <div className="goal-diagram-info-point yellow"></div>
-            Результат за попередні місяці:{" "}
-            {goalPrevMonthsNumber.toLocaleString("uk-UA")}
-          </div>
-          <div className="goal-diagram-info-elem">
-            <div className="goal-diagram-info-point blue"></div>
-            Відкладено цього місяця:{" "}
-            {goalCurrMonthNumber.toLocaleString("uk-UA")}
-          </div>
-          <div className="goal-diagram-info-elem">
-            <div className="goal-diagram-info-point grey"></div>
-            Залишилось зібрати {goalLeftNumber.toLocaleString("uk-UA")}
+          <div className="goal-buttons-container">
+            <div
+              className="btn"
+              onClick={() =>
+                props.showMoveMoneyPopUp("Відкласти кошти", handleAddGoalTransaction)
+              }
+            >
+              Відкласти
+            </div>
+            <div
+              className="btn btn-2"
+              onClick={() =>
+                props.showMoveMoneyPopUp("Зняти кошти", (number)=>handleAddGoalTransaction(number*(-1)))
+              }
+            >
+              Зняти
+            </div>
           </div>
         </div>
-        <div className="goal-diagram-info-number">
-          {goalNumber.toLocaleString("uk-UA")}
-        </div>
-      </div>
-      <div className="goal-buttons-container">
-        <div
-          className="btn"
-          onClick={() =>
-            props.showMoveMoneyPopUp("Відкласти кошти", handleAddGoalTransaction)
-          }
-        >
-          Відкласти
-        </div>
-        <div
-          className="btn btn-2"
-          onClick={() =>
-            props.showMoveMoneyPopUp("Зняти кошти", (number)=>handleAddGoalTransaction(number*(-1)))
-          }
-        >
-          Зняти
-        </div>
-      </div>
-    </div>
+         :
+         <div className="block block-2">
+             <div className="block-title">Прогрес цілі</div>
+             <div className="goal-diagram-container">
+
+                 <div
+                     style={{ width: `100%` }}
+                     className="goal-diagram-left"
+                 >
+                     <div className="goal-diagram-percent">
+                         100%
+                     </div>
+                     <div
+                         className={`goal-diagram-part orange diagram-part-first diagram-part-last`}
+                     ></div>
+                 </div>
+             </div>
+             <div className="text center-div">
+                 Ціль досягнута!
+             </div>
+             <div className="goal-diagram-info-container">
+
+                 <div className="goal-diagram-info-number center-div">
+                     {goalNumber.toLocaleString("uk-UA")}
+                 </div>
+             </div>
+             <div className="goal-buttons-container center-div">
+                 <div
+                     className="btn"
+                     //to do: create new goal pop up
+                     // onClick={() =>
+                     //     props.showMoveMoneyPopUp("Відкласти кошти", handleAddGoalTransaction)
+                     // }
+                 >
+                     Створити нову ціль
+                 </div>
+             </div>
+         </div>
+
+
+
+
+
   );
 };
 

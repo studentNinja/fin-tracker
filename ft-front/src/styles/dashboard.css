@@ -235,7 +235,7 @@ align-items: end;
     flex-direction: column;
     gap: 15px;
     padding: 0 15px;
-    height: fit-content;
+    height: 100%;
 }
 .spendings-history-part{
     display: flex;
