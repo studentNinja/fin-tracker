@@ -53,6 +53,10 @@ export class Data{
         return this.getTransactionsArray()
             .reduce((res, curr) => res + curr.amount, 0)
     }
+    getNetIncome() {
+        return this.getIncomeAmount() - this.getTransactionsAmount();
+
+    }
 
 
 }

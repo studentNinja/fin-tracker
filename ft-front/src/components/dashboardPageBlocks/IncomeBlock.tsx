@@ -27,7 +27,7 @@ const IncomeBlock: React.FC<Props> = (props) => {
   const arrayIncome=data.getIncomeArray()
 
   const incomeAmount=data.getIncomeAmount()
-    console.log(arrayIncome)
+  // console.log(arrayIncome)
 
   useEffect(() => {
     dispatch(fetchIncomes());
