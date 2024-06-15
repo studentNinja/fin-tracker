@@ -24,6 +24,8 @@ const DashboardPage: React.FC = () => {
     useState(false);
   const [visibilityAddSpendingPopUp, setVisibilityAddSpendingPopUp] =
     useState(false);
+ const [visibilityCreateGoalPopUp, setVisibilityCreateGoalPopUp] =
+    useState(false);
 
   const [functionsHolder, setFunctionsHolder] = useState({
     delete: () => {},
@@ -31,6 +33,7 @@ const DashboardPage: React.FC = () => {
     addSpending: (categoryId: number, title: string, number: number) => {},
     addFixedExpense: (title: string, number: number) => {},
     moveMoney: (number: number) => {},
+    createGoal: (number: number) => {},
   });
 
   const [titleMoveMoneyPopUp, setTitleMoveMoneyPopUp] = useState("");
@@ -62,6 +65,14 @@ const DashboardPage: React.FC = () => {
     setFunctionsHolder((prev) => ({ ...prev, addSpending: addFunct }));
     setVisibilityAddSpendingPopUp(true);
   }
+  function showCreateGoalPopUp(
+      createFunct: (number: number) => void)
+  {
+    setFunctionsHolder(
+        Object.assign(functionsHolder, { createGoal: createFunct })
+    );
+    setVisibilityCreateGoalPopUp(true);
+  }
 
   return (
     <div className="dashboard-container shadow">
@@ -72,7 +83,10 @@ const DashboardPage: React.FC = () => {
               showConfirmDeletePopUp={showConfirmDeletePopUp}
               showPopUpAddIncome={showPopUpAddIncome}
             />
-            <DashboardBlock2 showMoveMoneyPopUp={showMoveMoneyPopUp} />
+            <DashboardBlock2
+                showMoveMoneyPopUp={showMoveMoneyPopUp}
+                showCreateGoalPopUp={showCreateGoalPopUp}
+            />
           </div>
           <DashboardBlock3
             showConfirmDeletePopUp={showConfirmDeletePopUp}
@@ -106,6 +120,13 @@ const DashboardPage: React.FC = () => {
           cancel={() => setVisibilityAddSpendingPopUp(false)}
           confirmAdd={functionsHolder.addSpending}
         />
+      )}
+      {visibilityCreateGoalPopUp && (
+          <ChangeNumberPopUp
+              title="Створити нову ціль"
+              cancel={() => setVisibilityCreateGoalPopUp(false)}
+              confirmChange={functionsHolder.createGoal}
+          />
       )}
     </div>
   );
