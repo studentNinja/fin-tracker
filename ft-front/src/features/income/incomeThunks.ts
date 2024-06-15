@@ -14,6 +14,7 @@ export const fetchIncomes = createAsyncThunk(
     }
 );
 
+
 export const addIncome = createAsyncThunk(
     'incomes/addIncome',
     async (income: Omit<Income, '_id'>, { rejectWithValue }) => {

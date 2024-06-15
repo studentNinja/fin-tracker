@@ -7,8 +7,7 @@ import {
   addIncome,
   deleteIncome,
 } from "../../features/income/incomeThunks";
-import { Income } from "../../types/incomeTypes";
-import { ThunkDispatch, AnyAction, Action } from "@reduxjs/toolkit";
+import { ThunkDispatch, Action } from "@reduxjs/toolkit";
 import { fetchUserProfile } from "../../features/user/userThunks";
 import {
   validateIncomeDelete,
@@ -29,27 +28,40 @@ interface Props {
 
 const IncomeBlock: React.FC<Props> = (props) => {
   const dispatch = useDispatch<ThunkDispatch<RootState, void, Action>>();
-  const user = useSelector((state: RootState) => state.user.userInfo);
+
+  useEffect(() => {
+    dispatch(fetchIncomes());
+  }, [dispatch]);
+
+  const incomes = useSelector((state: RootState) => state.incomes.incomes);
   const goalTransactionsAll = useSelector(
     (state: RootState) => state.goalTransactions.goalTransactionsAll
   );
+
   const goalTransactionsCurrent = useSelector(
     (state: RootState) => state.goalTransactions.goalTransactionsCurrent
   );
 
-  let arrayIncome = getIncomeArrayCurrentMonth(user);
-  let incomeAmount = getIncomeAmountCurrentMonth(user);
-  let balance = getBalance(user, goalTransactionsAll);
+  const transactions = useSelector(
+    (state: RootState) => state.transactions.transactions
+  );
+  const fixedExpenses = useSelector(
+    (state: RootState) => state.fixedExpenses.fixedExpenses
+  );
 
-  useEffect(() => {
-    dispatch(fetchUserProfile());
-  }, [dispatch]);
+  let arrayIncome = getIncomeArrayCurrentMonth(incomes);
+  let incomeAmount = getIncomeAmountCurrentMonth(incomes);
+  let balance = getBalance(
+    goalTransactionsCurrent,
+    transactions,
+    fixedExpenses,
+    incomes
+  );
 
   async function handleDeleteIncome(id: string, amount: number) {
     try {
       validateIncomeDelete(amount, balance);
       await dispatch(deleteIncome(id));
-      await dispatch(fetchUserProfile());
     } catch (error) {
       console.error("Error deleting income:", error);
     }
@@ -63,12 +75,12 @@ const IncomeBlock: React.FC<Props> = (props) => {
           source: title,
           amount: number,
           userId: "",
-          date: "",
-          createdAt: "",
-          updatedAt: "",
+          date: new Date().toISOString(),
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+          category: "income",
         })
       );
-      await dispatch(fetchUserProfile());
     } catch (error) {
       console.error("Error adding income:", error);
     }

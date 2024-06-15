@@ -1,13 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { fetchTransactions, fetchTransactionById, addTransaction, updateTransaction, deleteTransaction } from './transactionThunks';
-import { Transaction } from '../../types/transactionTypes';
+import { Transaction , TransactionsState } from '../../types/transactionTypes';
 
-interface TransactionsState {
-    transactions: Transaction[];
-    selectedTransaction: Transaction | null;
-    loading: boolean;
-    error: string | null;
-}
+
 
 const initialState: TransactionsState = {
     transactions: [],

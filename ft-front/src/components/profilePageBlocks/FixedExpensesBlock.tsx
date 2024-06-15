@@ -18,6 +18,9 @@ const FixedExpensesBlock = (props: {
   ) => void;
 }) => {
   const dispatch = useDispatch<AppDispatch>();
+  useEffect(() => {
+    dispatch(fetchFixedExpenses());
+  }, [dispatch]);
   const fixedExpenses = useSelector(
     (state: RootState) => state.fixedExpenses.fixedExpenses
   );
@@ -30,10 +33,6 @@ const FixedExpensesBlock = (props: {
   let [arrayFixedExpenses, setArrayFixedExpenses] = useState<FixedExpense[]>(
     []
   );
-
-  useEffect(() => {
-    dispatch(fetchFixedExpenses());
-  }, [dispatch]);
 
   useEffect(() => {
     if (fixedExpenses) {
@@ -51,7 +50,7 @@ const FixedExpensesBlock = (props: {
     const newExpense = {
       name,
       amount,
-      category:"fixed" as Category,
+      category: "fixed" as Category,
     };
     dispatch(addFixedExpenseThunk(newExpense));
   }
@@ -79,9 +78,8 @@ const FixedExpensesBlock = (props: {
         <div
           className="add-btn"
           onClick={() =>
-            props.showPopUpAddFixedExpense(
-              (name: string, amount: number) =>
-                handleAddFixedExpense(name, amount)
+            props.showPopUpAddFixedExpense((name: string, amount: number) =>
+              handleAddFixedExpense(name, amount)
             )
           }
         >

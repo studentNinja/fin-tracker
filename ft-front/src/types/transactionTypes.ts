@@ -1,6 +1,6 @@
 import { Category } from "./categoryTypes";
 
-export interface Transaction {
+export interface Transaction{
     _id: string;
     userId: string;
     amount: number;
@@ -9,4 +9,11 @@ export interface Transaction {
     description?: string;
     createdAt: string;
     updatedAt: string;
+}
+
+export interface TransactionsState {
+    transactions: Transaction[];
+    selectedTransaction: Transaction | null;
+    loading: boolean;
+    error: string | null;
 }

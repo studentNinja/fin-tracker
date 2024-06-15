@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from "react";
-
-import MonthsSpendingsDiagramPart from "./StatisticsComponents/MonthsSpendingsDiagramPart";
-import CategoriesPart from "./StatisticsComponents/CategoriesPart";
-import SpendingsHistoryPart from "./StatisticsComponents/SpendingsHistoryPart";
 import { useDispatch, useSelector } from "react-redux";
+import { AnyAction, ThunkDispatch } from "@reduxjs/toolkit";
 import { RootState } from "../../app/store";
 import {
   getTransactionsAmountByCategoryId,
@@ -13,7 +10,6 @@ import {
   getBalance,
   getTransactionsArrayCurrentMonth,
 } from "../../utils/dataUtils";
-import { AnyAction, ThunkDispatch } from "@reduxjs/toolkit";
 import {
   deleteTransaction,
   addTransaction,
@@ -34,6 +30,10 @@ import {
   categoryMap,
   categoryNames,
 } from "../../utils/categoryData";
+import MonthsSpendingsDiagramPart from "./StatisticsComponents/MonthsSpendingsDiagramPart";
+import CategoriesPart from "./StatisticsComponents/CategoriesPart";
+import SpendingsHistoryPart from "./StatisticsComponents/SpendingsHistoryPart";
+import { Transaction } from "../../types/transactionTypes";
 
 const StatisticsBlock = (props: {
   showConfirmDeletePopUp: (deleteFunct: () => void) => void;
@@ -42,8 +42,14 @@ const StatisticsBlock = (props: {
   ) => void;
 }) => {
   const dispatch = useDispatch<ThunkDispatch<RootState, void, AnyAction>>();
-  const transactions = useSelector(
-    (state: RootState) => state.transactions.transactions
+
+  useEffect(() => {
+    dispatch(fetchAllGoalTransactions());
+    dispatch(fetchCurrentGoalTransactions());
+  }, [dispatch]);
+
+  const transactionsState = useSelector(
+    (state: RootState) => state.transactions
   );
   const user = useSelector((state: RootState) => state.user.userInfo);
   const goalTransactionsAll = useSelector(
@@ -52,27 +58,38 @@ const StatisticsBlock = (props: {
   const goalTransactionsCurrent = useSelector(
     (state: RootState) => state.goalTransactions.goalTransactionsCurrent
   );
+  const incomes = useSelector((state: RootState) => state.incomes.incomes);
+  const fixedExpenses = useSelector(
+    (state: RootState) => state.fixedExpenses.fixedExpenses
+  );
 
-  let transactionsTotalSum = getTransactionsAmountCurrentMonth(user);
-  let goalTransactionsTotalSum =
-    getGoalTransactionsAmountCurrentMonth(goalTransactionsAll);
-  let incomeAmount = getIncomeAmountCurrentMonth(user);
-  let balance = getBalance(user, goalTransactionsAll);
+  const transactions = transactionsState.transactions;
 
-  let arraySpendings = getTransactionsArrayCurrentMonth(user);
   const [selectedCategory, setSelectedCategory] = useState(0);
 
-  useEffect(() => {
-    dispatch(fetchUserProfile());
-    dispatch(fetchAllGoalTransactions());
-    dispatch(fetchCurrentGoalTransactions());
-  }, [dispatch, transactions]);
+  const transactionsTotalSum = getTransactionsAmountCurrentMonth(
+    transactions,
+    fixedExpenses
+  );
+  const goalTransactionsTotalSum =
+    getGoalTransactionsAmountCurrentMonth(goalTransactionsAll);
+  const incomeAmount = getIncomeAmountCurrentMonth(incomes);
+  const balance = getBalance(
+    goalTransactionsCurrent,
+    transactions,
+    fixedExpenses,
+    incomes
+  );
+  const arraySpendings = getTransactionsArrayCurrentMonth(
+    transactions,
+    fixedExpenses
+  );
 
   const categories = Object.keys(categoryMap).map((key) => {
     const totalAmount = getTransactionsAmountByCategoryId(
-      user,
       Number(key),
-      categoryMap
+      categoryMap,
+      transactions
     );
     return {
       id: Number(key),
@@ -91,7 +108,6 @@ const StatisticsBlock = (props: {
     props.showConfirmDeletePopUp(() => {
       try {
         dispatch(deleteTransaction(id));
-        dispatch(fetchUserProfile());
       } catch (error) {
         console.error("Error deleting transaction:", error);
       }
@@ -102,7 +118,6 @@ const StatisticsBlock = (props: {
     props.showConfirmDeletePopUp(() => {
       try {
         dispatch(deleteFixedExpense(id));
-        dispatch(fetchUserProfile());
       } catch (error) {
         console.error("Error deleting fixed expense:", error);
       }
@@ -119,17 +134,17 @@ const StatisticsBlock = (props: {
       description,
       category: categoryMap[categoryId],
       amount: number,
-      userId: "",
+      userId: user ? user._id : "",
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
-    };
+    } as Transaction;
+
     try {
       validateTitle(description);
       validateTransaction(number, balance);
       validateNumberToBePositive(number);
 
       dispatch(addTransaction(newSpending));
-      dispatch(fetchUserProfile());
     } catch (error) {
       console.error("Error adding transaction:", error);
     }
@@ -146,7 +161,6 @@ const StatisticsBlock = (props: {
       <CategoriesPart categories={categories} selectCategory={selectCategory} />
       <div className="line-vertical"></div>
       <SpendingsHistoryPart
-        arraySpendings={arraySpendings}
         selectedCategory={selectedCategory}
         deleteSpending={handleDeleteTransaction}
         deleteFixedExpense={handleDeleteFixedExpense}

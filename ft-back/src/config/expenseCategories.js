@@ -6,7 +6,9 @@ const validCategories = [
     'clothes',
     'lifestyle',
     'medicine',
-    'other'
+    'other',
+    'goal',
+    'income'
 ];
 
 module.exports = validCategories;

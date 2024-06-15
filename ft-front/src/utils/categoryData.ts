@@ -18,7 +18,9 @@ export const categoryNames: Record<Category, string> = {
     'medicine':"Медицина",
     'food':"Продукти",
     'transport':"Транспорт",
-    'other':"Інше"
+    'other':"Інше",
+    'goal':'',
+    'income':''
 };
 
 

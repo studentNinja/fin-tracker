@@ -6,6 +6,7 @@ export interface Income {
     date: string;
     createdAt: string;
     updatedAt: string;
+    category: 'income';
 }
 
 export interface IncomeState {
