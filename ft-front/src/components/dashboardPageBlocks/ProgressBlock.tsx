@@ -34,32 +34,38 @@ const DashboardBlock2 = (props: {
   const goalTransactionsAll = useSelector(
     (state: RootState) => state.goalTransactions.goalTransactionsAll
   );
-
+  // Return goal from the User that is last created
   const lastGoal = getRecentGoal(user);
+  //Boolean : is the goal achieved?
   const achieved = lastGoal?.achieved;
 
   useEffect(() => {
     dispatch(fetchUserProfile());
     dispatch(fetchCurrentGoalTransactions());
   }, []);
-
+  //
   const balance = getBalance(user, goalTransactionsCurrent);
 
   const goalNumber = lastGoal ? lastGoal.amount : 0;
+
   const goalPrevMonthsNumber =
     getSavedAmountByPrevMonthForGoal(goalTransactionsAll);
+
   const goalCurrMonthNumber = getSavedAmountByCurrentMonthForGoal(
     goalTransactionsCurrent
   );
 
   const goalLeftNumber =
     goalNumber - getSavedAmountCurrentGoal(goalTransactionsCurrent);
+
   const goalPrevMonthsPercent = Math.round(
     (goalPrevMonthsNumber / goalNumber) * 100
   );
+
   const goalCurrMonthPercent = Math.round(
     (goalCurrMonthNumber / goalNumber) * 100
   );
+
   const goalLeftPercent = 100 - goalPrevMonthsPercent - goalCurrMonthPercent;
 
   function fundGoal(number: number) {
@@ -69,16 +75,6 @@ const DashboardBlock2 = (props: {
       handleAddGoalTransaction(number);
     } catch (err) {
       console.error("Error funding goal:", err);
-    }
-  }
-
-  function withdrawFromGoal(number: number) {
-    try {
-      validateNumberToBePositive(number);
-      validateGoalTransactionWithdraw(number, goalCurrMonthNumber);
-      handleAddGoalTransaction(number * -1);
-    } catch (err) {
-      console.error("Error withdrawing from goal:", err);
     }
   }
 
@@ -94,6 +90,16 @@ const DashboardBlock2 = (props: {
       await dispatch(fetchUserProfile());
     } catch (error) {
       console.error("Error adding goal transaction:", error);
+    }
+  }
+
+  function withdrawFromGoal(number: number) {
+    try {
+      validateNumberToBePositive(number);
+      validateGoalTransactionWithdraw(number, goalCurrMonthNumber);
+      handleAddGoalTransaction(number * -1);
+    } catch (err) {
+      console.error("Error withdrawing from goal:", err);
     }
   }
 

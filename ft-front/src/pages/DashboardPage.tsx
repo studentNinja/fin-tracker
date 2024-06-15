@@ -15,16 +15,15 @@ const DashboardPage: React.FC = () => {
   const { incomes } = useSelector((state: RootState) => state.incomes);
 
   const [visibilityAddFixedExpensePopUp, setVisibilityAddFixedExpensePopUp] =
-      useState(false);
+    useState(false);
   const [visibilityPopUpConfirmDelete, setVisibilityPopUpConfirmDelete] =
-      useState(false);
+    useState(false);
   const [visibilityPopUpAddIncome, setVisibilityPopUpAddIncome] =
-      useState(false);
+    useState(false);
   const [visibilityMoveMoneyPopUp, setVisibilityMoveMoneyPopUp] =
-      useState(false);
+    useState(false);
   const [visibilityAddSpendingPopUp, setVisibilityAddSpendingPopUp] =
-      useState(false);
-
+    useState(false);
 
   const [functionsHolder, setFunctionsHolder] = useState({
     delete: () => {},
@@ -32,7 +31,6 @@ const DashboardPage: React.FC = () => {
     addSpending: (categoryId: number, title: string, number: number) => {},
     addFixedExpense: (title: string, number: number) => {},
     moveMoney: (number: number) => {},
-
   });
 
   const [titleMoveMoneyPopUp, setTitleMoveMoneyPopUp] = useState("");
@@ -43,15 +41,15 @@ const DashboardPage: React.FC = () => {
   }
 
   function showPopUpAddIncome(
-      addFunct: (title: string, number: number) => void
+    addFunct: (title: string, number: number) => void
   ) {
     setFunctionsHolder((prev) => ({ ...prev, addIncome: addFunct }));
     setVisibilityPopUpAddIncome(true);
   }
 
   function showMoveMoneyPopUp(
-      title: string,
-      moveFunct: (number: number) => void
+    title: string,
+    moveFunct: (number: number) => void
   ) {
     setTitleMoveMoneyPopUp(title);
     setFunctionsHolder((prev) => ({ ...prev, moveMoney: moveFunct }));
@@ -59,60 +57,58 @@ const DashboardPage: React.FC = () => {
   }
 
   function showAddSpendingPopUp(
-      addFunct: (categoryId: number, title: string, number: number) => void
+    addFunct: (categoryId: number, title: string, number: number) => void
   ) {
     setFunctionsHolder((prev) => ({ ...prev, addSpending: addFunct }));
     setVisibilityAddSpendingPopUp(true);
   }
 
-
   return (
-      <div className="dashboard-container shadow">
-        {userInfo && (
-            <>
-              <div className="one-row-block-container">
-                <DashboardBlock1
-                    showConfirmDeletePopUp={showConfirmDeletePopUp}
-                    showPopUpAddIncome={showPopUpAddIncome}
-                />
-                <DashboardBlock2 showMoveMoneyPopUp={showMoveMoneyPopUp} />
-              </div>
-              <DashboardBlock3
-                  showConfirmDeletePopUp={showConfirmDeletePopUp}
-                  showAddSpendingPopUp={showAddSpendingPopUp}
-              />
-            </>
-        )}
+    <div className="dashboard-container shadow">
+      {userInfo && (
+        <>
+          <div className="one-row-block-container">
+            <DashboardBlock1
+              showConfirmDeletePopUp={showConfirmDeletePopUp}
+              showPopUpAddIncome={showPopUpAddIncome}
+            />
+            <DashboardBlock2 showMoveMoneyPopUp={showMoveMoneyPopUp} />
+          </div>
+          <DashboardBlock3
+            showConfirmDeletePopUp={showConfirmDeletePopUp}
+            showAddSpendingPopUp={showAddSpendingPopUp}
+          />
+        </>
+      )}
 
-        {visibilityPopUpConfirmDelete && (
-            <ConfirmDeletePopUp
-                cancel={() => setVisibilityPopUpConfirmDelete(false)}
-                confirmDelete={functionsHolder.delete}
-            />
-        )}
-        {visibilityPopUpAddIncome && (
-            <AddIncomeOrFixedExpensesPopUp
-                title={"Додати джерело доходу"}
-                cancel={() => setVisibilityPopUpAddIncome(false)}
-                confirmAdd={functionsHolder.addIncome}
-            />
-        )}
-        {visibilityMoveMoneyPopUp && (
-            <ChangeNumberPopUp
-                title={titleMoveMoneyPopUp}
-                cancel={() => setVisibilityMoveMoneyPopUp(false)}
-                confirmChange={functionsHolder.moveMoney}
-            />
-        )}
-        {visibilityAddSpendingPopUp && (
-            <AddSpendingPopUp
-                cancel={() => setVisibilityAddSpendingPopUp(false)}
-                confirmAdd={functionsHolder.addSpending}
-            />
-        )}
-      </div>
+      {visibilityPopUpConfirmDelete && (
+        <ConfirmDeletePopUp
+          cancel={() => setVisibilityPopUpConfirmDelete(false)}
+          confirmDelete={functionsHolder.delete}
+        />
+      )}
+      {visibilityPopUpAddIncome && (
+        <AddIncomeOrFixedExpensesPopUp
+          title={"Додати джерело доходу"}
+          cancel={() => setVisibilityPopUpAddIncome(false)}
+          confirmAdd={functionsHolder.addIncome}
+        />
+      )}
+      {visibilityMoveMoneyPopUp && (
+        <ChangeNumberPopUp
+          title={titleMoveMoneyPopUp}
+          cancel={() => setVisibilityMoveMoneyPopUp(false)}
+          confirmChange={functionsHolder.moveMoney}
+        />
+      )}
+      {visibilityAddSpendingPopUp && (
+        <AddSpendingPopUp
+          cancel={() => setVisibilityAddSpendingPopUp(false)}
+          confirmAdd={functionsHolder.addSpending}
+        />
+      )}
+    </div>
   );
 };
 
 export default DashboardPage;
-

@@ -35,6 +35,12 @@ export const RegisterPage: React.FC = () => {
     }
   }, [isAuthenticated, navigate]);
 
+  useEffect(() => {
+    if (error) {
+      alert(error);
+    }
+  }, [error]);
+
   const onSubmit: SubmitHandler<IRegisterFormInput> = (
     data: IRegisterFormInput,
     event
@@ -139,7 +145,7 @@ export const RegisterPage: React.FC = () => {
             {loading ? "Відбувається реєстрація..." : "Зареєструватись"}
           </button>
           {error && typeof error === "object" && error !== null ? (
-            <div>{error}</div>
+            <div>{JSON.stringify(error)}</div>
           ) : (
             <div>{error}</div>
           )}

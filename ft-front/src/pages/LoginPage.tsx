@@ -21,11 +21,7 @@ const LoginPage: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const resultAction = await dispatch(loginUser({ email, password }));
-
-    //     if (loginUser.fulfilled.match(resultAction)) {
-    //       navigate("/dashboard");
-    //     }
+    await dispatch(loginUser({ email, password }));
   };
 
   return (
@@ -56,48 +52,17 @@ const LoginPage: React.FC = () => {
               required
             />
           </div>
-          <button className=" form-button" type="submit" disabled={loading}>
+          <button className="form-button" type="submit" disabled={loading}>
             {loading ? "Відбувається вхід..." : "Увійти"}
           </button>
-          {error && typeof error === "object" && error !== null ? (
-            <div>{error}</div>
-          ) : (
-            <div>{error}</div>
+          {error && (
+            <div className="error-message">
+              {typeof error === "string" ? error : JSON.stringify(error)}
+            </div>
           )}
         </form>
       </div>
     </div>
-    // <div>
-    //   <h1>Login</h1>
-    //   <form onSubmit={handleSubmit}>
-    //     <div>
-    //       <label>Email</label>
-    //       <input
-    //         type="email"
-    //         value={email}
-    //         onChange={(e) => setEmail(e.target.value)}
-    //         required
-    //       />
-    //     </div>
-    //     <div>
-    //       <label>Password</label>
-    //       <input
-    //         type="password"
-    //         value={password}
-    //         onChange={(e) => setPassword(e.target.value)}
-    //         required
-    //       />
-    //     </div>
-    //     <button type="submit" disabled={loading}>
-    //       {loading ? "Logging in..." : "Login"}
-    //     </button>
-    //     {error && typeof error === "object" && error !== null ? (
-    //       <p>{error.msg}</p>
-    //     ) : (
-    //       <p>{error}</p>
-    //     )}
-    //   </form>
-    // </div>
   );
 };
 

@@ -8,7 +8,7 @@ import {
   deleteIncome,
 } from "../../features/income/incomeThunks";
 import { Income } from "../../types/incomeTypes";
-import { ThunkDispatch, AnyAction } from "@reduxjs/toolkit";
+import { ThunkDispatch, AnyAction, Action } from "@reduxjs/toolkit";
 import { fetchUserProfile } from "../../features/user/userThunks";
 import {
   validateIncomeDelete,
@@ -28,7 +28,7 @@ interface Props {
 }
 
 const IncomeBlock: React.FC<Props> = (props) => {
-  const dispatch = useDispatch<ThunkDispatch<RootState, void, AnyAction>>();
+  const dispatch = useDispatch<ThunkDispatch<RootState, void, Action>>();
   const user = useSelector((state: RootState) => state.user.userInfo);
   const goalTransactionsAll = useSelector(
     (state: RootState) => state.goalTransactions.goalTransactionsAll
