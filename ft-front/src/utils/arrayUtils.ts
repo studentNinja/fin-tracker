@@ -2,9 +2,7 @@ import {Transaction} from "../types/transactionTypes";
 import {GoalTransaction} from "../types/goalTransactionTypes";
 import {Income} from "../types/incomeTypes";
 import {getMonthAndYearFromDate} from "./dateUtils";
-import {Goal} from "../types/goalTypes";
 
-// export let filterCurrentMonth=(array: (Transaction | GoalTransaction | Income)[])=>{
 export let filterCurrentMonth=(array: Transaction[] | GoalTransaction[] | Income[])=>{
     return filterbyMonthAndYear(array, (new Date()).getMonth(),(new Date()).getUTCFullYear())
 }

@@ -1,9 +1,1 @@
-export type Category = 'food' | 'transport' | 'fixed' | 'pets' | 'clothes' | 'lifestyle' | 'medicine' | 'other';
-
-
-
-
-
-
-
-
+export type Category = 'food' | 'transport' | 'fixed' | 'pets' | 'clothes' | 'lifestyle' | 'medicine' | 'other' | 'goal' | 'income';

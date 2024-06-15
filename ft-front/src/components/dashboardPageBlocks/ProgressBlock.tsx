@@ -18,18 +18,29 @@ import {
   getSavedAmountByCurrentMonthForGoal,
   getSavedAmountCurrentGoal,
 } from "../../utils/dataUtils";
+
+import { Transaction } from "../../types/transactionTypes";
+import { FixedExpense } from "../../types/fixedExpenseTypes";
+import { Income } from "../../types/incomeTypes";
 import {addGoal} from "../../features/goals/goalsThunks";
 
-const DashboardBlock2 = (props: {
+interface Props {
   showMoveMoneyPopUp: (
     title: string,
     moveFunct: (number: number) => void
   ) => void;
+}
+const DashboardBlock2: React.FC<Props> = (props) => {
+
   showCreateGoalPopUp: (
     createFunct: (number: number) => void
   ) => void;
 }) => {
   const dispatch = useDispatch<AppDispatch>();
+
+  useEffect(() => {
+    dispatch(fetchCurrentGoalTransactions());
+  }, [dispatch]);
 
   const user = useSelector((state: RootState) => state.user.userInfo);
 
@@ -39,39 +50,37 @@ const DashboardBlock2 = (props: {
   const goalTransactionsAll = useSelector(
     (state: RootState) => state.goalTransactions.goalTransactionsAll
   );
-  // Return goal from the User that is last created
-  const lastGoal = getRecentGoal(user);
-
-  //Boolean : is the goal achieved?
-  const achieved = lastGoal?.achieved;
-
-  useEffect(() => {
-    dispatch(fetchUserProfile());
-    dispatch(fetchCurrentGoalTransactions());
-  }, []);
-  //
-  const balance = getBalance(user, goalTransactionsCurrent);
+  const transactions = useSelector(
+    (state: RootState) => state.transactions.transactions
+  );
+  const fixedExpenses = useSelector(
+    (state: RootState) => state.fixedExpenses.fixedExpenses
+  );
+  const incomes = useSelector((state: RootState) => state.incomes.incomes);
+  const lastGoal = getRecentGoal(user?.goals || []);
+  const achieved = lastGoal?.achieved || false;
+  const balance = getBalance(
+    goalTransactionsCurrent,
+    transactions,
+    fixedExpenses,
+    incomes
+  );
 
   const goalNumber = lastGoal ? lastGoal.amount : 0;
-
   const goalPrevMonthsNumber =
     getSavedAmountByPrevMonthForGoal(goalTransactionsAll);
-
   const goalCurrMonthNumber = getSavedAmountByCurrentMonthForGoal(
     goalTransactionsCurrent
   );
-
   const goalLeftNumber =
     goalNumber - getSavedAmountCurrentGoal(goalTransactionsCurrent);
 
   const goalPrevMonthsPercent = Math.round(
     (goalPrevMonthsNumber / goalNumber) * 100
   );
-
   const goalCurrMonthPercent = Math.round(
     (goalCurrMonthNumber / goalNumber) * 100
   );
-
   const goalLeftPercent = 100 - goalPrevMonthsPercent - goalCurrMonthPercent;
 
   function fundGoal(number: number) {
@@ -86,14 +95,17 @@ const DashboardBlock2 = (props: {
 
   async function handleAddGoalTransaction(number: number) {
     try {
+      if (!lastGoal) {
+        throw new Error("No goal found.");
+      }
       await dispatch(
         addGoalTransaction({
           amount: number,
           userId: user?._id || "",
           date: new Date().toISOString(),
+          category: "goal",
         })
       );
-      await dispatch(fetchUserProfile());
     } catch (error) {
       console.error("Error adding goal transaction:", error);
     }
