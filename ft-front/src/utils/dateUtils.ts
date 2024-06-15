@@ -33,6 +33,6 @@ export let getMonthAndYearFromDate=(isoString:string | undefined)=>{
         return ""
     const date = new Date(isoString);
 
-    return [date.getUTCMonth(), date.getUTCFullYear()];
+    return [date.getMonth(), date.getFullYear()];
 
 }
