@@ -16,7 +16,10 @@ export let validateGoalTransactionWithdraw=(withdrawAmount:number, goalCurrentMo
     if(withdrawAmount>goalCurrentMonthBalance)
         throw new Error("Ви не можете зняти більше, аніж відклали цього місяця")
 }
-
+export let validateChangeGoalNumber= (goalSavedAmount:number, number:number)=>{
+    if(goalSavedAmount>number)
+        throw new Error("Сума цілі має бути більша, аніж вже відкладені кошти");
+}
 export let validateNumberToBePositive=(number:number)=>{
     if (number <= 0)
         throw new Error("Значення має бути додатнім");

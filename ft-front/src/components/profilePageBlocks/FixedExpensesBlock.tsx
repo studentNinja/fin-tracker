@@ -10,6 +10,7 @@ import {
   getFixedExpenseById,
 } from "../../features/fixedExpenses/fixedExpensesThunks";
 import { Category } from "../../types/categoryTypes";
+import {getBalance} from "../../utils/dataUtils";
 
 const FixedExpensesBlock = (props: {
   showConfirmDeletePopUp: (deleteFunct: () => void) => void;
@@ -28,8 +29,13 @@ const FixedExpensesBlock = (props: {
     (state: RootState) => state.fixedExpenses.loading
   );
   const error = useSelector((state: RootState) => state.fixedExpenses.error);
+  const user = useSelector((state: RootState) => state.user.userInfo);
+  const goalTransactionsAll = useSelector(
+      (state: RootState) => state.goalTransactions.goalTransactionsAll
+  );
 
-  let moneyLeft = 71000;
+  let balance = getBalance(user, goalTransactionsAll);
+
   let [arrayFixedExpenses, setArrayFixedExpenses] = useState<FixedExpense[]>(
     []
   );
@@ -56,7 +62,7 @@ const FixedExpensesBlock = (props: {
   }
 
   function validateSpendingNumber(number: number) {
-    return moneyLeft >= number;
+    return balance >= number;
   }
 
   function handleDeleteFixedExpense(id: string) {
@@ -69,7 +75,6 @@ const FixedExpensesBlock = (props: {
       <div className="income-number-container">
         <div className="income-number">
           {
-            // calc general income
             arrayFixedExpenses
               .reduce((res, curr) => res + curr.amount, 0)
               .toLocaleString("uk-UA")

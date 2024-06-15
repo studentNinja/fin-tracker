@@ -18,9 +18,11 @@ import {
   getSavedAmountByCurrentMonthForGoal,
   getSavedAmountCurrentGoal,
 } from "../../utils/dataUtils";
+
 import { Transaction } from "../../types/transactionTypes";
 import { FixedExpense } from "../../types/fixedExpenseTypes";
 import { Income } from "../../types/incomeTypes";
+import {addGoal} from "../../features/goals/goalsThunks";
 
 interface Props {
   showMoveMoneyPopUp: (
@@ -28,8 +30,12 @@ interface Props {
     moveFunct: (number: number) => void
   ) => void;
 }
-
 const DashboardBlock2: React.FC<Props> = (props) => {
+
+  showCreateGoalPopUp: (
+    createFunct: (number: number) => void
+  ) => void;
+}) => {
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
@@ -37,6 +43,7 @@ const DashboardBlock2: React.FC<Props> = (props) => {
   }, [dispatch]);
 
   const user = useSelector((state: RootState) => state.user.userInfo);
+
   const goalTransactionsCurrent = useSelector(
     (state: RootState) => state.goalTransactions.goalTransactionsCurrent
   );
@@ -50,7 +57,6 @@ const DashboardBlock2: React.FC<Props> = (props) => {
     (state: RootState) => state.fixedExpenses.fixedExpenses
   );
   const incomes = useSelector((state: RootState) => state.incomes.incomes);
-
   const lastGoal = getRecentGoal(user?.goals || []);
   const achieved = lastGoal?.achieved || false;
   const balance = getBalance(
@@ -114,6 +120,31 @@ const DashboardBlock2: React.FC<Props> = (props) => {
       console.error("Error withdrawing from goal:", err);
     }
   }
+
+  async function handleCreateGoal(number: number) {
+    try {
+      if(lastGoal?.achieved){
+        await dispatch(
+            addGoal({
+              userId: "",
+              name: "Ціль",
+              amount: number,
+              achieved: false,
+              startDate: new Date().toISOString(),
+              createdAt: "",
+              updatedAt: "",
+            })
+        );
+        await dispatch(fetchUserProfile());
+        await dispatch(fetchCurrentGoalTransactions());
+      }else{
+        throw new Error("Previous goal is not achieved, cannot create a new one")
+      }
+    } catch (error) {
+      console.error("Error creating goal:", error);
+    }
+  }
+
 
   return !achieved ? (
     <div className="block block-2">
@@ -227,10 +258,10 @@ const DashboardBlock2: React.FC<Props> = (props) => {
       <div className="goal-buttons-container center-div">
         <div
           className="btn"
-          // to do: create new goal pop up
-          // onClick={() =>
-          //     props.showMoveMoneyPopUp("Відкласти кошти", handleAddGoalTransaction)
-          // }
+          //  create new goal pop up
+          onClick={() =>
+              props.showCreateGoalPopUp(handleCreateGoal)
+          }
         >
           Створити нову ціль
         </div>

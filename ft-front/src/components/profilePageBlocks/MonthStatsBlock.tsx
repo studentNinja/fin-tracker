@@ -1,12 +1,49 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import deleteBtn from "../../assets/delete-btn.svg";
+import {useDispatch, useSelector} from "react-redux";
+import {AnyAction, ThunkDispatch} from "@reduxjs/toolkit";
+import {RootState} from "../../app/store";
+import {
+    getBalance,
+    getGoalTransactionsAmountCurrentMonth,
+    getIncomeAmountCurrentMonth, getTransactionsAmountByCategoryId,
+    getTransactionsAmountCurrentMonth
+} from "../../utils/dataUtils";
+import {fetchUserProfile} from "../../features/user/userThunks";
+import {
+    fetchAllGoalTransactions,
+    fetchCurrentGoalTransactions
+} from "../../features/goalTransactions/goalTransactionsThunks";
+import {categoryMap} from "../../utils/categoryData";
 
 const MonthStatsBlock = () => {
-    let incomeNumber=140000
-    let putAwayNumber=10000
-    let spentNumber= 48000
-    let spentWithoutFixedExpensesNumber= 11000
-    let leftNUmber= incomeNumber-(putAwayNumber+spentNumber+spentWithoutFixedExpensesNumber)
+    const dispatch = useDispatch<ThunkDispatch<RootState, void, AnyAction>>();
+    const transactions = useSelector(
+        (state: RootState) => state.transactions.transactions
+    );
+    const user = useSelector((state: RootState) => state.user.userInfo);
+
+    const goalTransactionsAll = useSelector(
+        (state: RootState) => state.goalTransactions.goalTransactionsAll
+    );
+
+    let transactionsTotalSum = getTransactionsAmountCurrentMonth(user);
+    let goalTransactionsTotalSum = getGoalTransactionsAmountCurrentMonth(goalTransactionsAll);
+    let incomeAmount = getIncomeAmountCurrentMonth(user);
+    let balance = getBalance(user, goalTransactionsAll);
+    let fixedExpensesAmount = getTransactionsAmountByCategoryId(user,
+        1,
+        categoryMap)
+    let transactionsTotalSumWithoutFixed= transactionsTotalSum - fixedExpensesAmount
+
+
+    useEffect(() => {
+        dispatch(fetchUserProfile());
+        dispatch(fetchAllGoalTransactions());
+        dispatch(fetchCurrentGoalTransactions());
+    }, [dispatch, transactions]);
+
+
 
 
 
@@ -18,7 +55,7 @@ const MonthStatsBlock = () => {
                 <div className="income-container-title">Дохід:</div>
                 <div className="income-number income-number-profile">
                     {
-                        incomeNumber.toLocaleString("uk-UA")
+                        incomeAmount.toLocaleString("uk-UA")
                     }
                 </div>
 
@@ -30,7 +67,7 @@ const MonthStatsBlock = () => {
                     <div className="list-elem">
                         <div className="font-weight-300">Відкладено</div>
                         <div className="list-elem-end-block">
-                            <div>{putAwayNumber.toLocaleString("uk-UA")}</div>
+                            <div>{goalTransactionsTotalSum.toLocaleString("uk-UA")}</div>
                         </div>
                     </div>
                     <div className="list-line"></div>
@@ -40,7 +77,7 @@ const MonthStatsBlock = () => {
                     <div className="list-elem">
                         <div className="font-weight-300" >Витрачено всього</div>
                         <div className="list-elem-end-block">
-                            <div>{spentNumber.toLocaleString("uk-UA")}</div>
+                            <div>{transactionsTotalSum.toLocaleString("uk-UA")}</div>
                         </div>
                     </div>
                     <div className="list-line"></div>
@@ -50,7 +87,7 @@ const MonthStatsBlock = () => {
                     <div className="list-elem">
                         <div className="font-weight-300">Витрачено без постійних витрат</div>
                         <div className="list-elem-end-block">
-                            <div>{spentWithoutFixedExpensesNumber.toLocaleString("uk-UA")}</div>
+                            <div>{transactionsTotalSumWithoutFixed.toLocaleString("uk-UA")}</div>
                         </div>
                     </div>
                     <div className="list-line"></div>
@@ -60,7 +97,7 @@ const MonthStatsBlock = () => {
                     <div className="list-elem">
                         <div className="font-weight-300" >Залишок</div>
                         <div className="list-elem-end-block">
-                            <div>{leftNUmber.toLocaleString("uk-UA")}</div>
+                            <div>{balance.toLocaleString("uk-UA")}</div>
                         </div>
                     </div>
                 </div>
