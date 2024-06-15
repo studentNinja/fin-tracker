@@ -24,7 +24,7 @@ export const mockUser: User = {
             userId: '1',
             amount: 100,
             category: 'food' as Category,
-            date: new Date(currentYear, currentMonth, 1).toISOString(), // Current month
+            date: new Date(currentYear, currentMonth, 1).toISOString(),
             createdAt: new Date(currentYear, currentMonth, 1).toISOString(),
             updatedAt: new Date(currentYear, currentMonth, 1).toISOString(),
             description: 'Lunch'
@@ -42,7 +42,7 @@ export const mockUser: User = {
         {
             _id: '3',
             userId: '1',
-            amount: 300,
+            amount: 400,
             category: 'entertainment' as Category,
             date: new Date(currentYear, currentMonth, 15).toISOString(),
             createdAt: new Date(currentYear, currentMonth, 15).toISOString(),
