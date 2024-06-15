@@ -3,6 +3,7 @@ const User = require('../models/User');
 const config = require('../config/config');
 const Goal = require("../models/Goal");
 const Income = require("../models/Income");
+const { generateAccessToken, generateRefreshToken } = require('../utils/tokenUtils');
 
 
 exports.register = async (req, res) => {
