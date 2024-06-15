@@ -1,9 +1,9 @@
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
-const { generateAccessToken, generateRefreshToken } = require('../utils/tokenUtils');
 const config = require('../config/config');
 const Goal = require("../models/Goal");
 const Income = require("../models/Income");
+
 
 exports.register = async (req, res) => {
     try {
@@ -38,7 +38,10 @@ exports.register = async (req, res) => {
         await user.save();
 
 
-        res.status(201).send({ message: 'User registered successfully', user: newUser });
+        const accessToken = generateAccessToken(newUser._id);
+        const refreshToken = generateRefreshToken(newUser._id);
+
+        res.status(201).send({ message: 'User registered successfully', user: newUser, accessToken, refreshToken });
     } catch (err) {
         console.error(err);
         res.status(500).send({ error: 'Server error' });

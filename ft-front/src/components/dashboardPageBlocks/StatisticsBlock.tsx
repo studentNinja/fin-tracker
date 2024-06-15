@@ -5,57 +5,62 @@ import CategoriesPart from "./StatisticsComponents/CategoriesPart";
 import SpendingsHistoryPart from "./StatisticsComponents/SpendingsHistoryPart";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../app/store";
-import { Data } from "../../utils/dataUtils";
-
-import { AnyAction, ThunkDispatch } from "@reduxjs/toolkit";
-import { Category } from "../../types/categoryTypes";
-import { deleteIncome, fetchIncomes } from "../../features/income/incomeThunks";
 import {
-  addTransaction,
+  getTransactionsAmountByCategoryId,
+  getTransactionsAmountCurrentMonth,
+  getGoalTransactionsAmountCurrentMonth,
+  getIncomeAmountCurrentMonth,
+  getBalance,
+  getTransactionsArrayCurrentMonth,
+} from "../../utils/dataUtils";
+import { AnyAction, ThunkDispatch } from "@reduxjs/toolkit";
+import {
   deleteTransaction,
+  addTransaction,
 } from "../../features/transactions/transactionThunks";
 import { fetchUserProfile } from "../../features/user/userThunks";
 import {
   fetchAllGoalTransactions,
   fetchCurrentGoalTransactions,
 } from "../../features/goalTransactions/goalTransactionsThunks";
+import { deleteFixedExpense } from "../../features/fixedExpenses/fixedExpensesThunks";
+import {
+  validateNumberToBePositive,
+  validateTitle,
+  validateTransaction,
+} from "../../utils/validationUtils";
 import {
   categoryColors,
   categoryMap,
   categoryNames,
 } from "../../utils/categoryData";
-import { userInfo } from "os";
-import {deleteFixedExpense} from "../../features/fixedExpenses/fixedExpensesThunks";
-import {validateNumberToBePositive, validateTitle, validateTransaction} from "../../utils/validationUtils";
 
 const StatisticsBlock = (props: {
   showConfirmDeletePopUp: (deleteFunct: () => void) => void;
   showAddSpendingPopUp: (
     addFunct: (categoryId: number, title: string, number: number) => void
   ) => void;
-
 }) => {
   const dispatch = useDispatch<ThunkDispatch<RootState, void, AnyAction>>();
   const transactions = useSelector(
     (state: RootState) => state.transactions.transactions
   );
+  const user = useSelector((state: RootState) => state.user.userInfo);
+  const goalTransactionsAll = useSelector(
+    (state: RootState) => state.goalTransactions.goalTransactionsAll
+  );
+  const goalTransactionsCurrent = useSelector(
+    (state: RootState) => state.goalTransactions.goalTransactionsCurrent
+  );
 
-  const data = useSelector((state: RootState) => {
-    return new Data(
-      state.user.userInfo,
-      state.goalTransactions.goalTransactionsCurrent,
-      state.goalTransactions.goalTransactionsAll
-    );
-  });
+  let transactionsTotalSum = getTransactionsAmountCurrentMonth(user);
+  let goalTransactionsTotalSum =
+    getGoalTransactionsAmountCurrentMonth(goalTransactionsAll);
+  let incomeAmount = getIncomeAmountCurrentMonth(user);
+  let balance = getBalance(user, goalTransactionsAll);
 
-  let transactionsTotalSum = data.getTransactionsAmountCurrentMonth();
-  let goalTransactionsTotalSum = data.getGoalTransactionsAmountCurrentMonth();
-  let incomeAmount = data.getIncomeAmountCurrentMonth();
-
-  let balance = data.getBalance();
-
-  let arraySpendings = data.getTransactionsArrayCurrentMonth();
-  let [selectedCategory, setSelectedCategory] = useState(0);
+  let arraySpendings = getTransactionsArrayCurrentMonth(user);
+  const [selectedCategory, setSelectedCategory] = useState(0);
 
   useEffect(() => {
     dispatch(fetchUserProfile());
@@ -64,8 +69,9 @@ const StatisticsBlock = (props: {
   }, [dispatch, transactions]);
 
   const categories = Object.keys(categoryMap).map((key) => {
-    const totalAmount = data.getTransactionsAmountByCategoryId(
-      +key,
+    const totalAmount = getTransactionsAmountByCategoryId(
+      user,
+      Number(key),
       categoryMap
     );
     return {
@@ -91,6 +97,7 @@ const StatisticsBlock = (props: {
       }
     });
   }
+
   async function handleDeleteFixedExpense(id: string) {
     props.showConfirmDeletePopUp(() => {
       try {
@@ -102,14 +109,11 @@ const StatisticsBlock = (props: {
     });
   }
 
-
-
   function handleAddTransaction(
     categoryId: number,
     description: string,
     number: number
   ) {
-
     let newSpending = {
       date: new Date().toISOString(),
       description,
@@ -120,9 +124,9 @@ const StatisticsBlock = (props: {
       updatedAt: new Date().toISOString(),
     };
     try {
-      validateTitle(description)
-      validateTransaction(number, balance)
-      validateNumberToBePositive(number)
+      validateTitle(description);
+      validateTransaction(number, balance);
+      validateNumberToBePositive(number);
 
       dispatch(addTransaction(newSpending));
       dispatch(fetchUserProfile());
@@ -130,7 +134,6 @@ const StatisticsBlock = (props: {
       console.error("Error adding transaction:", error);
     }
   }
-
 
   return (
     <div className="block block-3">
