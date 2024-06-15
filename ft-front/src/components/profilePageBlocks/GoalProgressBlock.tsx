@@ -8,13 +8,18 @@ import {
 import { fetchUserProfile } from "../../features/user/userThunks";
 import {
   addGoalTransaction,
+  fetchAllGoalTransactions,
   fetchCurrentGoalTransactions,
 } from "../../features/goalTransactions/goalTransactionsThunks";
 import {
   validateChangeGoalNumber,
   validateNumberToBePositive,
 } from "../../utils/validationUtils";
-import { addGoal, updateGoal } from "../../features/goals/goalsThunks";
+import {
+  addGoal,
+  fetchGoals,
+  updateGoal,
+} from "../../features/goals/goalsThunks";
 
 const GoalProgressBlock = (props: {
   showChangeGoalNumber: (
@@ -23,6 +28,11 @@ const GoalProgressBlock = (props: {
   ) => void;
 }) => {
   const dispatch = useDispatch<AppDispatch>();
+  useEffect(() => {
+    dispatch(fetchCurrentGoalTransactions());
+    dispatch(fetchGoals());
+    dispatch(fetchAllGoalTransactions());
+  }, [dispatch]);
   const goals = useSelector((state: RootState) => state.goals.goals);
 
   const goalTransactionsCurrent = useSelector(
@@ -34,10 +44,6 @@ const GoalProgressBlock = (props: {
   console.log(lastGoal, goals);
 
   const achieved = lastGoal?.achieved;
-
-  useEffect(() => {
-    dispatch(fetchCurrentGoalTransactions());
-  }, [dispatch]);
 
   const goalAmount = lastGoal ? lastGoal.amount : 0;
 

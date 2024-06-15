@@ -1,25 +1,20 @@
 import React, { useState } from "react";
-import {Category} from "../../../types/categoryTypes";
+import { Category } from "../../../types/categoryTypes";
 
-const CategoriesPart = (props: { categories: Array<{
-        id: number;
-        title: string;
-        color: string;
-        number: number;
-    }>;
-    selectCategory: (id: number) => void
+const CategoriesPart = (props: {
+  categories: Array<{
+    id: number;
+    title: string;
+    color: string;
+    number: number;
+  }>;
+  selectCategory: (id: number) => void;
 }) => {
-
-
   let [selectedCategory, setselectedCategory] = useState(0);
   function selectCategory(id: number) {
     setselectedCategory(id);
     props.selectCategory(id);
   }
-
-
-
-
 
   const spentNumber = props.categories.reduce(
     (res, curr) => (res += curr.number),

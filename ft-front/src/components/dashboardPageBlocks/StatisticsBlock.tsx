@@ -51,7 +51,7 @@ const StatisticsBlock = (props: {
   const transactionsState = useSelector(
     (state: RootState) => state.transactions
   );
-  const user = useSelector((state: RootState) => state.user.userInfo);
+  // const user = useSelector((state: RootState) => state.user.userInfo);
   const goalTransactionsAll = useSelector(
     (state: RootState) => state.goalTransactions.goalTransactionsAll
   );
@@ -134,7 +134,7 @@ const StatisticsBlock = (props: {
       description,
       category: categoryMap[categoryId],
       amount: number,
-      userId: user ? user._id : "",
+      userId: "",
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     } as Transaction;
