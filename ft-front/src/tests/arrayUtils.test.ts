@@ -4,7 +4,7 @@ import { GoalTransaction } from '../types/goalTransactionTypes';
 import { Income } from '../types/incomeTypes';
 import { mockUser, mockGoalTransactions } from '../tests/mockUserData';
 
-// Mock data
+
 const transactions: Transaction[] = mockUser.transactions as Transaction[];
 const goalTransactions: GoalTransaction[] = mockGoalTransactions;
 const incomes: Income[] = mockUser.incomes as Income[];
@@ -31,7 +31,7 @@ describe('filterbyMonthAndYear', () => {
     const currentYear = new Date().getUTCFullYear();
 
     test('should filter transactions by specified month and year', () => {
-        const filtered = filterbyMonthAndYear(transactions, currentMonth, currentYear);
+        const filtered = filterbyMonthAndYear(transactions,currentMonth, currentYear);
         expect(filtered.length).toBe(2);
     });
 

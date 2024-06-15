@@ -38,7 +38,7 @@ export const mockUser: User = {
             createdAt: new Date(currentYear, previousMonth, 1).toISOString(),
             updatedAt: new Date(currentYear, previousMonth, 1).toISOString(),
             description: 'Bus'
-        },
+        } as Transaction,
         {
             _id: '3',
             userId: '1',
@@ -122,7 +122,8 @@ export const mockGoalTransactions: GoalTransaction[] = [
         amount: 150,
         date: new Date(currentYear, currentMonth, 10).toISOString(),
         createdAt: new Date(currentYear, currentMonth, 10).toISOString(),
-        updatedAt: new Date(currentYear, currentMonth, 10).toISOString()
+        updatedAt: new Date(currentYear, currentMonth, 10).toISOString(),
+        category: 'goal' as Category
     } as GoalTransaction,
     {
         _id: '2',
@@ -131,6 +132,11 @@ export const mockGoalTransactions: GoalTransaction[] = [
         amount: 250,
         date: new Date(currentYear, previousMonth, 5).toISOString(),
         createdAt: new Date(currentYear, previousMonth, 5).toISOString(),
-        updatedAt: new Date(currentYear, previousMonth, 5).toISOString()
+        updatedAt: new Date(currentYear, previousMonth, 5).toISOString(),
+        category: 'goal' as Category
     } as GoalTransaction
 ];
+
+export const mockTransactions: Transaction[] = mockUser.transactions;
+export const mockFixedExpenses: FixedExpense[] = mockUser.fixed_expenses;
+export const mockIncomes: Income[] = mockUser.incomes;
