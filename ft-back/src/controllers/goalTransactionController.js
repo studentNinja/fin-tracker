@@ -69,7 +69,7 @@ exports.getAllGoalTransactions = async (req, res) => {
 };
 exports.getCurrentGoalTransactions = async (req, res) => {
     try {
-        const goal = await Goal.findOne({ achieved: false });
+        const goal = await Goal.findOne({userId: req.userId, achieved: false });
         if (goal == null) {
             res.status(400).json({error: "No goal exists"});
             return
