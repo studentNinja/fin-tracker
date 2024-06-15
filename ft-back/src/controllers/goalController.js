@@ -17,7 +17,9 @@ exports.createGoal = async (req, res) => {
 
 exports.getGoals = async (req, res) => {
     try {
+        console.log(req.userId)
         const goals = await Goal.find({ userId: req.userId });
+        console.log(goals)
         res.status(200).json(goals);
     } catch (err) {
         res.status(400).json({ error: err.message });

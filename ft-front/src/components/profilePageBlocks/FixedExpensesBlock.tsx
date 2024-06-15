@@ -10,7 +10,7 @@ import {
   getFixedExpenseById,
 } from "../../features/fixedExpenses/fixedExpensesThunks";
 import { Category } from "../../types/categoryTypes";
-import {getBalance} from "../../utils/dataUtils";
+import { getBalance } from "../../utils/dataUtils";
 
 const FixedExpensesBlock = (props: {
   showConfirmDeletePopUp: (deleteFunct: () => void) => void;
@@ -22,6 +22,16 @@ const FixedExpensesBlock = (props: {
   useEffect(() => {
     dispatch(fetchFixedExpenses());
   }, [dispatch]);
+
+  const goalTransactionsCurrent = useSelector(
+    (state: RootState) => state.goalTransactions.goalTransactionsCurrent
+  );
+
+  const transactions = useSelector(
+    (state: RootState) => state.transactions.transactions
+  );
+  const incomes = useSelector((state: RootState) => state.incomes.incomes);
+
   const fixedExpenses = useSelector(
     (state: RootState) => state.fixedExpenses.fixedExpenses
   );
@@ -31,10 +41,15 @@ const FixedExpensesBlock = (props: {
   const error = useSelector((state: RootState) => state.fixedExpenses.error);
   const user = useSelector((state: RootState) => state.user.userInfo);
   const goalTransactionsAll = useSelector(
-      (state: RootState) => state.goalTransactions.goalTransactionsAll
+    (state: RootState) => state.goalTransactions.goalTransactionsAll
   );
 
-  let balance = getBalance(user, goalTransactionsAll);
+  const balance = getBalance(
+    goalTransactionsCurrent,
+    transactions,
+    fixedExpenses,
+    incomes
+  );
 
   let [arrayFixedExpenses, setArrayFixedExpenses] = useState<FixedExpense[]>(
     []
@@ -74,11 +89,9 @@ const FixedExpensesBlock = (props: {
       <div className="block-title">Постійні витрати</div>
       <div className="income-number-container">
         <div className="income-number">
-          {
-            arrayFixedExpenses
-              .reduce((res, curr) => res + curr.amount, 0)
-              .toLocaleString("uk-UA")
-          }
+          {arrayFixedExpenses
+            .reduce((res, curr) => res + curr.amount, 0)
+            .toLocaleString("uk-UA")}
         </div>
         <div
           className="add-btn"
