@@ -12,13 +12,14 @@ import {
     getTransactionsAmountCurrentMonth,
     getGoalTransactionsAmountCurrentMonth
 } from '../utils/dataUtils';
+
 import { mockGoalTransactions, mockUser, mockTransactions, mockFixedExpenses, mockIncomes } from "../tests/mockUserData";
 import { Category } from "../types/categoryTypes";
 import { Transaction } from '../types/transactionTypes';
 import { GoalTransaction } from '../types/goalTransactionTypes';
 import { Income } from '../types/incomeTypes';
 import { Goal } from '../types/goalTypes';
-import {FixedExpense} from "../types/fixedExpenseTypes";
+import { FixedExpense } from "../types/fixedExpenseTypes";
 
 describe('getSavedAmountCurrentGoal', () => {
     it('calculates the saved amount for current goal correctly', () => {
@@ -69,7 +70,7 @@ describe('getTransactionsAmountByCategoryId', () => {
         const amount = getTransactionsAmountByCategoryId(1, {}, []);
         expect(amount).toBe(0);
 
-        const amount2 = getTransactionsAmountByCategoryId(1, {}, null as unknown as (Transaction | Income | GoalTransaction)[]);
+        const amount2 = getTransactionsAmountByCategoryId(1, {}, null as unknown as Transaction[]);
         expect(amount2).toBe(0);
     });
 });
@@ -79,7 +80,6 @@ describe('getTransactionsArrayCurrentMonth', () => {
         const transactions = getTransactionsArrayCurrentMonth(mockTransactions, mockFixedExpenses);
         expect(transactions.length).toBe(3);
     });
-
 });
 
 describe('getGoalTransactionsArrayCurrentMonth', () => {
@@ -99,7 +99,7 @@ describe('getIncomeArrayCurrentMonth', () => {
         const incomeArray = getIncomeArrayCurrentMonth([]);
         expect(incomeArray).toEqual([]);
 
-        const incomeArray2 = getIncomeArrayCurrentMonth(null as unknown as (Transaction | Income | GoalTransaction)[]);
+        const incomeArray2 = getIncomeArrayCurrentMonth(null as unknown as Income[]);
         expect(incomeArray2).toEqual([]);
     });
 });
@@ -114,7 +114,7 @@ describe('getIncomeAmountCurrentMonth', () => {
         const incomeAmount = getIncomeAmountCurrentMonth([]);
         expect(incomeAmount).toBe(0);
 
-        const incomeAmount2 = getIncomeAmountCurrentMonth(null as unknown as (Transaction | Income | GoalTransaction)[]);
+        const incomeAmount2 = getIncomeAmountCurrentMonth(null as unknown as Income[]);
         expect(incomeAmount2).toBe(0);
     });
 });
@@ -131,7 +131,6 @@ describe('getTransactionsAmountCurrentMonth', () => {
         const amount = getTransactionsAmountCurrentMonth(mockTransactions, mockFixedExpenses);
         expect(amount).toBe(1000);
     });
-
 });
 
 describe('getGoalTransactionsAmountCurrentMonth', () => {
@@ -139,5 +138,4 @@ describe('getGoalTransactionsAmountCurrentMonth', () => {
         const amount = getGoalTransactionsAmountCurrentMonth(mockGoalTransactions);
         expect(amount).toBe(150);
     });
-
 });

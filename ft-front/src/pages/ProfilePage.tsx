@@ -12,8 +12,22 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../app/store";
 import { fetchUserProfile } from "../features/user/userThunks";
 import { Category } from "../types/categoryTypes";
+import { Action, ThunkDispatch } from "@reduxjs/toolkit";
+import {
+  fetchAllGoalTransactions,
+  fetchCurrentGoalTransactions,
+} from "../features/goalTransactions/goalTransactionsThunks";
+import { fetchIncomes } from "../features/income/incomeThunks";
+import { fetchTransactions } from "../features/transactions/transactionThunks";
 
 const ProfilePage = () => {
+  const dispatch = useDispatch<ThunkDispatch<RootState, void, Action>>();
+  useEffect(() => {
+    dispatch(fetchAllGoalTransactions());
+    dispatch(fetchCurrentGoalTransactions());
+    dispatch(fetchIncomes());
+    dispatch(fetchTransactions());
+  }, [dispatch]);
   const { userInfo, loading, error } = useSelector(
     (state: RootState) => state.user
   );
@@ -94,7 +108,7 @@ const ProfilePage = () => {
           cancel={() => setVisibilityAddFixedExpensePopUp(false)}
           confirmAdd={functionsHolder.addFixedExpense}
         />
-      ) }
+      )}
       {visibilityChangeNumberPopUp && (
         <ChangeNumberPopUp
           title={titleChangeNumberPopUp}

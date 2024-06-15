@@ -48,11 +48,12 @@ const DashboardBlock2: React.FC<Props> = (props) => {
   const transactions = useSelector(
     (state: RootState) => state.transactions.transactions
   );
+  const goals = useSelector((state: RootState) => state.goals.goals);
   const fixedExpenses = useSelector(
     (state: RootState) => state.fixedExpenses.fixedExpenses
   );
   const incomes = useSelector((state: RootState) => state.incomes.incomes);
-  const lastGoal = getRecentGoal(user?.goals || []);
+  const lastGoal = getRecentGoal(goals || []);
   const achieved = lastGoal?.achieved || false;
   const balance = getBalance(
     goalTransactionsCurrent,

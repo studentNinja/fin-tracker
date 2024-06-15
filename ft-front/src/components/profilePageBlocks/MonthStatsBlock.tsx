@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import deleteBtn from "../../assets/delete-btn.svg";
 import { useDispatch, useSelector } from "react-redux";
-import { AnyAction, ThunkDispatch } from "@reduxjs/toolkit";
+import { Action, AnyAction, ThunkDispatch } from "@reduxjs/toolkit";
 import { RootState } from "../../app/store";
 import {
   getBalance,
@@ -16,9 +16,10 @@ import {
   fetchCurrentGoalTransactions,
 } from "../../features/goalTransactions/goalTransactionsThunks";
 import { categoryMap } from "../../utils/categoryData";
+import { fetchIncomes } from "../../features/income/incomeThunks";
+import { fetchTransactions } from "../../features/transactions/transactionThunks";
 
 const MonthStatsBlock = () => {
-  const dispatch = useDispatch<ThunkDispatch<RootState, void, AnyAction>>();
   const transactions = useSelector(
     (state: RootState) => state.transactions.transactions
   );
@@ -55,12 +56,6 @@ const MonthStatsBlock = () => {
   );
   let transactionsTotalSumWithoutFixed =
     transactionsTotalSum - fixedExpensesAmount;
-
-  useEffect(() => {
-    dispatch(fetchUserProfile());
-    dispatch(fetchAllGoalTransactions());
-    dispatch(fetchCurrentGoalTransactions());
-  }, [dispatch, transactions]);
 
   return (
     <div className="block block-flex-1 block-column-content">

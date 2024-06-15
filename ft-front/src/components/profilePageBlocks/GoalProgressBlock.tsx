@@ -41,7 +41,6 @@ const GoalProgressBlock = (props: {
 
   // Return goal from the User that is last created
   const lastGoal = getRecentGoal(goals);
-  console.log(lastGoal, goals);
 
   const achieved = lastGoal?.achieved;
 

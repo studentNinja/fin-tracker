@@ -19,18 +19,9 @@ ChartJS.register(
   Legend
 );
 
-interface DataSet {
-  [key: string]: number;
+interface BarChartProps {
+  data: Record<string, number>;
 }
-
-const dataSet: DataSet = {
-  "01": 15000,
-  "02": 12000,
-  "03": 13000,
-  "04": 10000,
-  "05": 15000,
-  "06": 7000,
-};
 
 const options = {
   responsive: true,
@@ -57,20 +48,19 @@ const options = {
   maintainAspectRatio: false,
 };
 
-const labels = Object.keys(dataSet);
+const BarChart: React.FC<BarChartProps> = ({ data }) => {
+  const labels = Object.keys(data);
+  const chartData = {
+    labels,
+    datasets: [
+      {
+        data: Object.values(data),
+        backgroundColor: "#F29B7F",
+        borderRadius: 5,
+      },
+    ],
+  };
 
-const data = {
-  labels,
-  datasets: [
-    {
-      data: Object.values(dataSet),
-      backgroundColor: "#F29B7F",
-      borderRadius: 5,
-    },
-  ],
-};
-
-const BarChart: React.FC = () => {
   return (
     <div
       style={{
@@ -79,7 +69,7 @@ const BarChart: React.FC = () => {
         padding: "10px",
       }}
     >
-      <Bar options={options} data={data} />
+      <Bar options={options} data={chartData} />
     </div>
   );
 };

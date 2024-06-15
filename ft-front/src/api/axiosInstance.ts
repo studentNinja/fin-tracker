@@ -1,4 +1,4 @@
-import axios, { AxiosRequestConfig, AxiosResponse, AxiosError, InternalAxiosRequestConfig } from 'axios';
+import axios, { AxiosResponse, AxiosError, InternalAxiosRequestConfig } from 'axios';
 import { refreshToken } from '../features/auth/authThunks';
 import { logout } from '../features/auth/authSlice';
 import store from '../app/store';

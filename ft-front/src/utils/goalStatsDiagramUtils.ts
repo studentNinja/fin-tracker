@@ -31,8 +31,13 @@ export function getGoalTransactionsDiagramData(transactions: GoalTransaction[], 
         iterDate.setMonth(iterDate.getMonth() - 1)
     }
     let averageAmount= sum/activeMonthCount
+    
+    const reversedRes = Object.keys(res).reverse().reduce((acc, key) => {
+        acc[key] = res[key];
+        return acc;
+      }, {} as Record<string, number>);
 
-    return {average:averageAmount, diagramData: res }
+    return {average:averageAmount, diagramData: reversedRes }
 
 
 }
