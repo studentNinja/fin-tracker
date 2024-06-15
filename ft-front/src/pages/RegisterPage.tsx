@@ -1,4 +1,3 @@
-import UserForm from "../components/userForm";
 import { Link, useNavigate } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -36,10 +35,11 @@ export const RegisterPage: React.FC = () => {
     }
   }, [isAuthenticated, navigate]);
 
-  // const onSubmit = (e: React.FormEvent) => {
-  //   e.preventDefault();
-  //   dispatch(registerUser({ username, email, password, initialCapital, saving_goal:savingGoal }));
-  // };
+  useEffect(() => {
+    if (error) {
+      alert(error);
+    }
+  }, [error]);
 
   const onSubmit: SubmitHandler<IRegisterFormInput> = (
     data: IRegisterFormInput,
@@ -145,7 +145,7 @@ export const RegisterPage: React.FC = () => {
             {loading ? "Відбувається реєстрація..." : "Зареєструватись"}
           </button>
           {error && typeof error === "object" && error !== null ? (
-            <div>{error}</div>
+            <div>{JSON.stringify(error)}</div>
           ) : (
             <div>{error}</div>
           )}
@@ -153,5 +153,4 @@ export const RegisterPage: React.FC = () => {
       </div>
     </div>
   );
-  // <UserForm />;
 };
