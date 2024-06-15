@@ -1,6 +1,6 @@
 import React from "react";
 import BarChart from "./BarChart";
-import {getTransactionsByMonth} from "../../utils/dataUtils 2";
+import {getGoalTransactionsDiagramData} from "../../utils/goalStatsDiagramUtils";
 import {useSelector} from "react-redux";
 import {RootState} from "../../app/store";
 
@@ -12,7 +12,7 @@ const SpengingHistoryStats = () => {
       (state: RootState) => state.goalTransactions.goalTransactionsAll
   );
   const registerDate = useSelector((state: RootState) => state.user.userInfo?.registration_date);
-  getTransactionsByMonth(goalTransactionsAll,registerDate)
+  // getGoalTransactionsDiagramData(goalTransactionsAll,registerDate)
 
 
 
