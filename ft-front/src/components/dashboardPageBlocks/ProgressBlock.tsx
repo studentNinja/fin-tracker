@@ -18,24 +18,19 @@ import {
   getSavedAmountByCurrentMonthForGoal,
   getSavedAmountCurrentGoal,
 } from "../../utils/dataUtils";
-
 import { Transaction } from "../../types/transactionTypes";
 import { FixedExpense } from "../../types/fixedExpenseTypes";
 import { Income } from "../../types/incomeTypes";
-import {addGoal} from "../../features/goals/goalsThunks";
+import { addGoal } from "../../features/goals/goalsThunks";
 
 interface Props {
   showMoveMoneyPopUp: (
     title: string,
     moveFunct: (number: number) => void
   ) => void;
+  showCreateGoalPopUp: (createFunct: (number: number) => void) => void;
 }
 const DashboardBlock2: React.FC<Props> = (props) => {
-
-  showCreateGoalPopUp: (
-    createFunct: (number: number) => void
-  ) => void;
-}) => {
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
@@ -123,28 +118,29 @@ const DashboardBlock2: React.FC<Props> = (props) => {
 
   async function handleCreateGoal(number: number) {
     try {
-      if(lastGoal?.achieved){
+      if (lastGoal?.achieved) {
         await dispatch(
-            addGoal({
-              userId: "",
-              name: "Ціль",
-              amount: number,
-              achieved: false,
-              startDate: new Date().toISOString(),
-              createdAt: "",
-              updatedAt: "",
-            })
+          addGoal({
+            userId: "",
+            name: "Ціль",
+            amount: number,
+            achieved: false,
+            startDate: new Date().toISOString(),
+            createdAt: "",
+            updatedAt: "",
+          })
         );
         await dispatch(fetchUserProfile());
         await dispatch(fetchCurrentGoalTransactions());
-      }else{
-        throw new Error("Previous goal is not achieved, cannot create a new one")
+      } else {
+        throw new Error(
+          "Previous goal is not achieved, cannot create a new one"
+        );
       }
     } catch (error) {
       console.error("Error creating goal:", error);
     }
   }
-
 
   return !achieved ? (
     <div className="block block-2">
@@ -259,9 +255,7 @@ const DashboardBlock2: React.FC<Props> = (props) => {
         <div
           className="btn"
           //  create new goal pop up
-          onClick={() =>
-              props.showCreateGoalPopUp(handleCreateGoal)
-          }
+          onClick={() => props.showCreateGoalPopUp(handleCreateGoal)}
         >
           Створити нову ціль
         </div>
