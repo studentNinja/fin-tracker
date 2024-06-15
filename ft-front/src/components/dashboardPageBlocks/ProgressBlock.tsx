@@ -32,16 +32,16 @@ const DashboardBlock2 = (props: {
   const dispatch = useDispatch<AppDispatch>();
 
   const user = useSelector((state: RootState) => state.user.userInfo);
-  console.log(user)
+
   const goalTransactionsCurrent = useSelector(
     (state: RootState) => state.goalTransactions.goalTransactionsCurrent
   );
   const goalTransactionsAll = useSelector(
     (state: RootState) => state.goalTransactions.goalTransactionsAll
   );
-  console.log(goalTransactionsCurrent)
   // Return goal from the User that is last created
   const lastGoal = getRecentGoal(user);
+
   //Boolean : is the goal achieved?
   const achieved = lastGoal?.achieved;
 
