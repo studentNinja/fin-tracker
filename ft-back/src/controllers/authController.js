@@ -1,7 +1,9 @@
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 const config = require('../config/config');
-const { generateAccessToken, generateRefreshToken } = require('../utils/tokenUtils');
+const Goal = require("../models/Goal");
+const Income = require("../models/Income");
+
 
 exports.register = async (req, res) => {
     try {
@@ -15,8 +17,26 @@ exports.register = async (req, res) => {
             return res.status(400).send({ error: 'Email is already in use' });
         }
 
-        const newUser = new User({ username, email, password, capital, saving_goal });
-        await newUser.save();
+        const newUser = new User({
+            username,
+            email,
+            password,
+            capital,
+            saving_goal
+        });
+
+        let user = await newUser.save();
+
+        const newGoal = new Goal({ userId: user._id, name:"Ціль", amount:saving_goal});
+        await newGoal.save();
+
+        const newIncome = new Income({ userId: user._id, source:"Дохід", amount:capital });
+        await newIncome.save();
+
+        user.goals.push(newGoal._id);
+        user.incomes.push(newIncome._id);
+        await user.save();
+
 
         const accessToken = generateAccessToken(newUser._id);
         const refreshToken = generateRefreshToken(newUser._id);
