@@ -18,6 +18,7 @@ exports.register = async (req, res) => {
             return res.status(400).send({ error: 'Email is already in use' });
         }
 
+        
         const newUser = new User({
             username,
             email,
