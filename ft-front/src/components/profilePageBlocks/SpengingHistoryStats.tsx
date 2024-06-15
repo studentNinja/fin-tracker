@@ -1,9 +1,21 @@
 import React from "react";
 import BarChart from "./BarChart";
+import {getTransactionsByMonth} from "../../utils/dataUtils 2";
+import {useSelector} from "react-redux";
+import {RootState} from "../../app/store";
 
 const SpengingHistoryStats = () => {
   let estimationDate = "12.2024";
   let averagePutAwayNumber = 15000;
+
+  const goalTransactionsAll = useSelector(
+      (state: RootState) => state.goalTransactions.goalTransactionsAll
+  );
+  const registerDate = useSelector((state: RootState) => state.user.userInfo?.registration_date);
+  getTransactionsByMonth(goalTransactionsAll,registerDate)
+
+
+
   return (
     <div className="block block-flex-3 block-column-content">
       <div className="block-title">Історія відкладень</div>
