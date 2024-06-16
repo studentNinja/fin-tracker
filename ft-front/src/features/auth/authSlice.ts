@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { User } from '../../types/userTypes';
-import { loginUser, refreshToken ,registerUser} from './authThunks';
+import { loginUser, refreshToken, registerUser } from './authThunks';
 
 interface AuthState {
     user: User | null;
@@ -59,7 +59,8 @@ const authSlice = createSlice({
                 state.refreshToken = null;
                 localStorage.removeItem('accessToken');
                 localStorage.removeItem('refreshToken');
-            }).addCase(registerUser.pending, (state) => {
+            })
+            .addCase(registerUser.pending, (state) => {
                 state.loading = true;
                 state.error = null;
             })

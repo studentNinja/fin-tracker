@@ -17,7 +17,7 @@ interface LoginCredentials {
 }
 
 interface TokenResponse {
-    user:User
+    user: User;
     accessToken: string;
     refreshToken: string;
 }
@@ -33,7 +33,8 @@ export const registerUser = createAsyncThunk(
             return response.data;
         } catch (error: unknown) {
             if (axios.isAxiosError(error) && error.response) {
-                return rejectWithValue(error.response.data || 'An error occurred');
+                const message = error.response.data?.error || 'An error occurred';
+                return rejectWithValue(message);
             }
             return rejectWithValue('An error occurred');
         }
@@ -51,7 +52,8 @@ export const loginUser = createAsyncThunk(
             return response.data;
         } catch (error: unknown) {
             if (axios.isAxiosError(error) && error.response) {
-                return rejectWithValue(error.response.data || 'An error occurred');
+                const message = error.response.data?.error || error.response.data?.message || 'Invalid credentials';
+                return rejectWithValue(message);
             }
             return rejectWithValue('An error occurred');
         }
@@ -73,7 +75,8 @@ export const refreshToken = createAsyncThunk(
             return { accessToken };
         } catch (error: unknown) {
             if (axios.isAxiosError(error) && error.response) {
-                return rejectWithValue(error.response.data || 'An error occurred');
+                const message = error.response.data?.error || 'An error occurred';
+                return rejectWithValue(message);
             }
             return rejectWithValue('An error occurred');
         }

@@ -11,7 +11,6 @@ import SpengingHistoryStats from "../components/profilePageBlocks/SpengingHistor
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../app/store";
 import { fetchUserProfile } from "../features/user/userThunks";
-import { Category } from "../types/categoryTypes";
 import { Action, ThunkDispatch } from "@reduxjs/toolkit";
 import {
   fetchAllGoalTransactions,
@@ -29,9 +28,8 @@ const ProfilePage = () => {
     dispatch(fetchIncomes());
     dispatch(fetchTransactions());
   }, [dispatch]);
-  const { userInfo, loading, error } = useSelector(
-    (state: RootState) => state.user
-  );
+
+  const { userInfo } = useSelector((state: RootState) => state.user);
 
   const [titleChangeNumberPopUp, setTitleChangeNumberPopUp] = useState("");
 
@@ -41,43 +39,51 @@ const ProfilePage = () => {
     useState(false);
   const [visibilityChangeNumberPopUp, setVisibilityChangeNumberPopUp] =
     useState(false);
- const [visibilityChangePasswordPopUp, setVisibilityChangePasswordPopUp] =
+  const [visibilityChangePasswordPopUp, setVisibilityChangePasswordPopUp] =
     useState(false);
 
   const [functionsHolder, setFunctionsHolder] = useState({
     delete: () => {},
-    addFixedExpense: (name: string, amount: number) => {},
+    addFixedExpense: (
+      name: string,
+      amount: number,
+      setError: (field: string, message: string) => void
+    ) => {},
     changeGoal: (amount: number) => {},
-    changePassword: (currentPassword:string, newPassword:string) => {},
+    changePassword: (currentPassword: string, newPassword: string) => {},
   });
 
+  const [errorState, setErrorState] = useState({ name: "", amount: "" });
+
   function showConfirmDeletePopUp(deleteFunct: () => void) {
-    setFunctionsHolder(Object.assign(functionsHolder, { delete: deleteFunct }));
+    setFunctionsHolder({ ...functionsHolder, delete: deleteFunct });
     setVisibilityPopUpConfirmDelete(true);
   }
-  function showChangePasswordPopUp(changePassFunct: (currentPassword:string, newPassword:string ) => void) {
-    setFunctionsHolder(Object.assign(functionsHolder, { changePassword: changePassFunct }));
+
+  function showChangePasswordPopUp(
+    changePassFunct: (currentPassword: string, newPassword: string) => void
+  ) {
+    setFunctionsHolder({ ...functionsHolder, changePassword: changePassFunct });
     setVisibilityChangePasswordPopUp(true);
   }
 
-
   function showAddFixedExpensePopUp(
-    addFunct: (name: string, amount: number) => void
+    addFunct: (
+      name: string,
+      amount: number,
+      setError: (field: string, message: string) => void
+    ) => void
   ) {
-    setFunctionsHolder(
-      Object.assign(functionsHolder, { addFixedExpense: addFunct })
-    );
+    setFunctionsHolder({ ...functionsHolder, addFixedExpense: addFunct });
     setVisibilityAddFixedExpensePopUp(true);
   }
 
   function showChangeNumberPopUp(
     title: string,
-    changeFunct: (number: number) => void
+    changeFunct: (amount: number) => void
   ) {
     setTitleChangeNumberPopUp(title);
-    setFunctionsHolder(
-      Object.assign(functionsHolder, { changeGoal: changeFunct })
-    );
+    setFunctionsHolder({ ...functionsHolder, changeGoal: changeFunct });
     setVisibilityChangeNumberPopUp(true);
   }
 
@@ -89,20 +95,20 @@ const ProfilePage = () => {
             <UserInfoBlock
               showConfirmDeletePopUp={showConfirmDeletePopUp}
               showChangePasswordPopUp={showChangePasswordPopUp}
-            ></UserInfoBlock>
+            />
             <div className="one-row-block-container block-flex-3">
-              <MonthStatsBlock></MonthStatsBlock>
+              <MonthStatsBlock />
               <FixedExpensesBlock
                 showConfirmDeletePopUp={showConfirmDeletePopUp}
-                showPopUpAddFixedExpense={showAddFixedExpensePopUp}
-              ></FixedExpensesBlock>
+                showPopUpAddFixedExpense={(addFunct) =>
+                  showAddFixedExpensePopUp(addFunct)
+                }
+              />
             </div>
           </div>
           <div className="one-row-block-container one-row-block-container-2">
-            <GoalProgressBlock
-              showChangeGoalNumber={showChangeNumberPopUp}
-            ></GoalProgressBlock>
-            <SpengingHistoryStats></SpengingHistoryStats>
+            <GoalProgressBlock showChangeGoalNumber={showChangeNumberPopUp} />
+            <SpengingHistoryStats />
           </div>
         </>
       )}
@@ -117,7 +123,12 @@ const ProfilePage = () => {
         <AddIncomeOrFixedExpensesPopUp
           title={"Додати постійну витрату"}
           cancel={() => setVisibilityAddFixedExpensePopUp(false)}
-          confirmAdd={functionsHolder.addFixedExpense}
+          confirmAdd={(name, amount) =>
+            functionsHolder.addFixedExpense(name, amount, (field, message) =>
+              setErrorState((prevState) => ({ ...prevState, [field]: message }))
+            )
+          }
+          errorState={errorState}
         />
       )}
       {visibilityChangeNumberPopUp && (
@@ -127,7 +138,7 @@ const ProfilePage = () => {
           confirmChange={functionsHolder.changeGoal}
         />
       )}
-        {visibilityChangePasswordPopUp && (
+      {visibilityChangePasswordPopUp && (
         <ChangePasswordPopUp
           cancel={() => setVisibilityChangePasswordPopUp(false)}
           confirmChange={functionsHolder.changePassword}
