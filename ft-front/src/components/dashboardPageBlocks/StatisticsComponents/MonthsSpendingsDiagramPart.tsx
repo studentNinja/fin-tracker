@@ -6,9 +6,10 @@ const MonthsSpendingsDiagramPart = (props: {
   putAwayNumber: number;
   income: number;
 }) => {
+
   let leftNumber = props.income - props.spentNumber - props.putAwayNumber;
-  let spentPercent = Math.round((props.spentNumber / props.income) * 100);
-  let putAwayPercent = Math.round((props.putAwayNumber / props.income) * 100);
+  let spentPercent = props.income!==0?Math.round((props.spentNumber / props.income) * 100):0;
+  let putAwayPercent =  props.income!==0?Math.round((props.putAwayNumber / props.income) * 100):0;
 
   return (
     <div className="months-spendings-diagram-part">

@@ -39,7 +39,7 @@ const IncomeBlock: React.FC<Props> = (props) => {
   );
 
   const goalTransactionsCurrent = useSelector(
-    (state: RootState) => state.goalTransactions.goalTransactionsCurrent
+    (state: RootState) => state.goalTransactions.goalTransactionsAll
   );
 
   const transactions = useSelector(
@@ -58,9 +58,11 @@ const IncomeBlock: React.FC<Props> = (props) => {
     incomes
   );
 
+
   async function handleDeleteIncome(id: string, amount: number) {
     try {
       validateIncomeDelete(amount, balance);
+
       await dispatch(deleteIncome(id));
     } catch (error) {
       console.error("Error deleting income:", error);

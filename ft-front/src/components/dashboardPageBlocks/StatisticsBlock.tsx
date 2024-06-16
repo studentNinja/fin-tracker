@@ -75,11 +75,12 @@ const StatisticsBlock = (props: {
     getGoalTransactionsAmountCurrentMonth(goalTransactionsAll);
   const incomeAmount = getIncomeAmountCurrentMonth(incomes);
   const balance = getBalance(
-    goalTransactionsCurrent,
+      goalTransactionsAll,
     transactions,
     fixedExpenses,
     incomes
   );
+
   const arraySpendings = getTransactionsArrayCurrentMonth(
     transactions,
     fixedExpenses
