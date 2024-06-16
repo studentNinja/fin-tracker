@@ -44,7 +44,7 @@ const MonthStatsBlock = () => {
     getGoalTransactionsAmountCurrentMonth(goalTransactionsAll);
   let incomeAmount = getIncomeAmountCurrentMonth(incomes);
   let balance = getBalance(
-    goalTransactionsCurrent,
+      goalTransactionsAll,
     transactions,
     fixedExpenses,
     incomes
@@ -52,7 +52,8 @@ const MonthStatsBlock = () => {
   let fixedExpensesAmount = getTransactionsAmountByCategoryId(
     1,
     categoryMap,
-    transactions
+    transactions,
+      fixedExpenses
   );
   let transactionsTotalSumWithoutFixed =
     transactionsTotalSum - fixedExpensesAmount;

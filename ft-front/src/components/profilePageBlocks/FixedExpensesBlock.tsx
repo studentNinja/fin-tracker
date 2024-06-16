@@ -45,7 +45,7 @@ const FixedExpensesBlock = (props: {
   );
 
   const balance = getBalance(
-    goalTransactionsCurrent,
+      goalTransactionsAll,
     transactions,
     fixedExpenses,
     incomes

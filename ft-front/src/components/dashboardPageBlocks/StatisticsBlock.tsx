@@ -90,7 +90,8 @@ const StatisticsBlock = (props: {
     const totalAmount = getTransactionsAmountByCategoryId(
       Number(key),
       categoryMap,
-      transactions
+      transactions,
+        fixedExpenses
     );
     return {
       id: Number(key),

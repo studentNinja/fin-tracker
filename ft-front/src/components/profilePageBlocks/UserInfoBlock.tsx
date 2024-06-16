@@ -5,8 +5,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../app/store";
 import { formatDate } from "../../utils/dateUtils";
 import { logout } from "../../features/auth/authSlice";
+import {deleteUser, updatePassword} from "../../features/user/userThunks";
 const UserInfoBlock = (props: {
   showConfirmDeletePopUp: (deleteFunct: () => void) => void;
+  showChangePasswordPopUp: (changePassFunct: (currentPassword:string, newPassword:string ) => void) => void;
 }) => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
@@ -15,13 +17,23 @@ const UserInfoBlock = (props: {
 
   let date = formatDate(user?.userInfo?.registration_date);
 
-  function deleteAccount() {
+  function handleDeleteAccount() {
     alert("account deleted");
-    // dispatch(deleteAccount())
+    dispatch(deleteUser())
     dispatch(logout());
     navigate("/login");
-    /// to do: DELETE account
+
   }
+  function handleChangePassword(currentPassword:string, newPassword:string ) {
+      try{
+          dispatch(updatePassword({currentPassword, newPassword}))
+      }catch (error) {
+          console.error("Error changing password:", error);
+      }
+
+  }
+
+
 
   return (
     <div className="block block-flex-1 block-column-content user-info-block">
@@ -32,16 +44,28 @@ const UserInfoBlock = (props: {
         <h4>{userName}</h4>
         <div className="register-date-container">Дата реєстрації {date}</div>
       </div>
-      <a
+        <div style={{display:"flex", flexDirection:"column"}}><a
+            href="#"
+            onClick={(e) => {
+                e.preventDefault();
+                props.showChangePasswordPopUp(handleChangePassword);
+            }}
+            className="delete-option"
+        >
+            Змінити пароль
+        </a>
+      <a style={{marginTop:0}}
         href="#"
         onClick={(e) => {
           e.preventDefault();
-          props.showConfirmDeletePopUp(() => deleteAccount());
+          props.showConfirmDeletePopUp(() => handleDeleteAccount());
         }}
         className="delete-option"
       >
         Видалити акаунт
       </a>
+
+    </div>
     </div>
   );
 };

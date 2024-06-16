@@ -5,6 +5,8 @@ import { Category } from "../types/categoryTypes";
 import { filterCurrentMonth, filterPrevMonth } from "./arrayUtils";
 import { Income } from "../types/incomeTypes";
 import { FixedExpense } from "../types/fixedExpenseTypes";
+import fixedExpensesSlice from "../features/fixedExpenses/fixedExpensesSlice";
+import FixedExpensesSlice from "../features/fixedExpenses/fixedExpensesSlice";
 
 function isTransaction(item: any): item is Transaction {
     return (item as Transaction).category !== undefined;
@@ -45,11 +47,13 @@ export function getRecentGoal(goals: Goal[]): Goal | null {
 export function getTransactionsAmountByCategoryId(
     categoryId: number,
     categoryMap: Record<number, Category>,
-    transactions: (Transaction | GoalTransaction | Income)[]
+    transactions: (Transaction | GoalTransaction | Income)[],
+    fixedExpenses: FixedExpense[]
 ): number {
     if (!transactions) return 0;
 
-    const categoryTransactions = filterCurrentMonth(transactions.filter(isTransaction))
+    // const categoryTransactions = filterCurrentMonth(transactions.filter(isTransaction))
+    const categoryTransactions = getTransactionsArrayCurrentMonth(transactions,fixedExpenses)
         .filter((transaction) => transaction.category === categoryMap[categoryId]);
 
     return categoryTransactions.reduce((sum, transaction) => sum + transaction.amount, 0);
