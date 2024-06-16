@@ -89,6 +89,7 @@ h4{
 }
 .img-container{
     flex: 1;
+    max-height: 55%;
 }
 .one-row-block-container-2{
     max-height: 100%;

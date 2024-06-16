@@ -6,6 +6,7 @@ import { categoryMap } from "../../../utils/categoryData";
 import { fetchTransactions } from "../../../features/transactions/transactionThunks";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState, AppDispatch } from "../../../app/store";
+import {getTransactionsArrayCurrentMonth} from "../../../utils/dataUtils";
 
 const SpendingsHistoryPart = (props: {
   selectedCategory: number;
@@ -19,8 +20,16 @@ const SpendingsHistoryPart = (props: {
     dispatch(fetchTransactions());
   }, [dispatch]);
 
-  const spendings = useSelector(
+  const transactions = useSelector(
     (state: RootState) => state.transactions.transactions
+  );
+const fixedExpenses = useSelector(
+    (state: RootState) => state.fixedExpenses.fixedExpenses
+  );
+
+  const spendings = getTransactionsArrayCurrentMonth(
+      transactions,
+      fixedExpenses
   );
 
   let arraySpendingsFiltered = spendings.slice();

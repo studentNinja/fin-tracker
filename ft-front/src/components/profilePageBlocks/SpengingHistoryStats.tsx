@@ -3,36 +3,42 @@ import BarChart from "./BarChart";
 import { getGoalTransactionsDiagramData } from "../../utils/goalStatsDiagramUtils";
 import { useSelector } from "react-redux";
 import { RootState } from "../../app/store";
+import {getRecentGoal, getSavedAmountCurrentGoal} from "../../utils/dataUtils";
 
 const SpendingHistoryStats = () => {
   const goalTransactionsCurrent = useSelector(
     (state: RootState) => state.goalTransactions.goalTransactionsCurrent
   );
+  const goalTransactionsAll = useSelector(
+    (state: RootState) => state.goalTransactions.goalTransactionsAll
+  );
   const registerDate = useSelector(
     (state: RootState) => state.user.userInfo?.registration_date
   );
-  const savingGoal = useSelector(
-    (state: RootState) => state.user.userInfo?.saving_goal
-  );
 
-  const savedAmount = useMemo(() => {
-    return goalTransactionsCurrent.reduce(
-      (sum, transaction) => sum + transaction.amount,
-      0
-    );
-  }, [goalTransactionsCurrent]);
+  const goals = useSelector((state: RootState) => state.goals.goals);
+
+  // Return goal from the User that is last created
+  const lastGoal = getRecentGoal(goals);
+
+  const goalAmount = lastGoal ? lastGoal.amount : 0;
+
+  const savedAmount = lastGoal?.achieved
+      ? goalAmount
+      : getSavedAmountCurrentGoal(goalTransactionsCurrent);
+
 
   const { average: averagePutAwayNumber, diagramData } = useMemo(() => {
     return getGoalTransactionsDiagramData(
-      goalTransactionsCurrent,
+      goalTransactionsAll,
       registerDate
     );
-  }, [goalTransactionsCurrent, registerDate]);
+  }, [goalTransactionsAll, registerDate]);
 
   const estimationDate = useMemo(() => {
-    if (!savingGoal || !savedAmount || averagePutAwayNumber === 0) return "N/A";
+    if (!goalAmount || averagePutAwayNumber === 0 || lastGoal?.achieved) return "N/A";
     const monthsRemaining = Math.ceil(
-      (savingGoal - savedAmount) / averagePutAwayNumber
+      (goalAmount - savedAmount) / averagePutAwayNumber
     );
     const estimatedDate = new Date();
     estimatedDate.setMonth(estimatedDate.getMonth() + monthsRemaining);
@@ -40,7 +46,7 @@ const SpendingHistoryStats = () => {
       month: "long",
       year: "numeric",
     });
-  }, [savingGoal, savedAmount, averagePutAwayNumber]);
+  }, [goalAmount, savedAmount, averagePutAwayNumber]);
 
   return (
     <div className="block block-flex-3 block-column-content">
@@ -55,8 +61,8 @@ const SpendingHistoryStats = () => {
             <div> у середньому відкладається за місяць</div>
           </div>
           <div>
-            <b>Досягнення цілі</b>
-            <br /> очікується {estimationDate}{" "}
+            <b>Очікувана дата досягнення цілі: </b>
+            {estimationDate}{" "}
           </div>
         </div>
       </div>

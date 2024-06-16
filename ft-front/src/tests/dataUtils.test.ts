@@ -62,15 +62,15 @@ describe('getTransactionsAmountByCategoryId', () => {
         const categoryMap = {
             1: 'pets' as Category
         };
-        const amount = getTransactionsAmountByCategoryId(1, categoryMap, mockTransactions);
+        const amount = getTransactionsAmountByCategoryId(1, categoryMap, mockTransactions,mockFixedExpenses);
         expect(amount).toBe(0);
     });
 
     it('returns 0 if transactions array is empty or null', () => {
-        const amount = getTransactionsAmountByCategoryId(1, {}, []);
+        const amount = getTransactionsAmountByCategoryId(1, {}, [],[]);
         expect(amount).toBe(0);
 
-        const amount2 = getTransactionsAmountByCategoryId(1, {}, null as unknown as Transaction[]);
+        const amount2 = getTransactionsAmountByCategoryId(1, {}, null as unknown as Transaction[], null as unknown as FixedExpense[]);
         expect(amount2).toBe(0);
     });
 });

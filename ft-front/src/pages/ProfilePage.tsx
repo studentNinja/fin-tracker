@@ -19,6 +19,7 @@ import {
 } from "../features/goalTransactions/goalTransactionsThunks";
 import { fetchIncomes } from "../features/income/incomeThunks";
 import { fetchTransactions } from "../features/transactions/transactionThunks";
+import ChangePasswordPopUp from "../components/pop-ups/ChangePasswordPopUp";
 
 const ProfilePage = () => {
   const dispatch = useDispatch<ThunkDispatch<RootState, void, Action>>();
@@ -40,17 +41,26 @@ const ProfilePage = () => {
     useState(false);
   const [visibilityChangeNumberPopUp, setVisibilityChangeNumberPopUp] =
     useState(false);
+ const [visibilityChangePasswordPopUp, setVisibilityChangePasswordPopUp] =
+    useState(false);
 
   const [functionsHolder, setFunctionsHolder] = useState({
     delete: () => {},
     addFixedExpense: (name: string, amount: number) => {},
     changeGoal: (amount: number) => {},
+    changePassword: (currentPassword:string, newPassword:string) => {},
   });
 
   function showConfirmDeletePopUp(deleteFunct: () => void) {
     setFunctionsHolder(Object.assign(functionsHolder, { delete: deleteFunct }));
     setVisibilityPopUpConfirmDelete(true);
   }
+  function showChangePasswordPopUp(changePassFunct: (currentPassword:string, newPassword:string ) => void) {
+    setFunctionsHolder(Object.assign(functionsHolder, { changePassword: changePassFunct }));
+    setVisibilityChangePasswordPopUp(true);
+  }
+
+
   function showAddFixedExpensePopUp(
     addFunct: (name: string, amount: number) => void
   ) {
@@ -78,6 +88,7 @@ const ProfilePage = () => {
           <div className="one-row-block-container">
             <UserInfoBlock
               showConfirmDeletePopUp={showConfirmDeletePopUp}
+              showChangePasswordPopUp={showChangePasswordPopUp}
             ></UserInfoBlock>
             <div className="one-row-block-container block-flex-3">
               <MonthStatsBlock></MonthStatsBlock>
@@ -114,6 +125,12 @@ const ProfilePage = () => {
           title={titleChangeNumberPopUp}
           cancel={() => setVisibilityChangeNumberPopUp(false)}
           confirmChange={functionsHolder.changeGoal}
+        />
+      )}
+        {visibilityChangePasswordPopUp && (
+        <ChangePasswordPopUp
+          cancel={() => setVisibilityChangePasswordPopUp(false)}
+          confirmChange={functionsHolder.changePassword}
         />
       )}
     </div>
