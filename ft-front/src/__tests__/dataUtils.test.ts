@@ -13,7 +13,7 @@ import {
     getGoalTransactionsAmountCurrentMonth
 } from '../utils/dataUtils';
 
-import { mockGoalTransactions, mockUser, mockTransactions, mockFixedExpenses, mockIncomes } from "../tests/mockUserData";
+import { mockGoalTransactions, mockUser, mockTransactions, mockFixedExpenses, mockIncomes } from "../mockData/mockUserData";
 import { Category } from "../types/categoryTypes";
 import { Transaction } from '../types/transactionTypes';
 import { GoalTransaction } from '../types/goalTransactionTypes';
@@ -124,6 +124,10 @@ describe('getBalance', () => {
         const balance = getBalance(mockGoalTransactions, mockTransactions, mockFixedExpenses, mockIncomes);
         expect(balance).toBe(50);
     });
+    it('should return 0 if user is null', () => {
+        const balance = getBalance([],[],[], []);
+        expect(balance).toBe(0);
+      });
 });
 
 describe('getTransactionsAmountCurrentMonth', () => {
