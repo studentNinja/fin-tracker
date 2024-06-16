@@ -2,7 +2,8 @@ import { filterCurrentMonth, filterbyMonthAndYear, filterPrevMonth } from '../ut
 import { Transaction } from '../types/transactionTypes';
 import { GoalTransaction } from '../types/goalTransactionTypes';
 import { Income } from '../types/incomeTypes';
-import { mockUser, mockGoalTransactions } from '../tests/mockUserData';
+import { mockUser, mockGoalTransactions } from '../mockData/mockUserData';
+// import "@testing-library/jest-dom/extend-expect"; 
 
 
 const transactions: Transaction[] = mockUser.transactions as Transaction[];
