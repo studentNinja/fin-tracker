@@ -3,6 +3,7 @@ import { Navigate, Outlet, useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { AppDispatch, RootState } from "../../app/store";
 import { fetchUserProfile } from "../../features/user/userThunks";
+import { fetchFixedExpenses } from "../../features/fixedExpenses/fixedExpensesThunks";
 
 interface PrivateRouteProps {
   children?: ReactElement;
@@ -13,6 +14,7 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({ children }) => {
 
   useEffect(() => {
     dispatch(fetchUserProfile());
+    dispatch(fetchFixedExpenses());
   }, [dispatch]);
 
   const isAuthenticated = useSelector(
