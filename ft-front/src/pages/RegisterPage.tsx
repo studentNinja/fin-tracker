@@ -1,28 +1,74 @@
 import { Link, useNavigate } from "react-router-dom";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../app/store";
 import { registerUser } from "../features/auth/authThunks";
 
 interface IRegisterFormInput {
-  confirmPassword: string;
+  username: string;
+  email: string;
   password: string;
+  confirmPassword: string;
+  initialCapital: number;
+  savingGoal: number;
 }
 
-export const RegisterPage: React.FC = () => {
-  const [username, setUserName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [initialCapital, setInitialCapital] = useState<number>(0);
-  const [savingGoal, setSavingGoal] = useState<number>(0);
-  const navigate = useNavigate();
+const schema = yup.object().shape({
+  username: yup
+    .string()
+    .required("Введіть ім'я")
+    .min(4, "Ім'я має містити щонайменше 4 символи")
+    .matches(
+      /^[a-z0-9_-]{3,16}$/,
+      "Ім'я не повинно містити спецсимволи як '{}[]', ',', '$', '.'"
+    ),
+  email: yup
+    .string()
+    .required("Введіть пошту")
+    .email("Некоректна пошта")
+    .matches(
+      /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6})*$/,
+      "Некоректна пошта"
+    ),
+  password: yup
+    .string()
+    .required("Придумайте пароль")
+    .min(8, "Пароль має містити щонайменше 8 символів")
+    .matches(
+      /(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/,
+      "Пароль повинен містити хоча б одну літеру та одну цифру"
+    ),
+  confirmPassword: yup
+    .string()
+    .oneOf([yup.ref("password"), undefined], "Паролі не збігаються")
+    .required("Повторіть пароль")
+    .min(8, "Пароль має містити щонайменше 8 символів")
+    .matches(
+      /(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/,
+      "Пароль повинен містити хоча б одну літеру та одну цифру"
+    ),
+  initialCapital: yup
+    .number()
+    .required("Введіть початковий капітал")
+    .min(0, "Початковий капітал має бути не менше 0"),
+  savingGoal: yup
+    .number()
+    .required("Введіть суму накопичення")
+    .min(0, "Сума накопичення має бути не менше 0"),
+});
 
+export const RegisterPage: React.FC = () => {
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<IRegisterFormInput>();
+  } = useForm<IRegisterFormInput>({
+    resolver: yupResolver(schema) as any,
+  });
 
   const dispatch = useDispatch<AppDispatch>();
   const { loading, error, isAuthenticated } = useSelector(
@@ -41,20 +87,14 @@ export const RegisterPage: React.FC = () => {
     }
   }, [error]);
 
-  const onSubmit: SubmitHandler<IRegisterFormInput> = (
-    data: IRegisterFormInput,
-    event
-  ) => {
-    if (event) {
-      event.preventDefault();
-    }
+  const onSubmit: SubmitHandler<IRegisterFormInput> = (data) => {
     dispatch(
       registerUser({
-        username,
-        email,
-        password,
-        capital: initialCapital,
-        saving_goal: savingGoal,
+        username: data.username,
+        email: data.email,
+        password: data.password,
+        capital: data.initialCapital,
+        saving_goal: data.savingGoal,
       })
     );
   };
@@ -73,75 +113,39 @@ export const RegisterPage: React.FC = () => {
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="input-container input-container-1-in-row">
             <label>Введіть ім'я</label>
-            <input
-              type="text"
-              value={username}
-              onChange={(e) => setUserName(e.target.value)}
-              required
-              minLength={4}
-            />
+            <input type="text" {...register("username")} />
+            {errors.username && <p>{errors.username.message}</p>}
           </div>
           <div className="input-container input-container-1-in-row">
             <label>Введіть пошту</label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
+            <input type="email" {...register("email")} />
+            {errors.email && <p>{errors.email.message}</p>}
           </div>
-          <div className=" input-container-1-in-row wrapper-row">
+          <div className="input-container-1-in-row wrapper-row">
             <div className="input-container input-container-2-in-row">
               <label>Придумайте пароль</label>
-              <input
-                type="password"
-                minLength={8}
-                value={password}
-                {...register("password", { required: "Введіть значення" })}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
+              <input type="password" {...register("password")} />
+              {errors.password && <p>{errors.password.message}</p>}
             </div>
             <div className="input-container input-container-2-in-row">
               <label>Повторіть пароль</label>
-              <input
-                type="password"
-                minLength={8}
-                {...register("confirmPassword", {
-                  required: "Введіть значення",
-                  validate: (value) =>
-                    value === password || "Паролі не збігаються",
-                })}
-                required
-              />
+              <input type="password" {...register("confirmPassword")} />
               {errors.confirmPassword && (
                 <p>{errors.confirmPassword.message}</p>
               )}
             </div>
           </div>
-
-          <div className="input-container input-container-1-in-row">
-            <label>Введіть суму накопичення</label>
-            <input
-              type="number"
-              min="0"
-              value={savingGoal}
-              onChange={(e) => setSavingGoal(Number(e.target.value))}
-              required
-            />
-          </div>
           <div className="input-container input-container-1-in-row">
             <label>Введіть початковий капітал</label>
-            <input
-              type="number"
-              min="0"
-              value={initialCapital}
-              onChange={(e) => setInitialCapital(Number(e.target.value))}
-              required
-            />
+            <input type="number" {...register("initialCapital")} />
+            {errors.initialCapital && <p>{errors.initialCapital.message}</p>}
           </div>
-
-          <button className=" form-button" type="submit" disabled={loading}>
+          <div className="input-container input-container-1-in-row">
+            <label>Введіть суму накопичення</label>
+            <input type="number" {...register("savingGoal")} />
+            {errors.savingGoal && <p>{errors.savingGoal.message}</p>}
+          </div>
+          <button className="form-button" type="submit" disabled={loading}>
             {loading ? "Відбувається реєстрація..." : "Зареєструватись"}
           </button>
           {error && typeof error === "object" && error !== null ? (
