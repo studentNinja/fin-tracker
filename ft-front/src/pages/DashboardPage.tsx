@@ -24,12 +24,16 @@ const DashboardPage: React.FC = () => {
     useState(false);
   const [visibilityAddSpendingPopUp, setVisibilityAddSpendingPopUp] =
     useState(false);
- const [visibilityCreateGoalPopUp, setVisibilityCreateGoalPopUp] =
+  const [visibilityCreateGoalPopUp, setVisibilityCreateGoalPopUp] =
     useState(false);
 
   const [functionsHolder, setFunctionsHolder] = useState({
     delete: () => {},
-    addIncome: (title: string, number: number) => {},
+    addIncome: (
+      title: string,
+      number: number,
+      setError: (field: string, message: string) => void
+    ) => {},
     addSpending: (categoryId: number, title: string, number: number) => {},
     addFixedExpense: (title: string, number: number) => {},
     moveMoney: (number: number) => {},
@@ -37,6 +41,7 @@ const DashboardPage: React.FC = () => {
   });
 
   const [titleMoveMoneyPopUp, setTitleMoveMoneyPopUp] = useState("");
+  const [errorState, setErrorState] = useState({ name: "", amount: "" });
 
   function showConfirmDeletePopUp(deleteFunct: () => void) {
     setFunctionsHolder((prev) => ({ ...prev, delete: deleteFunct }));
@@ -44,7 +49,11 @@ const DashboardPage: React.FC = () => {
   }
 
   function showPopUpAddIncome(
-    addFunct: (title: string, number: number) => void
+    addFunct: (
+      title: string,
+      number: number,
+      setError: (field: string, message: string) => void
+    ) => void
   ) {
     setFunctionsHolder((prev) => ({ ...prev, addIncome: addFunct }));
     setVisibilityPopUpAddIncome(true);
@@ -65,11 +74,10 @@ const DashboardPage: React.FC = () => {
     setFunctionsHolder((prev) => ({ ...prev, addSpending: addFunct }));
     setVisibilityAddSpendingPopUp(true);
   }
-  function showCreateGoalPopUp(
-      createFunct: (number: number) => void)
-  {
+
+  function showCreateGoalPopUp(createFunct: (number: number) => void) {
     setFunctionsHolder(
-        Object.assign(functionsHolder, { createGoal: createFunct })
+      Object.assign(functionsHolder, { createGoal: createFunct })
     );
     setVisibilityCreateGoalPopUp(true);
   }
@@ -84,8 +92,8 @@ const DashboardPage: React.FC = () => {
               showPopUpAddIncome={showPopUpAddIncome}
             />
             <DashboardBlock2
-                showMoveMoneyPopUp={showMoveMoneyPopUp}
-                showCreateGoalPopUp={showCreateGoalPopUp}
+              showMoveMoneyPopUp={showMoveMoneyPopUp}
+              showCreateGoalPopUp={showCreateGoalPopUp}
             />
           </div>
           <DashboardBlock3
@@ -105,7 +113,12 @@ const DashboardPage: React.FC = () => {
         <AddIncomeOrFixedExpensesPopUp
           title={"Додати джерело доходу"}
           cancel={() => setVisibilityPopUpAddIncome(false)}
-          confirmAdd={functionsHolder.addIncome}
+          confirmAdd={(name, amount) =>
+            functionsHolder.addIncome(name, amount, (field, message) =>
+              setErrorState((prevState) => ({ ...prevState, [field]: message }))
+            )
+          }
+          errorState={errorState}
         />
       )}
       {visibilityMoveMoneyPopUp && (
@@ -122,11 +135,11 @@ const DashboardPage: React.FC = () => {
         />
       )}
       {visibilityCreateGoalPopUp && (
-          <ChangeNumberPopUp
-              title="Створити нову ціль"
-              cancel={() => setVisibilityCreateGoalPopUp(false)}
-              confirmChange={functionsHolder.createGoal}
-          />
+        <ChangeNumberPopUp
+          title="Створити нову ціль"
+          cancel={() => setVisibilityCreateGoalPopUp(false)}
+          confirmChange={functionsHolder.createGoal}
+        />
       )}
     </div>
   );

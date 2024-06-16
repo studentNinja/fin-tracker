@@ -7,7 +7,6 @@ import {
   fetchFixedExpenses,
   addFixedExpense as addFixedExpenseThunk,
   deleteFixedExpense as deleteFixedExpenseThunk,
-  getFixedExpenseById,
 } from "../../features/fixedExpenses/fixedExpensesThunks";
 import { Category } from "../../types/categoryTypes";
 import { getBalance } from "../../utils/dataUtils";
@@ -15,17 +14,17 @@ import { getBalance } from "../../utils/dataUtils";
 const FixedExpensesBlock = (props: {
   showConfirmDeletePopUp: (deleteFunct: () => void) => void;
   showPopUpAddFixedExpense: (
-    addFunct: (name: string, amount: number) => void
+    addFunct: (
+      name: string,
+      amount: number,
+      setError: (field: string, message: string) => void
+    ) => void
   ) => void;
 }) => {
   const dispatch = useDispatch<AppDispatch>();
   useEffect(() => {
     dispatch(fetchFixedExpenses());
   }, [dispatch]);
-
-  const goalTransactionsCurrent = useSelector(
-    (state: RootState) => state.goalTransactions.goalTransactionsCurrent
-  );
 
   const transactions = useSelector(
     (state: RootState) => state.transactions.transactions
@@ -35,38 +34,40 @@ const FixedExpensesBlock = (props: {
   const fixedExpenses = useSelector(
     (state: RootState) => state.fixedExpenses.fixedExpenses
   );
-  const loading = useSelector(
-    (state: RootState) => state.fixedExpenses.loading
-  );
-  const error = useSelector((state: RootState) => state.fixedExpenses.error);
-  const user = useSelector((state: RootState) => state.user.userInfo);
-  const goalTransactionsAll = useSelector(
-    (state: RootState) => state.goalTransactions.goalTransactionsAll
-  );
-
-  const balance = getBalance(
-      goalTransactionsAll,
-    transactions,
-    fixedExpenses,
-    incomes
+  const balance = useSelector((state: RootState) =>
+    getBalance(
+      state.goalTransactions.goalTransactionsAll,
+      transactions,
+      fixedExpenses,
+      incomes
+    )
   );
 
-  let [arrayFixedExpenses, setArrayFixedExpenses] = useState<FixedExpense[]>(
-    []
-  );
+  const [errorState, setErrorState] = useState({ name: "", amount: "" });
 
-  useEffect(() => {
-    if (fixedExpenses) {
-      setArrayFixedExpenses(fixedExpenses);
+  function handleAddFixedExpense(
+    name: string,
+    amount: number,
+    setError: (field: string, message: string) => void
+  ) {
+    let hasError = false;
+
+    if (name.length === 0) {
+      setError("name", "Введіть назву");
+      hasError = true;
     }
-  }, [fixedExpenses]);
+    if (amount <= 0) {
+      setError("amount", "Неправильне значення суми");
+      hasError = true;
+    }
+    if (balance < amount) {
+      setError("amount", "Недостатньо коштів для здійснення операції");
+      hasError = true;
+    }
 
-  function handleAddFixedExpense(name: string, amount: number) {
-    if (name.length === 0) throw new Error("Введіть назву");
-    if (!validateSpendingNumber(amount))
-      throw new Error("Недостатньо коштів для здійснення операції");
-
-    if (amount <= 0) throw new Error("Неправильне значення суми");
+    if (hasError) {
+      return;
+    }
 
     const newExpense = {
       name,
@@ -74,10 +75,6 @@ const FixedExpensesBlock = (props: {
       category: "fixed" as Category,
     };
     dispatch(addFixedExpenseThunk(newExpense));
-  }
-
-  function validateSpendingNumber(number: number) {
-    return balance >= number;
   }
 
   function handleDeleteFixedExpense(id: string) {
@@ -89,15 +86,15 @@ const FixedExpensesBlock = (props: {
       <div className="block-title">Постійні витрати</div>
       <div className="income-number-container">
         <div className="income-number">
-          {arrayFixedExpenses
+          {fixedExpenses
             .reduce((res, curr) => res + curr.amount, 0)
             .toLocaleString("uk-UA")}
         </div>
         <div
           className="add-btn"
           onClick={() =>
-            props.showPopUpAddFixedExpense((name: string, amount: number) =>
-              handleAddFixedExpense(name, amount)
+            props.showPopUpAddFixedExpense((name, amount, setError) =>
+              handleAddFixedExpense(name, amount, setError)
             )
           }
         >
@@ -107,33 +104,31 @@ const FixedExpensesBlock = (props: {
       <div className="line"></div>
 
       <div className="list">
-        {arrayFixedExpenses.map((expense) => {
-          return (
-            <div
-              key={expense._id}
-              style={{ display: "flex", gap: "5px", flexDirection: "column" }}
-            >
-              <div className="list-elem">
-                <div>{expense.name}</div>
-                <div className="list-elem-end-block">
-                  <div className="delete-btn">
-                    <img
-                      src={deleteBtn}
-                      onClick={() =>
-                        props.showConfirmDeletePopUp(() =>
-                          handleDeleteFixedExpense(expense._id)
-                        )
-                      }
-                      alt="delete"
-                    />
-                  </div>
-                  <div>{expense.amount.toLocaleString("uk-UA")}</div>
+        {fixedExpenses.map((expense) => (
+          <div
+            key={expense._id}
+            style={{ display: "flex", gap: "5px", flexDirection: "column" }}
+          >
+            <div className="list-elem">
+              <div>{expense.name}</div>
+              <div className="list-elem-end-block">
+                <div className="delete-btn">
+                  <img
+                    src={deleteBtn}
+                    onClick={() =>
+                      props.showConfirmDeletePopUp(() =>
+                        handleDeleteFixedExpense(expense._id)
+                      )
+                    }
+                    alt="delete"
+                  />
                 </div>
+                <div>{expense.amount.toLocaleString("uk-UA")}</div>
               </div>
-              <div className="list-line"></div>
             </div>
-          );
-        })}
+            <div className="list-line"></div>
+          </div>
+        ))}
       </div>
     </div>
   );

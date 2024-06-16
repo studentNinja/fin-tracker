@@ -1,64 +1,85 @@
-import React, { useState } from "react";
+import React from "react";
 import "../../styles/pop-up.css";
+import { useForm, SubmitHandler } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
 
-const ChangeNumberPopUp = (props: {
+interface Props {
   title: string;
   cancel: () => void;
   confirmChange: (number: number) => void;
+}
+
+interface FormValues {
+  number: number;
+}
+
+const schema = yup.object().shape({
+  number: yup
+    .number()
+    .required("Введіть суму")
+    .min(1, "Сума має бути не менше 1")
+    .typeError("Сума має бути числом"),
+});
+
+const ChangeNumberPopUp: React.FC<Props> = ({
+  title,
+  cancel,
+  confirmChange,
 }) => {
-  const [number, setNumber] = useState(0);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormValues>({
+    resolver: yupResolver(schema) as any,
+  });
+
+  const onSubmit: SubmitHandler<FormValues> = (data) => {
+    confirmChange(data.number);
+    cancel();
+  };
 
   return (
     <div
       className="pop-up-bg"
       onClick={(e) => {
-        props.cancel();
+        cancel();
       }}
-    ><form onSubmit={(e) => {
-        e.preventDefault()
-        try {
-            props.confirmChange(number);
-            props.cancel();
-        } catch (error) {
-            alert((error as Error).message);
-        }
-    }}>
+    >
+      <form onSubmit={handleSubmit(onSubmit)}>
         <div
-        className="form-body pop-up shadow"
-        onClick={(e) => {
-          e.stopPropagation();
-        }}
-      >
-        <div className="pop-up-h">{props.title}</div>
-        <div className="input-title-pop-up">
-          Введіть суму
-          <input
-            min="1"
-            type="number"
-            value={number}
-            onChange={(event) => setNumber(+event.target.value)}
-            className="input-pop-up"
-            required
-          />
-        </div>
-        <div className="button-container">
-          <div
-            className="btn form-button btn-pop-up btn-pop-up-cancel "
-            onClick={(e) => {
-              props.cancel();
-            }}
-          >
-            Скасувати
+          className="form-body pop-up shadow"
+          onClick={(e) => {
+            e.stopPropagation();
+          }}
+        >
+          <div className="pop-up-h">{title}</div>
+          <div className="input-title-pop-up">
+            Введіть суму
+            <input
+              type="number"
+              {...register("number")}
+              className="input-pop-up"
+              required
+            />
+            {errors.number && <p>{errors.number.message}</p>}
           </div>
-          <button
-            className="btn form-button btn-pop-up "
-            type="submit"
-          >
-            {props.title.split(" ")[0]}
-          </button>
+          <div className="button-container">
+            <div
+              className="btn form-button btn-pop-up btn-pop-up-cancel"
+              onClick={(e) => {
+                cancel();
+              }}
+            >
+              Скасувати
+            </div>
+            <button className="btn form-button btn-pop-up" type="submit">
+              {title.split(" ")[0]}
+            </button>
+          </div>
         </div>
-      </div>
-    </form>
+      </form>
     </div>
   );
 };
