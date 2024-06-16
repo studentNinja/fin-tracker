@@ -64,6 +64,7 @@ const AddIncomeOrFixedExpensesPopUp: React.FC<Props> = ({
 
   const onSubmit: SubmitHandler<FormValues> = (data) => {
     confirmAdd(data.title, data.amount);
+    cancel();
   };
 
   return (
