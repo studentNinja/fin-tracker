@@ -17,9 +17,9 @@ const UserInfoBlock = (props: {
 
   let date = formatDate(user?.userInfo?.registration_date);
 
-  function handleDeleteAccount() {
+  async function handleDeleteAccount() {
     alert("account deleted");
-    dispatch(deleteUser())
+    await dispatch(deleteUser())
     dispatch(logout());
     navigate("/login");
 
