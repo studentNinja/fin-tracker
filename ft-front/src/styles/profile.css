@@ -4,7 +4,7 @@ min-width: 570px;
 }
 
 .spendings-history-diagram{
-    min-width: 320px;
+    min-width: 20rem;
     flex:2.5;
     width: 100%;
     background-color: rgba(8, 243, 172, 0.49);
@@ -15,26 +15,27 @@ min-width: 570px;
     flex:1;
     display: flex;
     flex-direction: column;
-    gap:16px;
+    gap:1rem;
     justify-content: flex-end;
     padding-bottom: 15px;
 }
 .font-size-32{
-    font-size: 32px;
+    font-size:2rem;
     font-weight: 500;
 }
 .spendings-history-info div{
     text-align: left;
 
-    font-size: 14px;
+    font-size: 1rem;
 
 }
 
 
 .block-row-content{
+
     width: 100%;
     display: flex;
-    gap:16px;
+    gap:1rem;
     flex:1;
     align-items: center;
 }
@@ -45,7 +46,7 @@ min-width: 570px;
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
-    gap:13px;
+    gap:1rem;
     max-height: 100%;
     overflow: hidden;
     align-items: center;
@@ -53,7 +54,7 @@ min-width: 570px;
 }
 
 .user-info-container{
-    flex: 1;
+    /*flex: 1;*/
 
 }
 .font-weight-300{
@@ -61,7 +62,7 @@ min-width: 570px;
     font-weight:300
 }
 .income-container-title{
-    font-size: 20px;
+    font-size: 1.2rem;
 }
 .income-number-profile{
     text-align: end;
@@ -74,13 +75,13 @@ h4{
     margin: 0;
 }
 .register-date-container{
-    font-size: 12px;
+    font-size: .8rem;
     font-weight: 300;
-    margin-top: 5px;
+    margin-top: 0.3rem;
 ;
 }
 .delete-option{
-    font-size: 14px;
+    font-size: 1rem;
     text-decoration: underline 1px;
 }
 .user-info-block{
@@ -97,15 +98,21 @@ h4{
 }
 
 .block-flex-1{
-    min-width: 200px;
-    flex: 1 1 calc(25% - 23px);
+    min-width: 12rem;
+    flex: 1 1 calc(25% - 1.5rem);
+    height: 100%;
 }
 
 
 .block-flex-3{
-    flex: 3 calc(75% - 23px);
+    flex: 3 calc(75% - 1.5rem);
+    /*height: fit-content;*/
+    height: 100%;
 }
 
-
+.flex-container{
+    display: flex;
+    gap: 1rem;
+}
 
 

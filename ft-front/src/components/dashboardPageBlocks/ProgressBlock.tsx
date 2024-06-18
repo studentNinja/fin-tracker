@@ -166,7 +166,7 @@ const DashboardBlock2: React.FC<Props> = (props) => {
             {goalPrevMonthsPercent !== 0 ? goalPrevMonthsPercent + "%" : ""}
           </div>
           <div
-            className={`goal-diagram-part blue ${
+            className={`goal-diagram-part  yellow ${
               goalPrevMonthsPercent !== 0 ? "diagram-part-first" : ""
             } ${
               goalLeftPercent === 0 && goalCurrMonthPercent === 0
@@ -183,7 +183,7 @@ const DashboardBlock2: React.FC<Props> = (props) => {
             {goalCurrMonthPercent !== 0 ? goalCurrMonthPercent + "%" : ""}
           </div>
           <div
-            className={`goal-diagram-part yellow ${
+            className={`goal-diagram-part blue ${
               goalPrevMonthsPercent === 0 ? "diagram-part-first" : ""
             } ${goalLeftPercent === 0 ? "diagram-part-last" : ""}`}
           ></div>

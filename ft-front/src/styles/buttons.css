@@ -1,13 +1,13 @@
 .add-btn{
     background-color: var(--button-bg-color);
     color: #FFFFFF;
-    padding: 0 7px;
-    border-radius: 5px;
+    padding: 0 0.5rem;
+    border-radius: 0.3rem;
     display: flex;
     align-items: center;
     justify-content: center;
     aspect-ratio: 1 / 1;
-    font-size: 22px;
+    font-size: 1.5rem;
     cursor: pointer;
     transition: background-color 200ms;
 }
@@ -25,17 +25,17 @@ button{
     color: #FFFFFF;
     border-radius: var(--button-border-radius);
     transition: background-color 200ms;
-    padding: 7px 10% ;
+    padding: 0.5rem 10% ;
     border:none;
     width: fit-content;
     height: fit-content;
-    font-size: 16px;
+    font-size: 1rem;
 }
 
 
 
 .btn{
-    padding: 7px 24px ;
+    padding: 0.5rem 1.8rem ;
     border-radius: var(--button-border-radius);
     background-color: var(--button-bg-color);
     color: #FFFFFF;
@@ -73,7 +73,7 @@ button{
     transition: background-color 200ms;
     font-weight: 300;
     width: fit-content;
-    padding: 5px 30px;
+    padding: 0.5rem 2.5rem;
     border: 1px solid transparent;
 }
 

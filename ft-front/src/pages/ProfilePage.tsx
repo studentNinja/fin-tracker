@@ -96,7 +96,7 @@ const ProfilePage = () => {
               showConfirmDeletePopUp={showConfirmDeletePopUp}
               showChangePasswordPopUp={showChangePasswordPopUp}
             />
-            <div className="one-row-block-container block-flex-3">
+            <div className="flex-container block-flex-3">
               <MonthStatsBlock />
               <FixedExpensesBlock
                 showConfirmDeletePopUp={showConfirmDeletePopUp}
