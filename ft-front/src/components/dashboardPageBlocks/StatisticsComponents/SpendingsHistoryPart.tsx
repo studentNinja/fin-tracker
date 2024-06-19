@@ -51,7 +51,8 @@ const fixedExpenses = useSelector(
         </div>
       </div>
 
-      <div className="list">
+
+      {spendings.length!==0 &&<div className="list">
         {arraySpendingsFiltered.map((spending) => (
           <div
             key={spending._id}
@@ -80,7 +81,10 @@ const fixedExpenses = useSelector(
             <div className="list-line"></div>
           </div>
         ))}
-      </div>
+      </div>}
+      {spendings.length==0 &&
+          <div style={{color:"grey"}}>Список транзакцій поки порожній</div>
+      }
     </div>
   );
 };

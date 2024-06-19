@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import avatar from "../../assets/avatar-profile-page.svg";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -25,10 +25,14 @@ const UserInfoBlock = (props: {
     navigate("/login");
 
   }
+
   async function handleChangePassword(currentPassword:string, newPassword:string ) {
       try{
-          await dispatch(updatePassword({currentPassword, newPassword}))
-          toast.success("Пароль успішно змінено");
+          let res = await dispatch(updatePassword({currentPassword, newPassword}))
+          if(res.payload?.message)
+            toast.success("Пароль успішно змінено");
+          else if(res.payload?.error)
+            toast.error("Помилка зміни паролю");
       }
       catch (error) {
           if (error instanceof Error) {
