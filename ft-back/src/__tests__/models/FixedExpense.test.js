@@ -5,13 +5,13 @@ const validCategories = require('../../config/expenseCategories');
 
 let mongoServer;
 
-beforeAll(async () => {
+beforeEach(async () => {
     mongoServer = await MongoMemoryServer.create();
     const uri = mongoServer.getUri();
     await mongoose.connect(uri);
 });
 
-afterAll(async () => {
+afterEach(async () => {
     await mongoose.disconnect();
     await mongoServer.stop();
 });
