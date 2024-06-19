@@ -10,6 +10,9 @@ import {
 } from "../../features/fixedExpenses/fixedExpensesThunks";
 import { Category } from "../../types/categoryTypes";
 import { getBalance } from "../../utils/dataUtils";
+import {validateNumberToBePositive, validateTransaction} from "../../utils/validationUtils";
+import {tryCatch} from "msw/lib/core/utils/internal/tryCatch";
+import {toast} from "react-toastify";
 
 const FixedExpensesBlock = (props: {
   showConfirmDeletePopUp: (deleteFunct: () => void) => void;
@@ -64,10 +67,13 @@ const FixedExpensesBlock = (props: {
       setError("amount", "Недостатньо коштів для здійснення операції");
       hasError = true;
     }
-
+    try {
+      validateNumberToBePositive(amount);
+      validateTransaction(amount, balance)
     if (hasError) {
       return;
     }
+
 
     const newExpense = {
       name,
@@ -75,6 +81,12 @@ const FixedExpensesBlock = (props: {
       category: "fixed" as Category,
     };
     dispatch(addFixedExpenseThunk(newExpense));
+    }catch (error) {
+      if (error instanceof Error) {
+        console.error("Error transaction:", error);
+        toast.error(error.message);
+      }
+    }
   }
 
   function handleDeleteFixedExpense(id: string) {

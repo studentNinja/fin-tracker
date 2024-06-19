@@ -6,6 +6,7 @@ import { AppDispatch, RootState } from "../../app/store";
 import { formatDate } from "../../utils/dateUtils";
 import { logout } from "../../features/auth/authSlice";
 import {deleteUser, updatePassword} from "../../features/user/userThunks";
+import {toast} from "react-toastify";
 const UserInfoBlock = (props: {
   showConfirmDeletePopUp: (deleteFunct: () => void) => void;
   showChangePasswordPopUp: (changePassFunct: (currentPassword:string, newPassword:string ) => void) => void;
@@ -24,11 +25,16 @@ const UserInfoBlock = (props: {
     navigate("/login");
 
   }
-  function handleChangePassword(currentPassword:string, newPassword:string ) {
+  async function handleChangePassword(currentPassword:string, newPassword:string ) {
       try{
-          dispatch(updatePassword({currentPassword, newPassword}))
-      }catch (error) {
-          console.error("Error changing password:", error);
+          await dispatch(updatePassword({currentPassword, newPassword}))
+          toast.success("Пароль успішно змінено");
+      }
+      catch (error) {
+          if (error instanceof Error) {
+              console.error("Error changing password:", error);
+              toast.error(error.message);
+          }
       }
 
   }

@@ -34,6 +34,7 @@ import MonthsSpendingsDiagramPart from "./StatisticsComponents/MonthsSpendingsDi
 import CategoriesPart from "./StatisticsComponents/CategoriesPart";
 import SpendingsHistoryPart from "./StatisticsComponents/SpendingsHistoryPart";
 import { Transaction } from "../../types/transactionTypes";
+import {toast} from "react-toastify";
 
 const StatisticsBlock = (props: {
   showConfirmDeletePopUp: (deleteFunct: () => void) => void;
@@ -110,8 +111,12 @@ const StatisticsBlock = (props: {
     props.showConfirmDeletePopUp(() => {
       try {
         dispatch(deleteTransaction(id));
-      } catch (error) {
-        console.error("Error deleting transaction:", error);
+      }
+      catch (error) {
+        if (error instanceof Error) {
+          console.error("Error deleting transaction:", error);
+          toast.error(error.message);
+        }
       }
     });
   }
@@ -120,8 +125,12 @@ const StatisticsBlock = (props: {
     props.showConfirmDeletePopUp(() => {
       try {
         dispatch(deleteFixedExpense(id));
-      } catch (error) {
-        console.error("Error deleting fixed expense:", error);
+      }
+      catch (error) {
+        if (error instanceof Error) {
+          console.error("Error deleting fixed expense:", error);
+          toast.error(error.message);
+        }
       }
     });
   }
@@ -147,8 +156,12 @@ const StatisticsBlock = (props: {
       validateNumberToBePositive(number);
 
       dispatch(addTransaction(newSpending));
-    } catch (error) {
-      console.error("Error adding transaction:", error);
+    }
+    catch (error) {
+      if (error instanceof Error) {
+        console.error("Error adding transaction:", error);
+        toast.error(error.message);
+      }
     }
   }
 

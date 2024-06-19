@@ -23,6 +23,7 @@ import { FixedExpense } from "../../types/fixedExpenseTypes";
 import { Income } from "../../types/incomeTypes";
 import {addGoal, fetchGoals} from "../../features/goals/goalsThunks";
 import {set} from "react-hook-form";
+import {toast} from "react-toastify";
 
 interface Props {
   showMoveMoneyPopUp: (
@@ -94,8 +95,12 @@ const DashboardBlock2: React.FC<Props> = (props) => {
       validateNumberToBePositive(number);
       validateTransaction(number, balance);
       handleAddGoalTransaction(number);
-    } catch (err) {
-      console.error("Error funding goal:", err);
+    }
+    catch (error) {
+      if (error instanceof Error) {
+        console.error("Error funding goal:", error);
+        toast.error(error.message);
+      }
     }
   }
 
@@ -114,8 +119,12 @@ const DashboardBlock2: React.FC<Props> = (props) => {
           category: "goal",
         })
       );
-    } catch (error) {
-      console.error("Error adding goal transaction:", error);
+    }
+    catch (error) {
+      if (error instanceof Error) {
+        console.error("Error adding goal transaction:", error);
+        toast.error(error.message);
+      }
     }
   }
 
@@ -124,8 +133,12 @@ const DashboardBlock2: React.FC<Props> = (props) => {
       validateNumberToBePositive(number);
       validateGoalTransactionWithdraw(number, goalCurrMonthNumber);
       handleAddGoalTransaction(number * -1);
-    } catch (err) {
-      console.error("Error withdrawing from goal:", err);
+    }
+    catch (error) {
+      if (error instanceof Error) {
+        console.error("Error withdrawing from goal:", error);
+        toast.error(error.message);
+      }
     }
   }
 
@@ -149,8 +162,12 @@ const DashboardBlock2: React.FC<Props> = (props) => {
           "Previous goal is not achieved, cannot create a new one"
         );
       }
-    } catch (error) {
-      console.error("Error creating goal:", error);
+    }
+    catch (error) {
+      if (error instanceof Error) {
+        console.error("Error creating goal:", error);
+        toast.error(error.message);
+      }
     }
   }
 

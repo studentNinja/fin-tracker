@@ -20,6 +20,7 @@ import {
   fetchGoals,
   updateGoal,
 } from "../../features/goals/goalsThunks";
+import {toast} from "react-toastify";
 
 const GoalProgressBlock = (props: {
   showChangeGoalNumber: (
@@ -69,9 +70,14 @@ const GoalProgressBlock = (props: {
           updatedAt: "",
         })
       );
-    } catch (error) {
-      console.error("Error changing goal amount:", error);
     }
+    catch (error) {
+            if (error instanceof Error) {
+                console.error("Error changing goal amount:", error);
+                toast.error(error.message);
+            }
+        }
+
   }
 
   async function handleCreateGoal(number: number) {
@@ -94,8 +100,12 @@ const GoalProgressBlock = (props: {
           "Previous goal is not achieved, cannot create a new one"
         );
       }
-    } catch (error) {
-      console.error("Error creating goal:", error);
+    }
+    catch (error) {
+        if (error instanceof Error) {
+            console.error("Error creating goal:", error);
+            toast.error(error.message);
+        }
     }
   }
 

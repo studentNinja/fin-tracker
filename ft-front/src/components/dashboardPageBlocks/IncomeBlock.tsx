@@ -18,6 +18,7 @@ import {
   getIncomeAmountCurrentMonth,
   getBalance,
 } from "../../utils/dataUtils";
+import {toast} from "react-toastify";
 
 interface Props {
   showPopUpAddIncome: (
@@ -65,7 +66,10 @@ const IncomeBlock: React.FC<Props> = (props) => {
 
       await dispatch(deleteIncome(id));
     } catch (error) {
-      console.error("Error deleting income:", error);
+        if (error instanceof Error) {
+            console.error("Error deleting income:", error);
+            toast.error(error.message);
+        }
     }
   }
 
@@ -84,7 +88,10 @@ const IncomeBlock: React.FC<Props> = (props) => {
         })
       );
     } catch (error) {
-      console.error("Error adding income:", error);
+        if (error instanceof Error) {
+            toast.error(error.message);
+            console.error("Error adding income:", error);
+        }
     }
   }
 
