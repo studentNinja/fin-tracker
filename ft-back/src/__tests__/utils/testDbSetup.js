@@ -10,12 +10,9 @@ const connect = async () => {
     mongoServer = await MongoMemoryServer.create();
     const mongoUri = mongoServer.getUri();
 
-    await mongoose.connect(mongoUri, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-    });
+    await mongoose.connect(mongoUri);
 
-    return createServer(); // Return the app instance
+    return createServer();
 };
 
 const closeDatabase = async () => {
