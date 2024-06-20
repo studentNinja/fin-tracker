@@ -50,7 +50,7 @@ const goalSchema = new Schema({
     achieved: { type: Boolean, default: false },
     goalTransactions:{type:Schema.Types.ObjectId, ref: 'GoalTransaction' },
     startDate: { type: Date, default: Date.now },
-    achievedDate: { type: Date }
+    achievedDate: { type: Date}
 }, { timestamps: true });
 
 const Goal = mongoose.model('Goal', goalSchema);

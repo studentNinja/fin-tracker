@@ -112,8 +112,6 @@ describe("Income Routes", () => {
                     amount: 3500
                 });
 
-            console.log('Update Income Response:', response.body);
-
             expect(response.statusCode).toBe(200);
             expect(response.body).toHaveProperty('source', 'Updated Дохід');
             expect(response.body).toHaveProperty('amount', 3500);

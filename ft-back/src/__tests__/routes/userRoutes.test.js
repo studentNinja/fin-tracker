@@ -94,8 +94,6 @@ describe("User Routes", () => {
                 .delete('/api/users/delete')
                 .set('Authorization', `Bearer ${accessToken}`);
 
-            console.log("Response body:", response.body);
-
             expect(response.statusCode).toBe(200);
             expect(response.body).toHaveProperty('message', 'Account deleted successfully');
 

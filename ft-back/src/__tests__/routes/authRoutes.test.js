@@ -12,7 +12,7 @@ afterAll(async () => {
     await db.closeDatabase();
 });
 
-afterEach(async () => {
+beforeEach(async () => {
     await db.clearDatabase();
 });
 

@@ -48,7 +48,6 @@ describe('FixedExpense Model Test', () => {
         } catch (error) {
             err = error;
         }
-        console.log(err.errors)
         expect(err).toBeInstanceOf(mongoose.Error.ValidationError);
         expect(err.errors.userId).toBeDefined();
         expect(err.errors.category).toBeDefined();
