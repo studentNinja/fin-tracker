@@ -4,12 +4,10 @@ export const setTokenWithExpiry = (key: string, value: string, ttl: number) => {
       value: value,
       expiry: now.getTime() + ttl,
     };
-    console.log('Setting token in localStorage:', item);
     localStorage.setItem(key, JSON.stringify(item));
   };
   
   export const getTokenWithExpiry = (key: string) => {
-    // localStorage.removeItem(key);
     const itemStr = localStorage.getItem(key);
     if (!itemStr) {
       return null;

@@ -7,7 +7,6 @@ export const fetchGoals = createAsyncThunk(
     async (_, { rejectWithValue }) => {
         try {
             const response = await axiosInstance.get('/goals');
-            console.log(response)
             return response.data;
         } catch (error: any) {
             return rejectWithValue(error.response?.data || 'An error occurred');

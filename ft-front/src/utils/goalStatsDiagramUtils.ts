@@ -13,7 +13,6 @@ export function getGoalTransactionsDiagramData(transactions: GoalTransaction[], 
 
     let res: Record<string, number>={}
     let iterDate=currentDate
-    console.log( "iterDate")
     let sum=0
     let activeMonthCount=0
     while(iterDate>=endDate){
