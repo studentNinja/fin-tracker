@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 const config = require('../../config/config');
-const { generateAccessToken, generateRefreshToken } = require('../../utils/tokenUtils'); // Adjust the path accordingly
+const { generateAccessToken, generateRefreshToken } = require('../../utils/tokenUtils');
 
 describe('Token Generation', () => {
     const mockUserId = '12345';
