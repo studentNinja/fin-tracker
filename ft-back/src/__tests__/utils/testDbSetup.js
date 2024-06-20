@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const { MongoMemoryServer } = require("mongodb-memory-server");
 const createServer = require("../../app");
 const request = require("supertest")
-
+const User = require('../../models/User');
 let mongoServer;
 
 const connect = async () => {
@@ -40,10 +40,16 @@ const seedUserAndGetToken = async (app) => {
     });
     return response.body.accessToken;
 };
+const getUserIdByEmail = async (email) => {
+    const user = await User.findOne({ email: email });
+    return user ? user._id : null;
+};
 
 module.exports = {
     connect,
     closeDatabase,
     clearDatabase,
     seedUserAndGetToken,
+    getUserIdByEmail,
 };
+
