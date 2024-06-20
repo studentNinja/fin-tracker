@@ -96,7 +96,6 @@ exports.refreshToken = async (req, res) => {
 
         res.status(200).send({ accessToken });
     } catch (err) {
-        console.error(err);
         res.status(401).send({ error: 'Invalid or expired refresh token' });
     }
 };

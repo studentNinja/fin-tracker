@@ -54,31 +54,23 @@ exports.updatePassword = async (req, res) => {
 };
 
 exports.deleteAccount = async (req, res) => {
-    const session = await mongoose.startSession();
-    session.startTransaction();
-
     try {
         const user = await User.findById(req.userId);
         if (!user) {
-            await session.abortTransaction();
-            session.endSession();
             return res.status(404).send({ error: 'User not found' });
         }
 
-        await Transaction.deleteMany({ userId: req.userId }).session(session);
-        await FixedExpense.deleteMany({ userId: req.userId }).session(session);
-        await Goal.deleteMany({ userId: req.userId }).session(session);
-        await Income.deleteMany({ userId: req.userId }).session(session);
+        await Transaction.deleteMany({ userId: req.userId });
+        await FixedExpense.deleteMany({ userId: req.userId });
+        await Goal.deleteMany({ userId: req.userId });
+        await Income.deleteMany({ userId: req.userId });
 
-        await User.findByIdAndDelete(req.userId).session(session);
+        await User.findByIdAndDelete(req.userId);
 
-        await session.commitTransaction();
-        session.endSession();
-        
         res.status(200).send({ message: 'Account deleted successfully' });
     } catch (err) {
-        await session.abortTransaction();
-        session.endSession();
+        console.error("Delete account error:", err);
         res.status(500).send({ error: 'Server error' });
     }
 };
+
