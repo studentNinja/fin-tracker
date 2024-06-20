@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { fetchTransactions, fetchTransactionById, addTransaction, updateTransaction, deleteTransaction } from './transactionThunks';
-import { Transaction , TransactionsState } from '../../types/transactionTypes';
+import { TransactionsState } from '../../types/transactionTypes';
 
 
 

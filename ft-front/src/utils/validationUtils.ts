@@ -1,7 +1,7 @@
 export let validateTitle=(title:string)=>{
     if( title.length>=60)
         throw new Error("Занадто довга назва")
-    if(title.length==0 )
+    if(title.length===0 )
         throw new Error("Поле з назвою не може бути порожнє")
 }
 export let validateIncomeDelete=(deleteAmount:number, balance:number)=>{

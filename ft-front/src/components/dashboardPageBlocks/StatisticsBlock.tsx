@@ -8,13 +8,11 @@ import {
   getGoalTransactionsAmountCurrentMonth,
   getIncomeAmountCurrentMonth,
   getBalance,
-  getTransactionsArrayCurrentMonth,
 } from "../../utils/dataUtils";
 import {
   deleteTransaction,
   addTransaction,
 } from "../../features/transactions/transactionThunks";
-import { fetchUserProfile } from "../../features/user/userThunks";
 import {
   fetchAllGoalTransactions,
   fetchCurrentGoalTransactions,
@@ -34,7 +32,7 @@ import MonthsSpendingsDiagramPart from "./StatisticsComponents/MonthsSpendingsDi
 import CategoriesPart from "./StatisticsComponents/CategoriesPart";
 import SpendingsHistoryPart from "./StatisticsComponents/SpendingsHistoryPart";
 import { Transaction } from "../../types/transactionTypes";
-import {toast} from "react-toastify";
+import { toast } from "react-toastify";
 
 const StatisticsBlock = (props: {
   showConfirmDeletePopUp: (deleteFunct: () => void) => void;
@@ -56,9 +54,7 @@ const StatisticsBlock = (props: {
   const goalTransactionsAll = useSelector(
     (state: RootState) => state.goalTransactions.goalTransactionsAll
   );
-  const goalTransactionsCurrent = useSelector(
-    (state: RootState) => state.goalTransactions.goalTransactionsCurrent
-  );
+
   const incomes = useSelector((state: RootState) => state.incomes.incomes);
   const fixedExpenses = useSelector(
     (state: RootState) => state.fixedExpenses.fixedExpenses
@@ -76,15 +72,10 @@ const StatisticsBlock = (props: {
     getGoalTransactionsAmountCurrentMonth(goalTransactionsAll);
   const incomeAmount = getIncomeAmountCurrentMonth(incomes);
   const balance = getBalance(
-      goalTransactionsAll,
+    goalTransactionsAll,
     transactions,
     fixedExpenses,
     incomes
-  );
-
-  const arraySpendings = getTransactionsArrayCurrentMonth(
-    transactions,
-    fixedExpenses
   );
 
   const categories = Object.keys(categoryMap).map((key) => {
@@ -92,7 +83,7 @@ const StatisticsBlock = (props: {
       Number(key),
       categoryMap,
       transactions,
-        fixedExpenses
+      fixedExpenses
     );
     return {
       id: Number(key),
@@ -111,8 +102,7 @@ const StatisticsBlock = (props: {
     props.showConfirmDeletePopUp(() => {
       try {
         dispatch(deleteTransaction(id));
-      }
-      catch (error) {
+      } catch (error) {
         if (error instanceof Error) {
           console.error("Error deleting transaction:", error);
           toast.error(error.message);
@@ -125,8 +115,7 @@ const StatisticsBlock = (props: {
     props.showConfirmDeletePopUp(() => {
       try {
         dispatch(deleteFixedExpense(id));
-      }
-      catch (error) {
+      } catch (error) {
         if (error instanceof Error) {
           console.error("Error deleting fixed expense:", error);
           toast.error(error.message);
@@ -156,8 +145,7 @@ const StatisticsBlock = (props: {
       validateNumberToBePositive(number);
 
       dispatch(addTransaction(newSpending));
-    }
-    catch (error) {
+    } catch (error) {
       if (error instanceof Error) {
         console.error("Error adding transaction:", error);
         toast.error(error.message);

@@ -46,7 +46,7 @@ export const deleteIncome = createAsyncThunk(
     'incomes/deleteIncome',
     async (id: string, { rejectWithValue }) => {
         try {
-            const response = await axiosInstance.delete(`/incomes/${id}`);
+            await axiosInstance.delete(`/incomes/${id}`);
             return id;
         } catch (error: any) {
             return rejectWithValue(error.response?.data || 'An error occurred');

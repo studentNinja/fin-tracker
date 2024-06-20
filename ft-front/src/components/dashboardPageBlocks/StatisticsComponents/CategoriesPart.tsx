@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import { Category } from "../../../types/categoryTypes";
+import { useState } from "react";
 
 const CategoriesPart = (props: {
   categories: Array<{
@@ -10,9 +9,10 @@ const CategoriesPart = (props: {
   }>;
   selectCategory: (id: number) => void;
 }) => {
-  let [selectedCategory, setselectedCategory] = useState(0);
+  let [selectedCategory, setSelectedCategory] = useState(0);
+
   function selectCategory(id: number) {
-    setselectedCategory(id);
+    setSelectedCategory(id);
     props.selectCategory(id);
   }
 
@@ -30,7 +30,7 @@ const CategoriesPart = (props: {
       >
         {props.categories.map((category) => {
           let percent = (category.number / spentNumber) * 100;
-          if (category.number !== 0)
+          if (category.number !== 0) {
             return (
               <div
                 key={category.id}
@@ -38,11 +38,13 @@ const CategoriesPart = (props: {
                 className={`categories-diagram-part ${category.color}`}
               ></div>
             );
+          }
+          return null;
         })}
       </div>
       <div className="list list-2">
         {props.categories.map((category) => {
-          if (category.number !== 0)
+          if (category.number !== 0) {
             return (
               <div
                 onClick={() => selectCategory(category.id)}
@@ -64,6 +66,8 @@ const CategoriesPart = (props: {
                 </div>
               </div>
             );
+          }
+          return null;
         })}
       </div>
     </div>

@@ -1,7 +1,4 @@
-import React, { useEffect } from "react";
-import deleteBtn from "../../assets/delete-btn.svg";
-import { useDispatch, useSelector } from "react-redux";
-import { Action, AnyAction, ThunkDispatch } from "@reduxjs/toolkit";
+import { useSelector } from "react-redux";
 import { RootState } from "../../app/store";
 import {
   getBalance,
@@ -10,20 +7,12 @@ import {
   getTransactionsAmountByCategoryId,
   getTransactionsAmountCurrentMonth,
 } from "../../utils/dataUtils";
-import { fetchUserProfile } from "../../features/user/userThunks";
-import {
-  fetchAllGoalTransactions,
-  fetchCurrentGoalTransactions,
-} from "../../features/goalTransactions/goalTransactionsThunks";
 import { categoryMap } from "../../utils/categoryData";
-import { fetchIncomes } from "../../features/income/incomeThunks";
-import { fetchTransactions } from "../../features/transactions/transactionThunks";
 
 const MonthStatsBlock = () => {
   const transactions = useSelector(
     (state: RootState) => state.transactions.transactions
   );
-  const user = useSelector((state: RootState) => state.user.userInfo);
   const fixedExpenses = useSelector(
     (state: RootState) => state.fixedExpenses.fixedExpenses
   );
@@ -31,9 +20,6 @@ const MonthStatsBlock = () => {
 
   const goalTransactionsAll = useSelector(
     (state: RootState) => state.goalTransactions.goalTransactionsAll
-  );
-  const goalTransactionsCurrent = useSelector(
-    (state: RootState) => state.goalTransactions.goalTransactionsCurrent
   );
 
   let transactionsTotalSum = getTransactionsAmountCurrentMonth(
@@ -44,7 +30,7 @@ const MonthStatsBlock = () => {
     getGoalTransactionsAmountCurrentMonth(goalTransactionsAll);
   let incomeAmount = getIncomeAmountCurrentMonth(incomes);
   let balance = getBalance(
-      goalTransactionsAll,
+    goalTransactionsAll,
     transactions,
     fixedExpenses,
     incomes
@@ -53,7 +39,7 @@ const MonthStatsBlock = () => {
     1,
     categoryMap,
     transactions,
-      fixedExpenses
+    fixedExpenses
   );
   let transactionsTotalSumWithoutFixed =
     transactionsTotalSum - fixedExpensesAmount;

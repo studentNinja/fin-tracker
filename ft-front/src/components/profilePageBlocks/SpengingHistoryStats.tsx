@@ -1,9 +1,12 @@
-import React, { useMemo } from "react";
+import { useMemo } from "react";
 import BarChart from "./BarChart";
 import { getGoalTransactionsDiagramData } from "../../utils/goalStatsDiagramUtils";
 import { useSelector } from "react-redux";
 import { RootState } from "../../app/store";
-import {getRecentGoal, getSavedAmountCurrentGoal} from "../../utils/dataUtils";
+import {
+  getRecentGoal,
+  getSavedAmountCurrentGoal,
+} from "../../utils/dataUtils";
 
 const SpendingHistoryStats = () => {
   const goalTransactionsCurrent = useSelector(
@@ -24,19 +27,16 @@ const SpendingHistoryStats = () => {
   const goalAmount = lastGoal ? lastGoal.amount : 0;
 
   const savedAmount = lastGoal?.achieved
-      ? goalAmount
-      : getSavedAmountCurrentGoal(goalTransactionsCurrent);
-
+    ? goalAmount
+    : getSavedAmountCurrentGoal(goalTransactionsCurrent);
 
   const { average: averagePutAwayNumber, diagramData } = useMemo(() => {
-    return getGoalTransactionsDiagramData(
-      goalTransactionsAll,
-      registerDate
-    );
+    return getGoalTransactionsDiagramData(goalTransactionsAll, registerDate);
   }, [goalTransactionsAll, registerDate]);
 
   const estimationDate = useMemo(() => {
-    if (!goalAmount || averagePutAwayNumber === 0 || lastGoal?.achieved) return "N/A";
+    if (!goalAmount || averagePutAwayNumber === 0 || lastGoal?.achieved)
+      return "N/A";
     const monthsRemaining = Math.ceil(
       (goalAmount - savedAmount) / averagePutAwayNumber
     );
@@ -46,7 +46,7 @@ const SpendingHistoryStats = () => {
       month: "long",
       year: "numeric",
     });
-  }, [goalAmount, savedAmount, averagePutAwayNumber]);
+  }, [goalAmount, savedAmount, averagePutAwayNumber, lastGoal]);
 
   return (
     <div className="block block-flex-3 block-column-content">

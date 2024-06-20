@@ -1,11 +1,10 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState, AppDispatch } from "../../app/store";
 import {
   addGoalTransaction,
   fetchCurrentGoalTransactions,
 } from "../../features/goalTransactions/goalTransactionsThunks";
-import { fetchUserProfile } from "../../features/user/userThunks";
 import {
   validateTransaction,
   validateGoalTransactionWithdraw,
@@ -18,12 +17,8 @@ import {
   getSavedAmountByCurrentMonthForGoal,
   getSavedAmountCurrentGoal,
 } from "../../utils/dataUtils";
-import { Transaction } from "../../types/transactionTypes";
-import { FixedExpense } from "../../types/fixedExpenseTypes";
-import { Income } from "../../types/incomeTypes";
-import {addGoal, fetchGoals} from "../../features/goals/goalsThunks";
-import {set} from "react-hook-form";
-import {toast} from "react-toastify";
+import { addGoal, fetchGoals } from "../../features/goals/goalsThunks";
+import { toast } from "react-toastify";
 
 interface Props {
   showMoveMoneyPopUp: (
@@ -34,7 +29,6 @@ interface Props {
 }
 const DashboardBlock2: React.FC<Props> = (props) => {
   const dispatch = useDispatch<AppDispatch>();
-
 
   const user = useSelector((state: RootState) => state.user.userInfo);
 
@@ -53,18 +47,15 @@ const DashboardBlock2: React.FC<Props> = (props) => {
   );
   const incomes = useSelector((state: RootState) => state.incomes.incomes);
   let lastGoal = getRecentGoal(goals || []);
-  let [achieved,setAchieved] = useState(lastGoal?.achieved || false)
-
-
+  let [achieved, setAchieved] = useState(lastGoal?.achieved || false);
 
   useEffect(() => {
     dispatch(fetchCurrentGoalTransactions());
     dispatch(fetchGoals());
   }, [dispatch]);
-   useEffect(() => {
-      setAchieved(lastGoal?.achieved || false)
-    }, [lastGoal]);
-
+  useEffect(() => {
+    setAchieved(lastGoal?.achieved || false);
+  }, [lastGoal]);
 
   const balance = getBalance(
     goalTransactionsAll,
@@ -74,8 +65,9 @@ const DashboardBlock2: React.FC<Props> = (props) => {
   );
 
   const goalNumber = lastGoal ? lastGoal.amount : 0;
-  const goalPrevMonthsNumber =
-    getSavedAmountByPrevMonthForGoal(goalTransactionsCurrent);
+  const goalPrevMonthsNumber = getSavedAmountByPrevMonthForGoal(
+    goalTransactionsCurrent
+  );
   const goalCurrMonthNumber = getSavedAmountByCurrentMonthForGoal(
     goalTransactionsCurrent
   );
@@ -95,8 +87,7 @@ const DashboardBlock2: React.FC<Props> = (props) => {
       validateNumberToBePositive(number);
       validateTransaction(number, balance);
       handleAddGoalTransaction(number);
-    }
-    catch (error) {
+    } catch (error) {
       if (error instanceof Error) {
         console.error("Error funding goal:", error);
         toast.error(error.message);
@@ -109,8 +100,7 @@ const DashboardBlock2: React.FC<Props> = (props) => {
       if (!lastGoal) {
         throw new Error("No goal found.");
       }
-      if(number>=goalLeftNumber)
-        setAchieved(true)
+      if (number >= goalLeftNumber) setAchieved(true);
       await dispatch(
         addGoalTransaction({
           amount: number,
@@ -119,8 +109,7 @@ const DashboardBlock2: React.FC<Props> = (props) => {
           category: "goal",
         })
       );
-    }
-    catch (error) {
+    } catch (error) {
       if (error instanceof Error) {
         console.error("Error adding goal transaction:", error);
         toast.error(error.message);
@@ -133,8 +122,7 @@ const DashboardBlock2: React.FC<Props> = (props) => {
       validateNumberToBePositive(number);
       validateGoalTransactionWithdraw(number, goalCurrMonthNumber);
       handleAddGoalTransaction(number * -1);
-    }
-    catch (error) {
+    } catch (error) {
       if (error instanceof Error) {
         console.error("Error withdrawing from goal:", error);
         toast.error(error.message);
@@ -162,8 +150,7 @@ const DashboardBlock2: React.FC<Props> = (props) => {
           "Previous goal is not achieved, cannot create a new one"
         );
       }
-    }
-    catch (error) {
+    } catch (error) {
       if (error instanceof Error) {
         console.error("Error creating goal:", error);
         toast.error(error.message);
