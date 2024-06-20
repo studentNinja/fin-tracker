@@ -1,5 +1,4 @@
 const express = require('express');
-const {connectDB} = require('./connections/db');
 const authRoutes = require('./routes/authRoutes');
 const userRoutes = require('./routes/userRoutes');
 const transactionRoutes = require('./routes/transactionRoutes');
@@ -18,8 +17,6 @@ const createServer = () => {
     app.use(cors());
     app.use(helmet());
     app.use(express.json());
-    connectDB();
-
     swaggerSetup(app);
 
     app.use('/api/auth', authRoutes);
