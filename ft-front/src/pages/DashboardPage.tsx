@@ -12,10 +12,7 @@ import { RootState } from "../app/store";
 
 const DashboardPage: React.FC = () => {
   const { userInfo } = useSelector((state: RootState) => state.user);
-  const { incomes } = useSelector((state: RootState) => state.incomes);
 
-  const [visibilityAddFixedExpensePopUp, setVisibilityAddFixedExpensePopUp] =
-    useState(false);
   const [visibilityPopUpConfirmDelete, setVisibilityPopUpConfirmDelete] =
     useState(false);
   const [visibilityPopUpAddIncome, setVisibilityPopUpAddIncome] =

@@ -1,13 +1,11 @@
-import React, { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../app/store";
 import {
   getRecentGoal,
   getSavedAmountCurrentGoal,
 } from "../../utils/dataUtils";
-import { fetchUserProfile } from "../../features/user/userThunks";
 import {
-  addGoalTransaction,
   fetchAllGoalTransactions,
   fetchCurrentGoalTransactions,
 } from "../../features/goalTransactions/goalTransactionsThunks";
@@ -20,7 +18,7 @@ import {
   fetchGoals,
   updateGoal,
 } from "../../features/goals/goalsThunks";
-import {toast} from "react-toastify";
+import { toast } from "react-toastify";
 
 const GoalProgressBlock = (props: {
   showChangeGoalNumber: (
@@ -40,7 +38,6 @@ const GoalProgressBlock = (props: {
     (state: RootState) => state.goalTransactions.goalTransactionsCurrent
   );
 
-  // Return goal from the User that is last created
   const lastGoal = getRecentGoal(goals);
 
   const achieved = lastGoal?.achieved;
@@ -64,20 +61,18 @@ const GoalProgressBlock = (props: {
           userId: "",
           name: "Ціль",
           amount: number,
-          achieved: goalSavedAmount == number,
+          achieved: goalSavedAmount === number,
           startDate: new Date().toISOString(),
           createdAt: "",
           updatedAt: "",
         })
       );
+    } catch (error) {
+      if (error instanceof Error) {
+        console.error("Error changing goal amount:", error);
+        toast.error(error.message);
+      }
     }
-    catch (error) {
-            if (error instanceof Error) {
-                console.error("Error changing goal amount:", error);
-                toast.error(error.message);
-            }
-        }
-
   }
 
   async function handleCreateGoal(number: number) {
@@ -100,12 +95,11 @@ const GoalProgressBlock = (props: {
           "Previous goal is not achieved, cannot create a new one"
         );
       }
-    }
-    catch (error) {
-        if (error instanceof Error) {
-            console.error("Error creating goal:", error);
-            toast.error(error.message);
-        }
+    } catch (error) {
+      if (error instanceof Error) {
+        console.error("Error creating goal:", error);
+        toast.error(error.message);
+      }
     }
   }
 

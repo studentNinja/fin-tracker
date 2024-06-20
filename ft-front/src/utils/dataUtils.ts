@@ -5,8 +5,7 @@ import { Category } from "../types/categoryTypes";
 import { filterCurrentMonth, filterPrevMonth } from "./arrayUtils";
 import { Income } from "../types/incomeTypes";
 import { FixedExpense } from "../types/fixedExpenseTypes";
-import fixedExpensesSlice from "../features/fixedExpenses/fixedExpensesSlice";
-import FixedExpensesSlice from "../features/fixedExpenses/fixedExpensesSlice";
+
 
 function isTransaction(item: any): item is Transaction {
     return (item as Transaction).category !== undefined;

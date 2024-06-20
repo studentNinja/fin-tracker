@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import DashboardPage from "./pages/DashboardPage";
 import "./styles/App.css";
 import Header from "./components/Header";
@@ -10,8 +10,8 @@ import "./styles/form.css";
 import "./styles/list-animation.css";
 import ProfilePage from "./pages/ProfilePage";
 import HomePage from "./pages/HomePage";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 const App: React.FC = () => {
   return (
     <div className="App">
@@ -37,18 +37,18 @@ const App: React.FC = () => {
           }
         />
       </Routes>
-        <ToastContainer
-            position="top-right"
-            autoClose={5000}
-            hideProgressBar={false}
-            newestOnTop={false}
-            closeOnClick
-            rtl={false}
-            pauseOnFocusLoss
-            draggable
-            pauseOnHover
-            theme="light"
-        />
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
     </div>
   );
 };

@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import deleteBtn from "../../assets/delete-btn.svg";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState, AppDispatch } from "../../app/store";
-import { FixedExpense } from "../../types/fixedExpenseTypes";
 import {
   fetchFixedExpenses,
   addFixedExpense as addFixedExpenseThunk,
@@ -10,9 +9,11 @@ import {
 } from "../../features/fixedExpenses/fixedExpensesThunks";
 import { Category } from "../../types/categoryTypes";
 import { getBalance } from "../../utils/dataUtils";
-import {validateNumberToBePositive, validateTransaction} from "../../utils/validationUtils";
-import {tryCatch} from "msw/lib/core/utils/internal/tryCatch";
-import {toast} from "react-toastify";
+import {
+  validateNumberToBePositive,
+  validateTransaction,
+} from "../../utils/validationUtils";
+import { toast } from "react-toastify";
 
 const FixedExpensesBlock = (props: {
   showConfirmDeletePopUp: (deleteFunct: () => void) => void;
@@ -46,8 +47,6 @@ const FixedExpensesBlock = (props: {
     )
   );
 
-  const [errorState, setErrorState] = useState({ name: "", amount: "" });
-
   function handleAddFixedExpense(
     name: string,
     amount: number,
@@ -69,19 +68,18 @@ const FixedExpensesBlock = (props: {
     }
     try {
       validateNumberToBePositive(amount);
-      validateTransaction(amount, balance)
-    if (hasError) {
-      return;
-    }
+      validateTransaction(amount, balance);
+      if (hasError) {
+        return;
+      }
 
-
-    const newExpense = {
-      name,
-      amount,
-      category: "fixed" as Category,
-    };
-    dispatch(addFixedExpenseThunk(newExpense));
-    }catch (error) {
+      const newExpense = {
+        name,
+        amount,
+        category: "fixed" as Category,
+      };
+      dispatch(addFixedExpenseThunk(newExpense));
+    } catch (error) {
       if (error instanceof Error) {
         console.error("Error transaction:", error);
         toast.error(error.message);

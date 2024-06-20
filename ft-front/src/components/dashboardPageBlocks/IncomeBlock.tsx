@@ -8,7 +8,6 @@ import {
   deleteIncome,
 } from "../../features/income/incomeThunks";
 import { ThunkDispatch, Action } from "@reduxjs/toolkit";
-import { fetchUserProfile } from "../../features/user/userThunks";
 import {
   validateIncomeDelete,
   validateTitle,
@@ -18,7 +17,7 @@ import {
   getIncomeAmountCurrentMonth,
   getBalance,
 } from "../../utils/dataUtils";
-import {toast} from "react-toastify";
+import { toast } from "react-toastify";
 
 interface Props {
   showPopUpAddIncome: (
@@ -35,9 +34,6 @@ const IncomeBlock: React.FC<Props> = (props) => {
   }, [dispatch]);
 
   const incomes = useSelector((state: RootState) => state.incomes.incomes);
-  const goalTransactionsAll = useSelector(
-    (state: RootState) => state.goalTransactions.goalTransactionsAll
-  );
 
   const goalTransactionsCurrent = useSelector(
     (state: RootState) => state.goalTransactions.goalTransactionsAll
@@ -59,17 +55,16 @@ const IncomeBlock: React.FC<Props> = (props) => {
     incomes
   );
 
-
   async function handleDeleteIncome(id: string, amount: number) {
     try {
       validateIncomeDelete(amount, balance);
 
       await dispatch(deleteIncome(id));
     } catch (error) {
-        if (error instanceof Error) {
-            console.error("Error deleting income:", error);
-            toast.error(error.message);
-        }
+      if (error instanceof Error) {
+        console.error("Error deleting income:", error);
+        toast.error(error.message);
+      }
     }
   }
 
@@ -88,10 +83,10 @@ const IncomeBlock: React.FC<Props> = (props) => {
         })
       );
     } catch (error) {
-        if (error instanceof Error) {
-            toast.error(error.message);
-            console.error("Error adding income:", error);
-        }
+      if (error instanceof Error) {
+        toast.error(error.message);
+        console.error("Error adding income:", error);
+      }
     }
   }
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import "../styles/profile.css";
 import UserInfoBlock from "../components/profilePageBlocks/UserInfoBlock";
 import MonthStatsBlock from "../components/profilePageBlocks/MonthStatsBlock";
@@ -9,8 +9,7 @@ import GoalProgressBlock from "../components/profilePageBlocks/GoalProgressBlock
 import ChangeNumberPopUp from "../components/pop-ups/ChangeNumberPopUp";
 import SpengingHistoryStats from "../components/profilePageBlocks/SpengingHistoryStats";
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../app/store";
-import { fetchUserProfile } from "../features/user/userThunks";
+import { RootState } from "../app/store";
 import { Action, ThunkDispatch } from "@reduxjs/toolkit";
 import {
   fetchAllGoalTransactions,
