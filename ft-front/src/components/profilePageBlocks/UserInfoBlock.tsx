@@ -54,7 +54,8 @@ const UserInfoBlock = (props: {
         <div className="register-date-container">Дата реєстрації {date}</div>
       </div>
       <div style={{ display: "flex", flexDirection: "column" }}>
-        <button
+        <a
+          href="#"
           onClick={(e) => {
             e.preventDefault();
             props.showChangePasswordPopUp(handleChangePassword);
@@ -62,9 +63,10 @@ const UserInfoBlock = (props: {
           className="delete-option"
         >
           Змінити пароль
-        </button>
-        <button
+        </a>
+        <a
           style={{ marginTop: 0 }}
+          href="#"
           onClick={(e) => {
             e.preventDefault();
             props.showConfirmDeletePopUp(() => handleDeleteAccount());
@@ -72,7 +74,7 @@ const UserInfoBlock = (props: {
           className="delete-option"
         >
           Видалити акаунт
-        </button>
+        </a>
       </div>
     </div>
   );
