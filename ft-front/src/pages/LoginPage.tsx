@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import axios from "axios";
 import { AppDispatch, RootState } from "../app/store";
 import { loginUser } from "../features/auth/authThunks";
 // import {toast} from "react-toastify";
@@ -48,36 +47,13 @@ const LoginPage: React.FC = () => {
     resolver: yupResolver(schema) as any,
   });
 
-  const [serverError, setServerError] = useState<string | null>(null);
-
   useEffect(() => {
     if (isAuthenticated) {
       navigate("/dashboard");
     }
   }, [isAuthenticated, navigate]);
 
-  useEffect(() => {
-    if (error) {
-      handleError(error);
-    }
-  }, [error]);
-
-  const handleError = (error: unknown) => {
-    if (typeof error === "string") {
-      setServerError(error);
-    } else if (axios.isAxiosError(error) && error.response) {
-      setServerError(
-        error.response.data?.error ||
-          error.response.data?.message ||
-          "An unknown error occurred. Please try again."
-      );
-    } else {
-      setServerError("An unknown error occurred. Please try again.");
-    }
-  };
-
   const onSubmit: SubmitHandler<ILoginFormInput> = async (data) => {
-    setServerError(null);
     await dispatch(loginUser({ email: data.email, password: data.password }));
   };
 
@@ -104,7 +80,7 @@ const LoginPage: React.FC = () => {
           <button className="form-button" type="submit" disabled={loading}>
             {loading ? "Відбувається вхід..." : "Увійти"}
           </button>
-          {serverError && <div className="error-message">{serverError}</div>}
+          {error && <div className="error-message">{error}</div>}
         </form>
       </div>
     </div>

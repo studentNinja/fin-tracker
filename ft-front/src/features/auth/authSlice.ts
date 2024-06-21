@@ -29,6 +29,7 @@ const authSlice = createSlice({
             state.accessToken = null;
             state.refreshToken = null;
             state.isAuthenticated = false;
+            state.loading = false;
             localStorage.removeItem('accessToken');
             localStorage.removeItem('refreshToken');
         },
@@ -45,6 +46,7 @@ const authSlice = createSlice({
                 state.refreshToken = action.payload.refreshToken;
                 state.isAuthenticated = true;
                 state.loading = false;
+                state.error = null;
             })
             .addCase(loginUser.rejected, (state, action) => {
                 state.loading = false;
@@ -57,6 +59,7 @@ const authSlice = createSlice({
                 state.isAuthenticated = false;
                 state.accessToken = null;
                 state.refreshToken = null;
+                state.loading = false;
                 localStorage.removeItem('accessToken');
                 localStorage.removeItem('refreshToken');
             })

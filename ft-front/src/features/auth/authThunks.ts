@@ -31,7 +31,9 @@ export const registerUser = createAsyncThunk(
             localStorage.setItem('accessToken', accessToken);
             localStorage.setItem('refreshToken', refreshToken);
             return response.data;
+
         } catch (error: unknown) {
+
             if (axios.isAxiosError(error) && error.response) {
                 const message = error.response.data?.error || 'An error occurred';
                 return rejectWithValue(message);
@@ -50,9 +52,10 @@ export const loginUser = createAsyncThunk(
             localStorage.setItem('accessToken', accessToken);
             localStorage.setItem('refreshToken', refreshToken);
             return response.data;
-        } catch (error: unknown) {
-            if (axios.isAxiosError(error) && error.response) {
-                const message = error.response.data?.error || error.response.data?.message || 'Invalid credentials';
+        } catch (error: any) {
+
+            if (axios.isAxiosError(error)) {
+                const message = error.response?.data?.error || error.response?.data?.message || 'Invalid credentials';
                 return rejectWithValue(message);
             }
             return rejectWithValue('An error occurred');

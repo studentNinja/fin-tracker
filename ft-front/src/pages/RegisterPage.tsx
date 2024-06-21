@@ -37,19 +37,19 @@ const schema = yup.object().shape({
     .string()
     .required("Придумайте пароль")
     .min(8, "Пароль має містити щонайменше 8 символів"),
-    // .matches(
-    //   /(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,24}$/,
-    //   "Пароль повинен містити хоча б одну літеру та одну цифру"
-    // ),
+  // .matches(
+  //   /(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,24}$/,
+  //   "Пароль повинен містити хоча б одну літеру та одну цифру"
+  // ),
   confirmPassword: yup
     .string()
     .oneOf([yup.ref("password"), undefined], "Паролі не збігаються")
     .required("Повторіть пароль")
     .min(8, "Пароль має містити щонайменше 8 символів"),
-    // .matches(
-    //   /(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,24}$/,
-    //   "Пароль повинен містити хоча б одну літеру та одну цифру"
-    // ),
+  // .matches(
+  //   /(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,24}$/,
+  //   "Пароль повинен містити хоча б одну літеру та одну цифру"
+  // ),
   initialCapital: yup
     .number()
     .required("Введіть початковий капітал")
@@ -80,12 +80,6 @@ export const RegisterPage: React.FC = () => {
       navigate("/dashboard");
     }
   }, [isAuthenticated, navigate]);
-
-  useEffect(() => {
-    if (error) {
-      alert(error);
-    }
-  }, [error]);
 
   const onSubmit: SubmitHandler<IRegisterFormInput> = (data) => {
     dispatch(
