@@ -20,7 +20,7 @@ const schema = yup.object().shape({
     .required("Введіть суму")
     .min(1, "Сума має бути не менше 1")
     .typeError("Сума має бути числом")
-    .max(10),
+    .max(10000000),
 });
 
 const ChangeNumberPopUp: React.FC<Props> = ({

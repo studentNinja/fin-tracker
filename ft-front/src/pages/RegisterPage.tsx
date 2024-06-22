@@ -53,11 +53,13 @@ const schema = yup.object().shape({
   initialCapital: yup
     .number()
     .required("Введіть початковий капітал")
-    .min(0, "Початковий капітал має бути не менше 0"),
+    .min(0, "Початковий капітал має бути не менше 0")
+    .max(10000000),
   savingGoal: yup
     .number()
     .required("Введіть суму накопичення")
-    .min(0, "Сума накопичення має бути не менше 0"),
+    .min(0, "Сума накопичення має бути не менше 0")
+    .max(10000000),
 });
 
 export const RegisterPage: React.FC = () => {
