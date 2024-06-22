@@ -28,7 +28,8 @@ const schema = yup.object().shape({
     .number()
     .required("Введіть суму")
     .min(1, "Сума має бути не менше 1")
-    .typeError("Сума має бути числом"),
+    .typeError("Сума має бути числом")
+    .max(10),
 });
 
 const AddIncomeOrFixedExpensesPopUp: React.FC<Props> = ({
