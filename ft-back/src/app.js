@@ -15,7 +15,16 @@ const createServer = () => {
     const app = express();
 
     app.use(cors());
-    app.use(helmet());
+    app.use(helmet({
+        contentSecurityPolicy: {
+          directives: {
+            defaultSrc: ["'self'"], 
+            scriptSrc: ["'self'", "'unsafe-inline'"],
+            imgSrc: ["'self'", "data:"], 
+            styleSrc: ["'self'", "'unsafe-inline'"],
+          },
+        },
+      }));
     app.use(express.json());
     swaggerSetup(app);
 
