@@ -85,3 +85,7 @@ input{
     border: var(--button-bg-color) 1px solid;
     padding-left: 0.8rem;
 }
+
+.max-width {
+    max-width: 600px;
+}

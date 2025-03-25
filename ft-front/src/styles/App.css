@@ -1,20 +1,24 @@
-a{
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+a {
   color: var(--text-color);
   /*text-decoration: none;*/
   transition: text-decoration 300ms;
   text-decoration: underline;
   text-decoration-color: transparent;
 }
-a:hover{
+a:hover {
   text-decoration: underline;
   text-decoration-color: var(--text-color);
 }
 
-.shadow{
-  box-shadow: 0 0 29px 1px rgba(35, 41, 57, 0.12)
+.shadow {
+  box-shadow: 0 0 29px 1px rgba(35, 41, 57, 0.12);
 }
 .App {
-  padding: 1rem 0 ;
+  padding: 1rem 0;
   height: 100%;
   flex: 1;
   text-align: center;
@@ -25,12 +29,11 @@ a:hover{
   gap: 1.5rem;
   max-height: 100%;
 }
-.center-div{
+.center-div {
   display: flex;
   align-items: center;
   justify-content: center;
 }
-
 
 :root {
   --border-radius: 1rem;
@@ -39,18 +42,17 @@ a:hover{
   --line-bg-color: rgba(236, 241, 255, 0.94);
   --text-color: #272938;
 
-  --blue-diagram-color:#6ECBED;
-  --yellow-diagram-color:#FFF0BA;
-  --grey-diagram-color:#DADFE9;
-  --green-diagram-color:#A0E8D0;
-  --orange-diagram-color:#F29B7F;
-  --purple-diagram-color:#B7C8F4;
-  --pink-diagram-color:#FFD2D2;
-  --yellow-green-diagram-color:#DAFFAC;
+  --blue-diagram-color: #6ecbed;
+  --yellow-diagram-color: #fff0ba;
+  --grey-diagram-color: #dadfe9;
+  --green-diagram-color: #a0e8d0;
+  --orange-diagram-color: #f29b7f;
+  --purple-diagram-color: #b7c8f4;
+  --pink-diagram-color: #ffd2d2;
+  --yellow-green-diagram-color: #daffac;
 }
 ::-webkit-scrollbar {
   width: 2px;
-
 }
 
 ::-webkit-scrollbar-track {
@@ -65,7 +67,7 @@ a:hover{
 ::-webkit-scrollbar-thumb:hover {
   background: rgba(56, 56, 56, 0.5);
 }
-::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+::placeholder {
+  /* Chrome, Firefox, Opera, Safari 10.1+ */
   color: rgba(56, 56, 56, 0.39);
-
 }

@@ -7,6 +7,7 @@ import * as yup from "yup";
 import { AppDispatch, RootState } from "../app/store";
 import { loginUser } from "../features/auth/authThunks";
 // import {toast} from "react-toastify";
+import { clearError } from "../features/auth/authSlice";
 
 interface ILoginFormInput {
   email: string;
@@ -48,10 +49,16 @@ const LoginPage: React.FC = () => {
   });
 
   useEffect(() => {
-    if (isAuthenticated) {
-      navigate("/dashboard");
+    if (error == "403") {
+      navigate("/payment");
     }
-  }, [isAuthenticated, navigate]);
+  }, [error, navigate]);
+
+  useEffect(() => {
+    return () => {
+      dispatch(clearError());
+    };
+  }, []);
 
   const onSubmit: SubmitHandler<ILoginFormInput> = async (data) => {
     await dispatch(loginUser({ email: data.email, password: data.password }));

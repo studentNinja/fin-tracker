@@ -6,6 +6,7 @@ import * as yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../app/store";
 import { registerUser } from "../features/auth/authThunks";
+import { clearError } from "../features/auth/authSlice";
 
 interface IRegisterFormInput {
   username: string;
@@ -84,6 +85,18 @@ export const RegisterPage: React.FC = () => {
     }
   }, [isAuthenticated, navigate]);
 
+  useEffect(() => {
+    if (error == "403") {
+      navigate("/payment");
+    }
+  }, [error, navigate]);
+
+  useEffect(() => {
+    return () => {
+      dispatch(clearError());
+    };
+  }, []);
+  
   const onSubmit: SubmitHandler<IRegisterFormInput> = (data) => {
     dispatch(
       registerUser({

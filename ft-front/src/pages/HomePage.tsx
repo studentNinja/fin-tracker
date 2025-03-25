@@ -43,7 +43,7 @@ const data = {
   datasets: [
     {
       label: "Витрати",
-      data: [10, 9.5, 8.5, 10, 10.5, 9, 10.5, 9, 8.5, 11, 10, 11],
+      data: [100000, 95000, 85000, 100000, 105000, 90000, 105000, 90000, 85000, 110000, 100000, 100000],
       borderColor: "rgba(255, 99, 132, 1)",
       backgroundColor: "rgba(255, 99, 132, 0.2)",
       fill: false,
@@ -61,8 +61,8 @@ const options = {
   scales: {
     y: {
       beginAtZero: false,
-      min: 8,
-      max: 11.5,
+      min: 85000,
+      max: 110000,
     },
   },
   maintainAspectRatio: false,
@@ -71,44 +71,46 @@ const options = {
 const HomePage: React.FC = () => {
   const { isAuthenticated } = useSelector((state: RootState) => state.auth);
   return (
-    <div className="dashboard-container shadow">
-      <div className="main-section">
+    <div className="dashboard-container shadow !text-lg flex flex-col !h-fit">
+      <div className="feature w-full bg-white text-lg p-5 rounded-md text-start">
         <p>
-          <b>FinTracker</b> –{" "}
-          <small>
-            зручний і потужний інструмент для управління вашими фінансами.
-          </small>
+          <b>FinTracker</b> – зручний і потужний інструмент для управління
+          вашими фінансами.
         </p>
         <p>
-          <small>
-            Допоможе вам контролювати витрати, розподіляти бюджет та досягати
-            фінансових цілей.
-          </small>
+          Він допоможе вам контролювати витрати, розподіляти бюджет та досягати
+          фінансових цілей.
         </p>
       </div>
-      <div className="features">
-        <div className="feature">
+      <div className="flex w-full  gap-5">
+        <div className="feature flex-1 rounded-md text-start p-5">
           <h3>Що пропонує FinTracker</h3>
-          <ul>
-            <li>Простий облік витрат і доходів</li>
-            <li>Аналіз фінансів</li>
-            <li>Фінансові цілі</li>
-          </ul>
+          <div className="pl-5">
+            <ul>
+              <li>Простий облік витрат і доходів</li>
+              <li>Аналіз фінансів</li>
+              <li>Фінансові цілі</li>
+            </ul>
+          </div>
         </div>
-        <div className="feature">
+        <div className="feature flex-1 rounded-md text-start p-5">
           <h3>Переваги нашого сервісу</h3>
-          <ul>
-            <li>Безпека і конфіденційність</li>
-            <li>Зручність і доступність</li>
-            <li>Гнучкість</li>
-          </ul>
-        </div>
-        <div className="chart">
-          <Line data={data} options={options} />
+          <div className="pl-5">
+            <ul>
+              <li>Безпека і конфіденційність</li>
+              <li>Зручність і доступність</li>
+              <li>Гнучкість</li>
+            </ul>
+          </div>
         </div>
       </div>
-      <div className="footer">
-        <p>Зручно керуйте фінансами, легко досягайте цілей!</p>
+      <div className="feature bg-white p-5 rounded-md w-full">
+        <Line data={data} options={options} />
+      </div>
+      <div className="feature  p-5 rounded-md w-full flex justify-between items-center">
+        <div className="font-bold text-2xl ">
+          Зручно керуйте фінансами, легко досягайте цілей!
+        </div>
         {!isAuthenticated ? (
           <Link to="/register">
             <button className="sign-up-btn">Зареєструватися!</button>

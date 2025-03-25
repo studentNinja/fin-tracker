@@ -12,6 +12,7 @@ import ProfilePage from "./pages/ProfilePage";
 import HomePage from "./pages/HomePage";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import PaymentPage from "./pages/PaymentPage";
 const App: React.FC = () => {
   return (
     <div className="App">
@@ -36,6 +37,7 @@ const App: React.FC = () => {
             </PrivateRoute>
           }
         />
+        <Route path="/payment" element={<PaymentPage />} />
       </Routes>
       <ToastContainer
         position="top-right"
