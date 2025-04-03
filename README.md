@@ -46,6 +46,13 @@ FinTracker is a full-stack application for tracking finances, built with React, 
 
    The backend server will start on `http://localhost:8080`.
 
+6. If you run into problems with `npm install`, do the following:
+   ```bash
+   npm cache clean --force
+   rm -rf node_modules package-lock.json 
+   npm install --legacy-peer-deps
+   ```
+
 ### Frontend
 
 1. Navigate to the frontend directory:
