@@ -64,7 +64,10 @@ FinTracker is a full-stack application for tracking finances, built with React, 
 
    ```env
    REACT_APP_BACK_URL=http://localhost:8080/api
+   REACT_APP_PAYPAL_CLIENT_ID="<your_paypal_client_id>"
+   REACT_APP_PAYPAL_SECRET="<your_paypal_secret>"
    ```
+You can get these variables [here](https://developer.paypal.com/dashboard/applications/sandbox).
 
 4. Run the frontend development server:
 
@@ -78,7 +81,8 @@ FinTracker is a full-stack application for tracking finances, built with React, 
 
 1. Open your browser and navigate to `http://localhost:3000`.
 2. Use the registration form to create a new user.
-3. Monitor the console for any potential errors or logs.
+3. Use your PayPal sandbox personal account to "pay" for the application. You can find your account credentials [here](https://developer.paypal.com/dashboard).
+4. Monitor the console for any potential errors or logs.
 
 ## API Endpoints
 
