@@ -30,7 +30,7 @@ const LoginPage: React.FC = () => {
       console.log("Using user ID:", userIdToUse);
       
       if (userIdToUse) {
-        const res = await axios.post(`${BaseUrl}api/payment/success`, {
+        const res = await axios.post(`${BaseUrl}payment/success`, {
           userId: userIdToUse,
           paymentId: details.id,
         });
