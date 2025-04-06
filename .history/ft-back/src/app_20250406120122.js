@@ -18,7 +18,7 @@ const createServer = () => {
 
   app.use(cors(
     {
-      origin: "https://fin-tracker-21n6.onrender.com",
+      origin: "http://localhost:3000",
       credentials: true
     }
   ));
