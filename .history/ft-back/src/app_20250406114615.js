@@ -6,22 +6,15 @@ const goalTransactionRoutes = require('./routes/goalTransactionRoutes');
 const fixedExpenseRoutes = require('./routes/fixedExpenseRoutes');
 const goalRoutes = require('./routes/goalRoutes');
 const incomeRoutes = require('./routes/incomeRoutes');
-const paymentRoutes = require("./routes/payment");
 const cors = require('cors');
 const helmet = require('helmet');
 const swaggerSetup = require('./swagger');
-
 require('dotenv').config();
 
 const createServer = () => {
   const app = express();
 
-  app.use(cors(
-    //     {
-    //     origin: "http://localhost:3000",
-    //     credentials: true
-    // }
-  ));
+  app.use(cors());
   app.use(helmet({
     contentSecurityPolicy: {
       directives: {
@@ -42,8 +35,6 @@ const createServer = () => {
   app.use('/api/transactions', transactionRoutes);
   app.use('/api/fixedexpenses', fixedExpenseRoutes);
   app.use('/api/incomes', incomeRoutes);
-  app.use("/api/payment", paymentRoutes);
-
 
   app.use((err, req, res, next) => {
     console.error(err.stack);
@@ -54,3 +45,4 @@ const createServer = () => {
 };
 
 module.exports = createServer;
+
