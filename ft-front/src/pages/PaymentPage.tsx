@@ -25,7 +25,7 @@ const LoginPage: React.FC = () => {
     try {
 
       const userIdFromCookie = localStorage.getItem('pendingUserId');
-      const userIdToUse = (user && user._id) ? user._id : userIdFromCookie;
+      const userIdToUse = userIdFromCookie;
       
       console.log("Using user ID:", userIdToUse);
       
