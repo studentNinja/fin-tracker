@@ -12,6 +12,7 @@ const LoginPage: React.FC = () => {
   const { isAuthenticated, user } = useSelector((state: RootState) => state.auth);
   
   console.log("Redux auth state:", useSelector((state: RootState) => state.auth));
+  const BaseUrl = process.env.REACT_APP_BACK_URL
   
   useEffect(() => {
     if (isAuthenticated) {
@@ -29,7 +30,7 @@ const LoginPage: React.FC = () => {
       console.log("Using user ID:", userIdToUse); // For debugging
       
       if (userIdToUse) {
-        const res = await axios.post("http://localhost:8080/api/payment/success", {
+        const res = await axios.post({BaseUrl}+"/api/payment/success", {
           userId: userIdToUse,
           paymentId: details.id,
         });
