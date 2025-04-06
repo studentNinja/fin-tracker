@@ -154,7 +154,7 @@ const StatisticsBlock = (props: {
   }
 
   return (
-    <div className="block block-3">
+    <div  className="block block-3">
       <MonthsSpendingsDiagramPart
         spentNumber={transactionsTotalSum}
         putAwayNumber={goalTransactionsTotalSum}
