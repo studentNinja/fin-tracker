@@ -156,7 +156,7 @@
 }
 
 .block {
-    display: flex;
+    display: flex !important;
     background-color: rgba(255, 255, 255, 0.89);
     border-radius: var(--border-radius);
     min-height: 20rem;
