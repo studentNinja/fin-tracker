@@ -13,7 +13,7 @@ const LoginPage: React.FC = () => {
   
   console.log("Redux auth state:", useSelector((state: RootState) => state.auth));
   const BaseUrl = process.env.REACT_APP_BACK_URL
-  
+
   useEffect(() => {
     if (isAuthenticated) {
       navigate("/dashboard");
@@ -23,11 +23,11 @@ const LoginPage: React.FC = () => {
   const handlePaymentSuccess = async (details: any) => {
     console.log("Payment Success:", details);
     try {
-      // Get userId from cookies
+
       const userIdFromCookie = Cookies.get('pendingUserId');
       const userIdToUse = (user && user._id) ? user._id : userIdFromCookie;
       
-      console.log("Using user ID:", userIdToUse); // For debugging
+      console.log("Using user ID:", userIdToUse);
       
       if (userIdToUse) {
         const res = await axios.post({BaseUrl}+"/api/payment/success", {
@@ -36,7 +36,6 @@ const LoginPage: React.FC = () => {
         });
         
         if (res.data.success) {
-          // Clear the cookie after successful payment
           Cookies.remove('pendingUserId');
           alert("Payment successful! Your subscription is activated.");
           // navigate("/login"); // Redirect to login to authenticate with updated status
