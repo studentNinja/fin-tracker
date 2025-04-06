@@ -33,6 +33,7 @@ import CategoriesPart from "./StatisticsComponents/CategoriesPart";
 import SpendingsHistoryPart from "./StatisticsComponents/SpendingsHistoryPart";
 import { Transaction } from "../../types/transactionTypes";
 import { toast } from "react-toastify";
+import "../../styles/dashboard.css"
 
 const StatisticsBlock = (props: {
   showConfirmDeletePopUp: (deleteFunct: () => void) => void;
