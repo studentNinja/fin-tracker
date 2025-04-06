@@ -7,7 +7,7 @@ const connectDB = async () => {
 
   
     mongoose.connect(MONGODB_URI, {
-      ssl: true,
+      ssl: false,
     }).then(() => {
       console.log('MongoDB connected');
     }).catch((err) => {

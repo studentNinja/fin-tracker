@@ -1,27 +1,56 @@
-import React, { useEffect } from "react";
-import { useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { RootState } from "../app/store";
-// import {toast} from "react-toastify";
+import PayPalButton from "../components/PayPalButton";
+import axios from "axios";
+import Cookies from 'js-cookie';  // You'll need to install this package
 
 const LoginPage: React.FC = () => {
   const navigate = useNavigate();
-  const { loading, isAuthenticated } = useSelector(
-    (state: RootState) => state.auth
-  );
-
+  const dispatch = useDispatch();
+  const { isAuthenticated, user } = useSelector((state: RootState) => state.auth);
+  
+  console.log("Redux auth state:", useSelector((state: RootState) => state.auth));
+  
   useEffect(() => {
     if (isAuthenticated) {
       navigate("/dashboard");
     }
   }, [isAuthenticated, navigate]);
-
-  const onPay = async () => {}; //TODO: open checkout
-
-  useEffect(() => {
-    return () => {};
-  }, []);
-
+  
+  const handlePaymentSuccess = async (details: any) => {
+    console.log("Payment Success:", details);
+    try {
+      // Get userId from cookies
+      const userIdFromCookie = Cookies.get('pendingUserId');
+      const userIdToUse = (user && user._id) ? user._id : userIdFromCookie;
+      
+      console.log("Using user ID:", userIdToUse); // For debugging
+      
+      if (userIdToUse) {
+        const res = await axios.post("http://localhost:8080/api/payment/success", {
+          userId: userIdToUse,
+          paymentId: details.id,
+        });
+        
+        if (res.data.success) {
+          // Clear the cookie after successful payment
+          Cookies.remove('pendingUserId');
+          alert("Payment successful! Your subscription is activated.");
+          // navigate("/login"); // Redirect to login to authenticate with updated status
+        } else {
+          alert("Payment verification failed. Please contact support.");
+        }
+      } else {
+        alert("User ID not found. Please try logging in again.");
+      }
+    } catch (error) {
+      console.error("Payment error:", error);
+      alert("Error processing payment.");
+    }
+  };
+  
   return (
     <div className="form-container">
       <div className="form-body shadow max-width">
@@ -29,14 +58,13 @@ const LoginPage: React.FC = () => {
           <div className="center-div form-h">Оплатити підписку</div>
         </div>
         <div className="text-lg text-start">
-          Дякуємо, що обрали наш фінансовий трекер для управління вашими
-          фінансами! Щоб продовжити користування всіма функціями нашого сервісу,
-          необхідно активувати підписку.
+          Дякуємо, що обрали наш фінансовий трекер для управління вашими фінансами! Щоб продовжити
+          користування всіма функціями нашого сервісу, необхідно активувати підписку.
         </div>
         <div className="mt-2 text-5xl font-bold border border-black/10 rounded-md w-full py-4">
           $5<span className="text-lg font-normal">/місяць</span>
         </div>
-        <button className="form-button">Оплатити</button>
+        <PayPalButton amount="5.00" onSuccess={handlePaymentSuccess} />
       </div>
     </div>
   );

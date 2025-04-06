@@ -8,6 +8,7 @@ const axiosInstance = axios.create({
     headers: {
         'Content-Type': 'application/json',
     },
+    withCredentials: true
 });
 
 const getAccessToken = (): string | null => localStorage.getItem('accessToken');

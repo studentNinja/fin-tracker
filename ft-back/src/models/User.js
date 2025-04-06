@@ -62,7 +62,8 @@ const userSchema = new Schema({
     transactions: [{ type: Schema.Types.ObjectId, ref: 'Transaction' }],
     fixed_expenses: [{ type: Schema.Types.ObjectId, ref: 'FixedExpense' }],
     goals: [{ type: Schema.Types.ObjectId, ref: 'Goal' }],
-    incomes: [{ type: Schema.Types.ObjectId, ref: 'Income' }]
+    incomes: [{ type: Schema.Types.ObjectId, ref: 'Income' }],
+    hasPaid: { type: Boolean, default: false }
 });
 
 userSchema.pre('save', async function(next) {

@@ -18,64 +18,77 @@ exports.register = async (req, res) => {
             return res.status(400).send({ error: 'Email is already in use' });
         }
 
-        
+        // Create a new user object
         const newUser = new User({
             username,
             email,
             password,
             capital,
-            saving_goal
+            saving_goal,
+            hasPaid: false
         });
 
+        // Save the new user to the database
         let user = await newUser.save();
 
-        const newGoal = new Goal({ userId: user._id, name:"Ціль", amount:saving_goal});
+        // Create initial goal and income for the user
+        const newGoal = new Goal({ userId: user._id, name: "Ціль", amount: saving_goal });
         await newGoal.save();
 
-        const newIncome = new Income({ userId: user._id, source:"Дохід", amount:capital });
+        const newIncome = new Income({ userId: user._id, source: "Дохід", amount: capital });
         await newIncome.save();
 
+        // Add goal and income references to the user
         user.goals.push(newGoal._id);
         user.incomes.push(newIncome._id);
         await user.save();
 
+        // Respond with a message and user data without authentication tokens
+        res.status(200).send({
+            message: 'User registered successfully but payment is required. Please log in.',
+            user: newUser
+        });
 
-        const accessToken = generateAccessToken(newUser._id);
-        const refreshToken = generateRefreshToken(newUser._id);
-
-        res.status(201).send({ message: 'User registered successfully', user: newUser, accessToken, refreshToken });
     } catch (err) {
         console.error(err);
         res.status(500).send({ error: 'Server error' });
     }
 };
+
 
 exports.login = async (req, res) => {
     try {
-        const { email, password } = req.body;
-        if (!email || !password) {
-            return res.status(400).send({ error: 'Email and password are required' });
-        }
-
-        const user = await User.findOne({ email });
-        if (!user) {
-            return res.status(401).send({ error: 'Invalid credentials' });
-        }
-
-        const isMatch = await user.comparePassword(password);
-        if (!isMatch) {
-            return res.status(401).send({ error: 'Invalid credentials' });
-        }
-
-        const accessToken = generateAccessToken(user._id);
-        const refreshToken = generateRefreshToken(user._id);
-
-        res.status(200).send({ message: 'Login successful', accessToken, refreshToken });
+      const { email, password } = req.body;
+      if (!email || !password) {
+        return res.status(400).send({ error: 'Email and password are required' });
+      }
+      const user = await User.findOne({ email });
+      if (!user) {
+        return res.status(401).send({ error: 'Invalid credentials' });
+      }
+      const isMatch = await user.comparePassword(password);
+      if (!isMatch) {
+        return res.status(401).send({ error: 'Invalid credentials' });
+      }
+      if (!user.hasPaid) {
+        // Set a cookie with the user ID before sending the 403 response
+        res.cookie('pendingUserId', user._id.toString(), { 
+            httpOnly: false, 
+            secure: true,  // Required for cross-origin cookies
+            sameSite: 'None',  // Allows cross-site usage
+            maxAge: 24 * 60 * 60 * 1000, 
+            path: '/'
+          });
+        return res.status(403).send({ error: 'Payment required to access the app', userId: user._id });
+      }
+      const accessToken = generateAccessToken(user._id);
+      const refreshToken = generateRefreshToken(user._id);
+      res.status(200).send({ message: 'Login successful', accessToken, refreshToken });
     } catch (err) {
-        console.error(err);
-        res.status(500).send({ error: 'Server error' });
+      console.error(err);
+      res.status(500).send({ error: 'Server error' });
     }
-};
+  };
 
 exports.refreshToken = async (req, res) => {
     const { refreshToken } = req.body;
