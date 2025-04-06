@@ -1,10 +1,9 @@
-@tailwind base;
+/* @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 a {
   color: var(--text-color);
-  /*text-decoration: none;*/
   transition: text-decoration 300ms;
   text-decoration: underline;
   text-decoration-color: transparent;
@@ -68,6 +67,5 @@ a:hover {
   background: rgba(56, 56, 56, 0.5);
 }
 ::placeholder {
-  /* Chrome, Firefox, Opera, Safari 10.1+ */
   color: rgba(56, 56, 56, 0.39);
-}
+} */
