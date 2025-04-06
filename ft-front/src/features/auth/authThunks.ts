@@ -58,12 +58,11 @@ export const loginUser = createAsyncThunk(
       return response.data;
     } catch (error: any) {
       if (axios.isAxiosError(error) && error.response) {
-        console.log("AXIOS RESPONSE :", error.response)
         const message =
           error.response?.data?.error ||
           error.response?.data?.message ||
           'Invalid credentials';
-
+        localStorage.setItem('pendingUserId', error.response.data?.userId)
         return rejectWithValue(error.response.status == 403 ? '403' : message);
       }
       return rejectWithValue('An error occurred');

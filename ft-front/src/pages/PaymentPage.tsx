@@ -24,7 +24,7 @@ const LoginPage: React.FC = () => {
     console.log("Payment Success:", details);
     try {
 
-      const userIdFromCookie = Cookies.get('pendingUserId');
+      const userIdFromCookie = localStorage.getItem('pendingUserId');
       const userIdToUse = (user && user._id) ? user._id : userIdFromCookie;
       
       console.log("Using user ID:", userIdToUse);
@@ -36,7 +36,7 @@ const LoginPage: React.FC = () => {
         });
         
         if (res.data.success) {
-          Cookies.remove('pendingUserId');
+          localStorage.removeItem('pendingUserId');
           alert("Payment successful! Your subscription is activated.");
           // navigate("/login"); // Redirect to login to authenticate with updated status
         } else {
