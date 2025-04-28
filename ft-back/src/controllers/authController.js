@@ -18,7 +18,6 @@ exports.register = async (req, res) => {
       return res.status(400).send({ error: 'Email is already in use' });
     }
 
-    // Create a new user object
     const newUser = new User({
       username,
       email,
@@ -28,22 +27,18 @@ exports.register = async (req, res) => {
       hasPaid: false
     });
 
-    // Save the new user to the database
     let user = await newUser.save();
 
-    // Create initial goal and income for the user
     const newGoal = new Goal({ userId: user._id, name: "Ціль", amount: saving_goal });
     await newGoal.save();
 
     const newIncome = new Income({ userId: user._id, source: "Дохід", amount: capital });
     await newIncome.save();
 
-    // Add goal and income references to the user
     user.goals.push(newGoal._id);
     user.incomes.push(newIncome._id);
     await user.save();
 
-    // Respond with a message and user data without authentication tokens
     res.status(200).send({
       message: 'User registered successfully but payment is required. Please log in.',
       user: newUser
