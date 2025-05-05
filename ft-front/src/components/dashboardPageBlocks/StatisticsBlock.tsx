@@ -12,6 +12,7 @@ import {
 import {
   deleteTransaction,
   addTransaction,
+  fetchTransactions,
 } from "../../features/transactions/transactionThunks";
 import {
   fetchAllGoalTransactions,
@@ -46,6 +47,7 @@ const StatisticsBlock = (props: {
   useEffect(() => {
     dispatch(fetchAllGoalTransactions());
     dispatch(fetchCurrentGoalTransactions());
+    dispatch(fetchTransactions())
   }, [dispatch]);
 
   const transactionsState = useSelector(

@@ -52,7 +52,7 @@ export function getTransactionsAmountByCategoryId(
     if (!transactions) return 0;
 
     // const categoryTransactions = filterCurrentMonth(transactions.filter(isTransaction))
-    const categoryTransactions = getTransactionsArrayCurrentMonth(transactions,fixedExpenses)
+    const categoryTransactions = getTransactionsArrayCurrentMonth(transactions, fixedExpenses)
         .filter((transaction) => transaction.category === categoryMap[categoryId]);
 
     return categoryTransactions.reduce((sum, transaction) => sum + transaction.amount, 0);
@@ -64,6 +64,7 @@ export function getTransactionsArrayCurrentMonth(
 ): Transaction[] {
     const now = new Date();
     const fixedTransactions = fixedExpenses.map((expense) => {
+        console.log(expense);
         return {
             _id: expense._id,
             userId: expense.userId,

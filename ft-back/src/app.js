@@ -7,6 +7,10 @@ const fixedExpenseRoutes = require('./routes/fixedExpenseRoutes');
 const goalRoutes = require('./routes/goalRoutes');
 const incomeRoutes = require('./routes/incomeRoutes');
 const adminRoutes = require("./routes/adminRoutes")
+const { authMiddleware, authorize } = require('./middleware/authMiddleware');
+
+const { createHandler } = require('graphql-http/lib/use/express');
+const adminSchema = require('./graphql/adminSchema');
 
 const cors = require('cors');
 const helmet = require('helmet');
@@ -44,6 +48,22 @@ const createServer = () => {
   app.use('/api/fixedexpenses', fixedExpenseRoutes);
   app.use('/api/incomes', incomeRoutes);
   app.use("/api/admin", adminRoutes);
+
+
+  app.all(
+    '/graphql',
+    express.json(),
+    authMiddleware,
+    authorize('ADMIN'),
+    createHandler({
+      schema: adminSchema,
+      context: (ctx) => {
+        const req = ctx?.req || ctx?.request;
+        return { user: req?.user || null };
+      },
+      graphiql: true
+    })
+  );
 
 
   app.use((err, req, res, next) => {
