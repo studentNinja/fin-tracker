@@ -1,15 +1,20 @@
 const jwt = require('jsonwebtoken');
 const config = require('../config/config');
 
-const generateAccessToken = (userId) => {
-    return jwt.sign({ userId }, config.JWT_SECRET, { expiresIn: '30m' });
-};
+function generateAccessToken(userId, role) {
+    return jwt.sign(
+        { userId, role },
+        config.JWT_SECRET,
+        { expiresIn: '15m' }
+    );
+}
 
-const generateRefreshToken = (userId) => {
-    return jwt.sign({ userId }, config.JWT_REFRESH_SECRET, { expiresIn: '4d' });
-};
+function generateRefreshToken(userId, role) {
+    return jwt.sign(
+        { userId, role },
+        config.JWT_REFRESH_SECRET,
+        { expiresIn: '7d' }
+    );
+}
 
-module.exports = {
-    generateAccessToken,
-    generateRefreshToken,
-};
+module.exports = { generateAccessToken, generateRefreshToken };

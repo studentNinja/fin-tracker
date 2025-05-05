@@ -3,75 +3,96 @@ const User = require('../models/User');
 
 exports.createTransaction = async (req, res) => {
     try {
+        const callerId = req.user.id;
+        const targetUserId = (req.user.role === 'ADMIN' && req.query.userId)
+            ? req.query.userId
+            : callerId;
         const { amount, category, description } = req.body;
-
-        if (!amount || !category) {
-            return res.status(400).send({ error: 'Amount and category are required' });
+        if (amount === undefined || !category) {
+            return res.status(400).json({ error: 'Amount and category are required' });
         }
-
         const newTransaction = new Transaction({
-            userId: req.userId,
+            userId: targetUserId,
             amount,
             category,
             description
         });
-
         await newTransaction.save();
-        await User.findByIdAndUpdate(req.userId, { $push: { transactions: newTransaction._id } });
-
-        res.status(201).json(newTransaction);
+        await User.findByIdAndUpdate(targetUserId, {
+            $push: { transactions: newTransaction._id }
+        });
+        return res.status(201).json(newTransaction);
     } catch (err) {
-        res.status(400).json({ error: err.message });
+        return res.status(400).json({ error: err.message });
     }
 };
 
 exports.getTransactions = async (req, res) => {
     try {
-        const transactions = await Transaction.find({ userId: req.userId });
-        res.status(200).json(transactions);
+        const callerId = req.user.id;
+        const targetUserId = (req.user.role === 'ADMIN' && req.query.userId)
+            ? req.query.userId
+            : callerId;
+        const transactions = await Transaction.find({ userId: targetUserId });
+        return res.status(200).json(transactions);
     } catch (err) {
-        res.status(400).json({ error: err.message });
+        return res.status(400).json({ error: err.message });
     }
 };
 
 exports.getTransactionById = async (req, res) => {
     try {
         const { transactionId } = req.params;
-        const transaction = await Transaction.findById(transactionId);
-        if (!transaction) {
+        const tx = await Transaction.findById(transactionId);
+        if (!tx) {
             return res.status(404).json({ error: 'Transaction not found' });
         }
-        res.status(200).json(transaction);
+        if (req.user.role !== 'ADMIN' && tx.userId.toString() !== req.user.id) {
+            return res.status(403).json({ error: 'Forbidden' });
+        }
+        return res.status(200).json(tx);
     } catch (err) {
-        res.status(400).json({ error: err.message });
+        return res.status(400).json({ error: err.message });
     }
 };
 
 exports.updateTransaction = async (req, res) => {
     try {
         const { transactionId } = req.params;
-        const { amount, category, description } = req.body;
-        const updatedTransaction = await Transaction.findByIdAndUpdate(transactionId, { amount, category, description }, { new: true });
-        if (!updatedTransaction) {
+        const tx = await Transaction.findById(transactionId);
+        if (!tx) {
             return res.status(404).json({ error: 'Transaction not found' });
         }
-        res.status(200).json(updatedTransaction);
+        if (req.user.role !== 'ADMIN' && tx.userId.toString() !== req.user.id) {
+            return res.status(403).json({ error: 'Forbidden' });
+        }
+        const { amount, category, description } = req.body;
+        tx.amount = amount;
+        tx.category = category;
+        tx.description = description;
+        await tx.save();
+        return res.status(200).json(tx);
     } catch (err) {
-        res.status(400).json({ error: err.message });
+        return res.status(400).json({ error: err.message });
     }
 };
 
 exports.deleteTransaction = async (req, res) => {
     try {
         const { transactionId } = req.params;
-        const deletedTransaction = await Transaction.findByIdAndDelete(transactionId);
-        if (!deletedTransaction) {
+        const tx = await Transaction.findById(transactionId);
+        if (!tx) {
             return res.status(404).json({ error: 'Transaction not found' });
         }
-        await User.findByIdAndUpdate(req.userId, { $pull: { transactions: transactionId } });
-
-        res.status(200).json({ message: 'Transaction deleted successfully' });
+        if (req.user.role !== 'ADMIN' && tx.userId.toString() !== req.user.id) {
+            return res.status(403).json({ error: 'Forbidden' });
+        }
+        await Transaction.findByIdAndDelete(transactionId);
+        await User.findByIdAndUpdate(tx.userId, {
+            $pull: { transactions: transactionId }
+        });
+        return res.status(200).json({ message: 'Transaction deleted successfully' });
     } catch (err) {
-        res.status(400).json({ error: err.message });
+        return res.status(400).json({ error: err.message });
     }
 };

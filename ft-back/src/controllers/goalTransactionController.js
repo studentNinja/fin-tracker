@@ -1,41 +1,39 @@
 const GoalTransaction = require('../models/GoalTransaction');
 const Goal = require('../models/Goal');
+const User = require('../models/User');
 
 exports.createGoalTransaction = async (req, res) => {
     try {
+        const callerId = req.user.id;
+        const targetUserId = req.user.role === 'ADMIN' && req.query.userId ? req.query.userId : callerId;
         let { amount } = req.body;
-        if (!amount) {
-            return res.status(400).send({ error: 'Amount is required' });
+        if (amount === undefined) {
+            return res.status(400).json({ error: 'Amount is required' });
         }
-
-        const goal = await Goal.findOne({ achieved: false, userId: req.userId });
+        const goal = await Goal.findOne({ achieved: false, userId: targetUserId });
         if (!goal) {
             return res.status(400).json({ error: 'No goal exists' });
         }
-
         const goalId = goal._id;
-        const goalTransactionsArray = await GoalTransaction.find({ goalId });
-        const savedAmount = goalTransactionsArray.reduce((res, curr) => res + curr.amount, 0);
-
+        const transactions = await GoalTransaction.find({ goalId });
+        const savedAmount = transactions.reduce((sum, tx) => sum + tx.amount, 0);
         if (savedAmount + amount >= goal.amount) {
             await Goal.findByIdAndUpdate(goalId, { achieved: true });
             amount = goal.amount - savedAmount;
         }
-
         if (savedAmount + amount < 0) {
             return res.status(400).json({ error: 'Not enough funds to complete operation' });
         }
-
-        const newGoalTransaction = new GoalTransaction({
-            userId: req.userId,
+        const newTransaction = new GoalTransaction({
+            userId: targetUserId,
             goalId,
             amount
         });
-
-        await newGoalTransaction.save();
-        await Goal.findByIdAndUpdate(goalId, { $push: { goalTransactions: newGoalTransaction._id } });
-
-        res.status(201).json(newGoalTransaction);
+        await newTransaction.save();
+        await Goal.findByIdAndUpdate(goalId, {
+            $push: { goalTransactions: newTransaction._id }
+        });
+        res.status(201).json(newTransaction);
     } catch (err) {
         res.status(400).json({ error: err.message });
     }
@@ -43,8 +41,10 @@ exports.createGoalTransaction = async (req, res) => {
 
 exports.getAllGoalTransactions = async (req, res) => {
     try {
-        const goalTransactions = await GoalTransaction.find({ userId: req.userId });
-        res.status(200).json(goalTransactions);
+        const callerId = req.user.id;
+        const targetUserId = req.user.role === 'ADMIN' && req.query.userId ? req.query.userId : callerId;
+        const transactions = await GoalTransaction.find({ userId: targetUserId });
+        res.status(200).json(transactions);
     } catch (err) {
         res.status(400).json({ error: err.message });
     }
@@ -52,13 +52,14 @@ exports.getAllGoalTransactions = async (req, res) => {
 
 exports.getCurrentGoalTransactions = async (req, res) => {
     try {
-        const goal = await Goal.findOne({ userId: req.userId, achieved: false });
+        const callerId = req.user.id;
+        const targetUserId = req.user.role === 'ADMIN' && req.query.userId ? req.query.userId : callerId;
+        const goal = await Goal.findOne({ userId: targetUserId, achieved: false });
         if (!goal) {
             return res.status(400).json({ error: 'No goal exists' });
         }
-
-        const goalTransactions = await GoalTransaction.find({ userId: req.userId, goalId: goal._id });
-        res.status(200).json(goalTransactions);
+        const transactions = await GoalTransaction.find({ userId: targetUserId, goalId: goal._id });
+        res.status(200).json(transactions);
     } catch (err) {
         res.status(400).json({ error: err.message });
     }

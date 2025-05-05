@@ -6,7 +6,8 @@ const goalTransactionRoutes = require('./routes/goalTransactionRoutes');
 const fixedExpenseRoutes = require('./routes/fixedExpenseRoutes');
 const goalRoutes = require('./routes/goalRoutes');
 const incomeRoutes = require('./routes/incomeRoutes');
-const paymentRoutes = require("./routes/payment");
+const adminRoutes = require("./routes/adminRoutes")
+
 const cors = require('cors');
 const helmet = require('helmet');
 const swaggerSetup = require('./swagger');
@@ -42,7 +43,7 @@ const createServer = () => {
   app.use('/api/transactions', transactionRoutes);
   app.use('/api/fixedexpenses', fixedExpenseRoutes);
   app.use('/api/incomes', incomeRoutes);
-  app.use("/api/payment", paymentRoutes);
+  app.use("/api/admin", adminRoutes);
 
 
   app.use((err, req, res, next) => {

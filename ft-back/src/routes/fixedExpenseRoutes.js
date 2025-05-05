@@ -1,6 +1,6 @@
 const express = require('express');
 const fixedExpenseController = require('../controllers/fixedExpenseController');
-const authMiddleware = require('../middleware/authMiddleware');
+const { authMiddleware } = require('../middleware/authMiddleware');
 
 const router = express.Router();
 
@@ -70,10 +70,10 @@ router.post('/', authMiddleware, fixedExpenseController.createFixedExpense);
  *     parameters:
  *       - in: path
  *         name: fixedExpenseId
+ *         required: true
  *         schema:
  *           type: string
- *         required: true
- *         description: The ID of the fixed expense
+ *         description: ID of the fixed expense
  *     responses:
  *       200:
  *         description: Fixed expense retrieved successfully
@@ -99,10 +99,10 @@ router.get('/:fixedExpenseId', authMiddleware, fixedExpenseController.getFixedEx
  *     parameters:
  *       - in: path
  *         name: fixedExpenseId
+ *         required: true
  *         schema:
  *           type: string
- *         required: true
- *         description: The ID of the fixed expense
+ *         description: ID of the fixed expense
  *     requestBody:
  *       required: true
  *       content:
@@ -130,10 +130,10 @@ router.put('/:fixedExpenseId', authMiddleware, fixedExpenseController.updateFixe
  *     parameters:
  *       - in: path
  *         name: fixedExpenseId
+ *         required: true
  *         schema:
  *           type: string
- *         required: true
- *         description: The ID of the fixed expense
+ *         description: ID of the fixed expense
  *     responses:
  *       200:
  *         description: Fixed expense deleted successfully

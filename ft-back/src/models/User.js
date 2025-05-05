@@ -2,6 +2,11 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 const bcrypt = require('bcryptjs');
 
+const crypto = require('crypto');
+
+
+
+
 /**
  * @swagger
  * components:
@@ -63,10 +68,18 @@ const userSchema = new Schema({
     fixed_expenses: [{ type: Schema.Types.ObjectId, ref: 'FixedExpense' }],
     goals: [{ type: Schema.Types.ObjectId, ref: 'Goal' }],
     incomes: [{ type: Schema.Types.ObjectId, ref: 'Income' }],
-    hasPaid: { type: Boolean, default: false }
+    // hasPaid: { type: Boolean, default: false },
+    emailVerified: { type: Boolean, default: false },
+    emailVerificationToken: { type: String },
+    emailVerificationExpires: { type: Date },
+    role: {
+        type: String,
+        enum: ['USER', 'ADMIN'],
+        default: 'USER'
+    }
 });
 
-userSchema.pre('save', async function(next) {
+userSchema.pre('save', async function (next) {
     if (this.isModified('password') || this.isNew) {
         const salt = await bcrypt.genSalt(10);
         this.password = await bcrypt.hash(this.password, salt);
@@ -74,7 +87,7 @@ userSchema.pre('save', async function(next) {
     next();
 });
 
-userSchema.methods.comparePassword = function(candidatePassword) {
+userSchema.methods.comparePassword = function (candidatePassword) {
     return bcrypt.compare(candidatePassword, this.password);
 };
 

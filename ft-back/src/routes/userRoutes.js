@@ -1,6 +1,6 @@
 const express = require('express');
 const userController = require('../controllers/userController');
-const authMiddleware = require('../middleware/authMiddleware');
+const { authMiddleware, authorize } = require('../middleware/authMiddleware');
 
 const router = express.Router();
 
@@ -8,94 +8,69 @@ const router = express.Router();
  * @swagger
  * tags:
  *   name: Users
- *   description: API for managing users
+ *   description: User operations
  */
 
 /**
  * @swagger
  * /api/users/profile:
  *   get:
- *     summary: Get user profile
+ *     summary: Get your own profile
  *     tags: [Users]
  *     security:
  *       - bearerAuth: []
  *     responses:
  *       200:
- *         description: User profile retrieved successfully
+ *         description: Your profile returned
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/User'
- *       401:
- *         description: Unauthorized
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 error:
- *                   type: string
- *                   description: Error message
- *       500:
- *         description: Internal Server Error
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 error:
- *                   type: string
- *                   description: Error message
  */
-router.get('/profile', authMiddleware, userController.getProfile);
+router.get(
+    '/profile',
+    authMiddleware,
+    authorize('USER', 'ADMIN'),
+    userController.getProfile
+);
 
 /**
  * @swagger
- * /api/users/delete:
- *   delete:
- *     summary: Delete user account
+ * /api/users/{id}:
+ *   get:
+ *     summary: Get any user’s profile (admin only)
  *     tags: [Users]
  *     security:
  *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: User ID
  *     responses:
  *       200:
- *         description: User account deleted successfully
+ *         description: User profile returned
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   description: Success message
- *       401:
- *         description: Unauthorized
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 error:
- *                   type: string
- *                   description: Error message
- *       500:
- *         description: Internal Server Error
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 error:
- *                   type: string
- *                   description: Error message
+ *               $ref: '#/components/schemas/User'
+ *       403:
+ *         description: Forbidden
  */
-router.delete('/delete', authMiddleware, userController.deleteAccount);
+router.get(
+    '/:id',
+    authMiddleware,
+    authorize('ADMIN'),
+    userController.getProfile
+);
 
 /**
  * @swagger
  * /api/users/update-password:
  *   put:
- *     summary: Update user password
+ *     summary: Update your password
  *     tags: [Users]
  *     security:
  *       - bearerAuth: []
@@ -105,58 +80,77 @@ router.delete('/delete', authMiddleware, userController.deleteAccount);
  *         application/json:
  *           schema:
  *             type: object
- *             required:
- *               - currentPassword
- *               - newPassword
+ *             required: [currentPassword,newPassword]
  *             properties:
  *               currentPassword:
  *                 type: string
- *                 description: The current password of the user
  *               newPassword:
  *                 type: string
- *                 description: The new password of the user
  *     responses:
  *       200:
- *         description: Password updated successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   description: Success message
- *       400:
- *         description: Bad Request
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 error:
- *                   type: string
- *                   description: Error message
- *       401:
- *         description: Unauthorized
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 error:
- *                   type: string
- *                   description: Error message
- *       500:
- *         description: Internal Server Error
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 error:
- *                   type: string
- *                   description: Error message
+ *         description: Password updated
+ *       403:
+ *         description: Forbidden
  */
-router.put('/update-password', authMiddleware, userController.updatePassword);
+router.put(
+    '/update-password',
+    authMiddleware,
+    authorize('USER', 'ADMIN'),
+    userController.updatePassword
+);
+
+/**
+ * @swagger
+ * /api/users/delete:
+ *   delete:
+ *     summary: Delete account (self or admin)
+ *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: id
+ *         schema:
+ *           type: string
+ *         description: User ID (admin only)
+ *     responses:
+ *       200:
+ *         description: Account deleted
+ *       403:
+ *         description: Forbidden
+ */
+router.delete(
+    '/delete',
+    authMiddleware,
+    authorize('USER', 'ADMIN'),
+    userController.deleteAccount
+);
+
+/**
+ * @swagger
+ * /api/users:
+ *   get:
+ *     summary: List all users (admin only)
+ *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: List of users
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/User'
+ *       403:
+ *         description: Forbidden
+ */
+router.get(
+    '/',
+    authMiddleware,
+    authorize('ADMIN'),
+    userController.listUsers
+);
 
 module.exports = router;

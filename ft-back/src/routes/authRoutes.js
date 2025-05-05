@@ -1,6 +1,5 @@
 const express = require('express');
 const authController = require('../controllers/authController');
-
 const router = express.Router();
 
 /**
@@ -30,50 +29,27 @@ const router = express.Router();
  *             properties:
  *               username:
  *                 type: string
- *                 description: The username of the user
  *               email:
  *                 type: string
- *                 description: The email of the user
  *               password:
  *                 type: string
- *                 description: The password of the user
  *               capital:
  *                 type: number
- *                 description: The initial capital of the user
  *               saving_goal:
  *                 type: number
- *                 description: The saving goal of the user
  *             example:
- *               username: ddddddddd
- *               email: test@t.t
- *               password: password123
- *               capital: 5000
- *               saving_goal: 20000
+ *               username: 'john'
+ *               email: 'john@example.com'
+ *               password: 'password123'
+ *               capital: 1000
+ *               saving_goal: 5000
  *     responses:
  *       201:
- *         description: User registered successfully
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/User'
+ *         description: User registered
  *       400:
- *         description: Bad Request
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 error:
- *                   type: string
+ *         description: Bad request
  *       500:
- *         description: Internal Server Error
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 error:
- *                   type: string
+ *         description: Server error
  */
 router.post('/register', authController.register);
 
@@ -81,7 +57,7 @@ router.post('/register', authController.register);
  * @swagger
  * /api/auth/login:
  *   post:
- *     summary: Log in a user
+ *     summary: User login
  *     tags: [Auth]
  *     requestBody:
  *       required: true
@@ -95,57 +71,20 @@ router.post('/register', authController.register);
  *             properties:
  *               email:
  *                 type: string
- *                 description: The email of the user
  *               password:
  *                 type: string
- *                 description: The password of the user
  *             example:
- *               email: test@t.t
- *               password: password123
+ *               email: 'john@example.com'
+ *               password: 'password123'
  *     responses:
  *       200:
- *         description: User logged in successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   description: Success message
- *                 accessToken:
- *                   type: string
- *                   description: The JWT token
- *                 refreshToken:
- *                   type: string
- *                   description: The refresh token
+ *         description: Login successful
  *       400:
- *         description: Bad Request
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 error:
- *                   type: string
+ *         description: Bad request
  *       401:
- *         description: Invalid credentials
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 error:
- *                   type: string
+ *         description: Unauthorized
  *       500:
- *         description: Internal Server Error
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 error:
- *                   type: string
+ *         description: Server error
  */
 router.post('/login', authController.login);
 
@@ -153,7 +92,7 @@ router.post('/login', authController.login);
  * @swagger
  * /api/auth/refresh:
  *   post:
- *     summary: Refresh JWT token
+ *     summary: Refresh access token
  *     tags: [Auth]
  *     requestBody:
  *       required: true
@@ -166,51 +105,20 @@ router.post('/login', authController.login);
  *             properties:
  *               refreshToken:
  *                 type: string
- *                 description: The refresh token
  *             example:
- *               refreshToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'
+ *               refreshToken: 'jwt-refresh-token'
  *     responses:
  *       200:
- *         description: New access token generated successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 accessToken:
- *                   type: string
- *                   description: The new access token
+ *         description: Token refreshed
+ *       400:
+ *         description: Bad request
  *       401:
- *         description: Refresh token is missing
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 error:
- *                   type: string
- *                   description: Error message
- *       403:
- *         description: Invalid or expired refresh token
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 error:
- *                   type: string
- *                   description: Error message
+ *         description: Unauthorized
  *       500:
- *         description: Internal Server Error
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 error:
- *                   type: string
- *                   description: Error message
+ *         description: Server error
  */
 router.post('/refresh', authController.refreshToken);
+
+router.get('/confirm-email', authController.confirmEmail);
 
 module.exports = router;

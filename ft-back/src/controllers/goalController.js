@@ -1,15 +1,19 @@
 const Goal = require('../models/Goal');
 const User = require('../models/User');
 
-
 exports.createGoal = async (req, res) => {
     try {
-        const { name, amount } = req.body;
-        const newGoal = new Goal({ userId: req.userId, name, amount });
-        await newGoal.save();
-        await User.findByIdAndUpdate(req.userId, { $push: { goals: newGoal._id } });
+        const callerId = req.user.id;
+        const targetUserId =
+            req.user.role === 'ADMIN' && req.query.userId
+                ? req.query.userId
+                : callerId;
 
-        res.status(201).json(newGoal);
+        const { name, amount } = req.body;
+        const goal = new Goal({ userId: targetUserId, name, amount });
+        await goal.save();
+        await User.findByIdAndUpdate(targetUserId, { $push: { goals: goal._id } });
+        res.status(201).json(goal);
     } catch (err) {
         res.status(400).json({ error: err.message });
     }
@@ -17,7 +21,13 @@ exports.createGoal = async (req, res) => {
 
 exports.getGoals = async (req, res) => {
     try {
-        const goals = await Goal.find({ userId: req.userId });
+        const callerId = req.user.id;
+        const targetUserId =
+            req.user.role === 'ADMIN' && req.query.userId
+                ? req.query.userId
+                : callerId;
+
+        const goals = await Goal.find({ userId: targetUserId });
         res.status(200).json(goals);
     } catch (err) {
         res.status(400).json({ error: err.message });
@@ -28,9 +38,12 @@ exports.getGoalById = async (req, res) => {
     try {
         const { goalId } = req.params;
         const goal = await Goal.findById(goalId);
-        if (!goal) {
-            return res.status(404).json({ error: 'Goal not found' });
+        if (!goal) return res.status(404).json({ error: 'Goal not found' });
+
+        if (req.user.role !== 'ADMIN' && goal.userId.toString() !== req.user.id) {
+            return res.status(403).json({ error: 'Forbidden' });
         }
+
         res.status(200).json(goal);
     } catch (err) {
         res.status(400).json({ error: err.message });
@@ -40,12 +53,19 @@ exports.getGoalById = async (req, res) => {
 exports.updateGoal = async (req, res) => {
     try {
         const { goalId } = req.params;
-        const { name, amount, achieved } = req.body;
-        const updatedGoal = await Goal.findByIdAndUpdate(goalId, { name, amount, achieved }, { new: true });
-        if (!updatedGoal) {
-            return res.status(404).json({ error: 'Goal not found' });
+        const goal = await Goal.findById(goalId);
+        if (!goal) return res.status(404).json({ error: 'Goal not found' });
+
+        if (req.user.role !== 'ADMIN' && goal.userId.toString() !== req.user.id) {
+            return res.status(403).json({ error: 'Forbidden' });
         }
-        res.status(200).json(updatedGoal);
+
+        const { name, amount, achieved } = req.body;
+        goal.name = name;
+        goal.amount = amount;
+        goal.achieved = achieved;
+        await goal.save();
+        res.status(200).json(goal);
     } catch (err) {
         res.status(400).json({ error: err.message });
     }
@@ -54,11 +74,15 @@ exports.updateGoal = async (req, res) => {
 exports.deleteGoal = async (req, res) => {
     try {
         const { goalId } = req.params;
-        const deletedGoal = await Goal.findByIdAndDelete(goalId);
-        if (!deletedGoal) {
-            return res.status(404).json({ error: 'Goal not found' });
+        const goal = await Goal.findById(goalId);
+        if (!goal) return res.status(404).json({ error: 'Goal not found' });
+
+        if (req.user.role !== 'ADMIN' && goal.userId.toString() !== req.user.id) {
+            return res.status(403).json({ error: 'Forbidden' });
         }
-        await User.findByIdAndUpdate(req.userId, { $pull: { goals: goalId } });
+
+        await Goal.findByIdAndDelete(goalId);
+        await User.findByIdAndUpdate(req.user.id, { $pull: { goals: goalId } });
         res.status(200).json({ message: 'Goal deleted successfully' });
     } catch (err) {
         res.status(400).json({ error: err.message });
